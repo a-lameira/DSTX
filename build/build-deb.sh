@@ -19,15 +19,15 @@ mkdir -p "$TEMP_DIR/etc/dbus-1/system.d"
 # Copy static binaries
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$TEMP_DIR/usr/bin/"
 
-# Copy system files (now directly from dstx/ root)
-cp "$CORE_SRC/dstx.service" "$TEMP_DIR/lib/systemd/system/" 2>/dev/null || \
-    echo "Warning: dstx.service not found"
-cp "$CORE_SRC/dstx-dbus.service" "$TEMP_DIR/lib/systemd/system/" 2>/dev/null || \
-    echo "Warning: dstx-dbus.service not found"
-cp "$CORE_SRC/99-dstx.rules" "$TEMP_DIR/lib/udev/rules.d/" 2>/dev/null || \
-    echo "Warning: 99-dstx.rules not found"
-cp "$CORE_SRC/org.dstx.Bridge.conf" "$TEMP_DIR/etc/dbus-1/system.d/" 2>/dev/null || \
-    echo "Warning: org.dstx.Bridge.conf not found"
+# Copy system files from dstx/data/ (not from the root)
+cp "$CORE_SRC/data/dstx.service" "$TEMP_DIR/lib/systemd/system/" 2>/dev/null || \
+    echo "Warning: dstx.service not found in $CORE_SRC/data/"
+cp "$CORE_SRC/data/dstx-dbus.service" "$TEMP_DIR/lib/systemd/system/" 2>/dev/null || \
+    echo "Warning: dstx-dbus.service not found in $CORE_SRC/data/"
+cp "$CORE_SRC/data/99-dstx.rules" "$TEMP_DIR/lib/udev/rules.d/" 2>/dev/null || \
+    echo "Warning: 99-dstx.rules not found in $CORE_SRC/data/"
+cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$TEMP_DIR/etc/dbus-1/system.d/" 2>/dev/null || \
+    echo "Warning: org.dstx.Bridge.conf not found in $CORE_SRC/data/"
 
 # control file
 cat > "$TEMP_DIR/DEBIAN/control" << EOF
