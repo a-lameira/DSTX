@@ -1,0 +1,17 @@
+Source: dstx
+Section: utils
+Priority: optional
+Maintainer: André Lameira <alameira@dstx.org>
+Build-Depends: debhelper-compat (=13), meson, ninja-build, pkg-config,
+               libgtk-4-dev, libadwaita-1-dev, libgee-0.8-dev,
+               libjson-glib-dev, librsvg2-dev, libsystemd-dev
+Standards-Version: 4.6.2
+Homepage: https://dstx.org
+Rules-Requires-Root: no
+
+Package: dstx
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, systemd, udev, dbus
+Description: Driver for PlayStation DualSense, DS4 and Nintendo Switch Pro controllers
+ DSTX provides advanced configuration (LED, rumble, macros) for game controllers.
+ This package contains the core daemon, D-Bus bridge, and graphical interface.
