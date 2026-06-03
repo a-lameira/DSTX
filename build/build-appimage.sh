@@ -11,7 +11,7 @@ docker run --rm -v "$PROJECT_ROOT:/work" ubuntu:rolling bash -c '
     set -e
     export DEBIAN_FRONTEND=noninteractive
     apt-get update
-    apt-get install -y meson ninja-build valac pkg-config wget \
+    apt-get install -y meson ninja-build valac pkg-config wget gettext \
         libgtk-4-dev libadwaita-1-dev libgee-0.8-dev \
         libjson-glib-dev librsvg2-dev
 
