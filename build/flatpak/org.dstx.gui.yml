@@ -19,8 +19,8 @@ modules:
   - name: dstx-core-static
     buildsystem: simple
     build-commands:
-      - install -Dm755 static/dstx /app/bin/dstx
-      - install -Dm755 static/dstx-dbus /app/bin/dstx-dbus
+      - install -Dm755 dstx /app/bin/dstx
+      - install -Dm755 dstx-dbus /app/bin/dstx-dbus
     sources:
       - type: dir
         path: static
