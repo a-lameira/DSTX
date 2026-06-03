@@ -143,8 +143,9 @@ jobs:
       - name: Install GUI build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y meson ninja-build valac libgtk-4-dev libadwaita-1-dev \
-               libgee-0.8-dev libjson-glib-dev librsvg2-dev
+          sudo apt-get install -y meson ninja-build valac gettext \
+               libgtk-4-dev libadwaita-1-dev libgee-0.8-dev \
+               libjson-glib-dev librsvg2-dev
 
       - name: Create VERSION file
         run: |
