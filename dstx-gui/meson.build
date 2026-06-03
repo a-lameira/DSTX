@@ -91,10 +91,9 @@ dependencies = [
 ]
 
 m_dep = cc.find_library('m', required: true)
-dependencies += m_dep
 
 foreach dep : dependencies
-    if dep.name() != 'm'
+    if dep.type_name() == 'pkgconfig'
         assert(dep.found(), 'Dependency @0@ not found'.format(dep.name()))
     endif
 endforeach
