@@ -11,7 +11,7 @@ docker build -t dstx-alpine-static -f "$SCRIPT_DIR/containers/alpine-static.Dock
 
 docker run --rm -v "$CORE_SRC:/work" dstx-alpine-static sh -c '
     set -e
-    # Compiles static dbus
+    # Compile static dbus
     cd /tmp
     git clone --depth 1 https://gitlab.freedesktop.org/dbus/dbus.git
     cd dbus
@@ -29,7 +29,7 @@ docker run --rm -v "$CORE_SRC:/work" dstx-alpine-static sh -c '
     ninja
     ninja install
 
-    # Compiles static dstx and dstx-dbus
+    # Compile dstx and dstx-dbus statically
     cd /work
     make static-all DBUS_STATIC_DIR=/usr/local/dbus-static
 '
