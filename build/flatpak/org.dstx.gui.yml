@@ -32,7 +32,7 @@ modules:
       - -Dflatpak=true
     sources:
       - type: dir
-        path: dstx-gui
+        path: ../../dstx-gui
     post-install:
       - mkdir -p /app/share/locale
       - cp -r /run/build/dstx-gui/po/*.mo /app/share/locale/ 2>/dev/null || true
