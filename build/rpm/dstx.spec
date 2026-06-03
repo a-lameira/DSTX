@@ -30,7 +30,7 @@ This package includes the core daemon, D-Bus bridge and graphical interface.
 install -Dm755 %{_builddir}/src/bin/dstx %{buildroot}%{_bindir}/dstx
 install -Dm755 %{_builddir}/src/bin/dstx-dbus %{buildroot}%{_bindir}/dstx-dbus
 
-# Install systemd units, udev rules, dbus config (adjust paths as needed)
+# Install systemd units, udev rules, dbus config
 install -Dm644 data/dstx.service %{buildroot}%{_unitdir}/dstx.service
 install -Dm644 data/dstx-dbus.service %{buildroot}%{_unitdir}/dstx-dbus.service
 install -Dm644 data/99-dstx.rules %{buildroot}%{_udevrulesdir}/99-dstx.rules
