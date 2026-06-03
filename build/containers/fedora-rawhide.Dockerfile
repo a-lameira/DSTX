@@ -1,7 +1,6 @@
 FROM fedora:rawhide
 
-RUN dnf install -y gcc gcc-c++ make meson ninja-build pkgconfig \
-    gtk4-devel libadwaita-devel libgee-devel json-glib-devel librsvg2-devel \
-    systemd-devel rpm-build rpmdevtools git
+# Minimal dependencies for RPM packaging
+RUN dnf install -y rpm-build rpmdevtools make
 
 WORKDIR /build
