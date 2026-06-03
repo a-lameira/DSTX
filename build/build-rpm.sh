@@ -69,32 +69,32 @@ EOF
 # Copy static binaries
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$RPM_TOPDIR/SOURCES/"
 
-# Copy system files – try both root and data/ subdirectory
-if [ -f "$CORE_SRC/dstx.service" ]; then
-    cp "$CORE_SRC/dstx.service" "$RPM_TOPDIR/SOURCES/"
+# Copy system files from dstx/data/
+if [ -f "$CORE_SRC/data/dstx.service" ]; then
+    cp "$CORE_SRC/data/dstx.service" "$RPM_TOPDIR/SOURCES/"
 else
-    echo "ERROR: dstx.service not found in $CORE_SRC/"
+    echo "ERROR: dstx.service not found in $CORE_SRC/data/"
     exit 1
 fi
 
-if [ -f "$CORE_SRC/dstx-dbus.service" ]; then
-    cp "$CORE_SRC/dstx-dbus.service" "$RPM_TOPDIR/SOURCES/"
+if [ -f "$CORE_SRC/data/dstx-dbus.service" ]; then
+    cp "$CORE_SRC/data/dstx-dbus.service" "$RPM_TOPDIR/SOURCES/"
 else
-    echo "ERROR: dstx-dbus.service not found in $CORE_SRC/"
+    echo "ERROR: dstx-dbus.service not found in $CORE_SRC/data/"
     exit 1
 fi
 
-if [ -f "$CORE_SRC/99-dstx.rules" ]; then
-    cp "$CORE_SRC/99-dstx.rules" "$RPM_TOPDIR/SOURCES/"
+if [ -f "$CORE_SRC/data/99-dstx.rules" ]; then
+    cp "$CORE_SRC/data/99-dstx.rules" "$RPM_TOPDIR/SOURCES/"
 else
-    echo "ERROR: 99-dstx.rules not found in $CORE_SRC/"
+    echo "ERROR: 99-dstx.rules not found in $CORE_SRC/data/"
     exit 1
 fi
 
-if [ -f "$CORE_SRC/org.dstx.Bridge.conf" ]; then
-    cp "$CORE_SRC/org.dstx.Bridge.conf" "$RPM_TOPDIR/SOURCES/"
+if [ -f "$CORE_SRC/data/org.dstx.Bridge.conf" ]; then
+    cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$RPM_TOPDIR/SOURCES/"
 else
-    echo "ERROR: org.dstx.Bridge.conf not found in $CORE_SRC/"
+    echo "ERROR: org.dstx.Bridge.conf not found in $CORE_SRC/data/"
     exit 1
 fi
 
