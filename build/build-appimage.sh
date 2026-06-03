@@ -19,18 +19,23 @@ docker run --rm -v "$PROJECT_ROOT:/work" ubuntu:rolling bash -c '
     meson setup builddir --prefix=/usr
     ninja -C builddir
 
-    # Install translations and data into a temporary prefix
+    # Install into AppDir
     DESTDIR=/work/AppDir ninja -C builddir install
-    mkdir -p /work/AppDir/usr/bin
-    cp builddir/dstx-gui /work/AppDir/usr/bin/
+
+    # Copy desktop file and icon explicitly (linuxdeploy needs them)
+    cp data/dstx-gui.desktop /work/AppDir/usr/share/applications/
+    cp data/icons/dstx.svg /work/AppDir/usr/share/icons/hicolor/scalable/apps/
 
     # Download linuxdeploy and GTK plugin
     wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
     wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/continuous/linuxdeploy-plugin-gtk-x86_64.AppImage
     chmod +x linuxdeploy*.AppImage
 
-    # Run with verbose output
-    ./linuxdeploy-x86_64.AppImage --appdir /work/AppDir --plugin gtk --output appimage --verbose
+    # Run with explicit desktop and icon file
+    ./linuxdeploy-x86_64.AppImage --appdir /work/AppDir \
+        --desktop-file /work/AppDir/usr/share/applications/dstx-gui.desktop \
+        --icon-file /work/AppDir/usr/share/icons/hicolor/scalable/apps/dstx.svg \
+        --plugin gtk --output appimage
 
     # Move result
     mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
