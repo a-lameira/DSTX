@@ -3,8 +3,9 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 RAW_VERSION=$(cat "$PROJECT_ROOT/VERSION")
-VERSION="${RAW_VERSION//-/.}"   # Replace dash with dot for RPM compatibility
+VERSION="${RAW_VERSION//-/.}"
 CORE_BIN="$PROJECT_ROOT/build/core-static"
+CORE_SRC="$PROJECT_ROOT/dstx"
 OUTPUT_DIR="$PROJECT_ROOT/build/rpm"
 
 echo "📦 Building RPM package (core only) for version $VERSION"
@@ -62,13 +63,14 @@ systemctl stop dstx.service dstx-dbus.service || true
 - Core-only package
 EOF
 
-# Copy source files
+# Copy source files (static binaries and system files)
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$RPM_TOPDIR/SOURCES/"
-cp "$PROJECT_ROOT/dstx/data/dstx.service" \
-   "$PROJECT_ROOT/dstx/data/dstx-dbus.service" \
-   "$PROJECT_ROOT/dstx/data/99-dstx.rules" \
-   "$PROJECT_ROOT/dstx/data/org.dstx.Bridge.conf" \
-   "$RPM_TOPDIR/SOURCES/"
+cp "$CORE_SRC/dstx.service" \
+   "$CORE_SRC/dstx-dbus.service" \
+   "$CORE_SRC/99-dstx.rules" \
+   "$CORE_SRC/org.dstx.Bridge.conf" \
+   "$RPM_TOPDIR/SOURCES/" 2>/dev/null || \
+   echo "Warning: some system files not found, RPM may be incomplete"
 
 # Build using the minimal Fedora container
 docker build -t dstx-fedora-builder -f "$SCRIPT_DIR/containers/fedora-rawhide.Dockerfile" .
