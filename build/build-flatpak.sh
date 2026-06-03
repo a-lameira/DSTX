@@ -9,6 +9,11 @@ MANIFEST="$SCRIPT_DIR/flatpak/org.dstx.gui.yml"
 
 echo "📦 Building Flatpak bundle for DSTX"
 
+# Copy static binaries to a location where the manifest can find them
+mkdir -p "$SCRIPT_DIR/flatpak/static"
+cp "$PROJECT_ROOT/build/core-static/dstx" "$SCRIPT_DIR/flatpak/static/"
+cp "$PROJECT_ROOT/build/core-static/dstx-dbus" "$SCRIPT_DIR/flatpak/static/"
+
 # Clean previous builds
 rm -rf "$REPO_DIR" "$BUILD_DIR"
 mkdir -p "$(dirname "$OUTPUT_BUNDLE")"
