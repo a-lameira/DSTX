@@ -2,7 +2,7 @@
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-CORE_SRC="$PROJECT_ROOT/DSTX"
+CORE_SRC="$PROJECT_ROOT/dstx"
 OUTPUT_DIR="$PROJECT_ROOT/build/core-static"
 
 echo "🔨 Building static core (dstx, dstx-dbus) using Alpine..."
