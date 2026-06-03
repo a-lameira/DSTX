@@ -5,7 +5,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 RAW_VERSION=$(cat "$PROJECT_ROOT/VERSION")
 VERSION="${RAW_VERSION//-/.}"
 CORE_BIN="$PROJECT_ROOT/build/core-static"
-CORE_SRC="$PROJECT_ROOT/dstx"               # Root of core source
+CORE_SRC="$PROJECT_ROOT/dstx"
 OUTPUT_DIR="$PROJECT_ROOT/build/rpm"
 
 echo "📦 Building RPM package (core only) for version $VERSION"
@@ -13,10 +13,13 @@ echo "📦 Building RPM package (core only) for version $VERSION"
 RPM_TOPDIR=$(mktemp -d)
 mkdir -p "$RPM_TOPDIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
-# Create spec file (unchanged)
-cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << 'EOF'
+# Generate changelog date
+CHANGELOG_DATE=$(date +"%a %b %d %Y")
+
+# Create spec file (using double quotes for variable substitution)
+cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << EOF
 Name:           dstx-core
-Version:        @VERSION@
+Version:        $VERSION
 Release:        1%{?dist}
 Summary:        DSTX Core (daemon and D-Bus bridge)
 License:        GPL-3.0-only
@@ -59,19 +62,41 @@ systemctl stop dstx.service dstx-dbus.service || true
 /etc/dbus-1/system.d/org.dstx.Bridge.conf
 
 %changelog
-* $(date +"%a %b %d %Y") André Lameira <alameira@dstx.org> - @VERSION@-1
+* $CHANGELOG_DATE André Lameira <alameira@dstx.org> - $VERSION-1
 - Core-only package
 EOF
 
-sed -i "s/@VERSION@/$VERSION/g" "$RPM_TOPDIR/SPECS/dstx-core.spec"
-
-# Copy static binaries and system files
+# Copy static binaries
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$RPM_TOPDIR/SOURCES/"
-# System files are directly under dstx/ (same as for .deb)
-cp "$CORE_SRC/dstx.service" "$RPM_TOPDIR/SOURCES/" 2>/dev/null || echo "ERROR: dstx.service not found"
-cp "$CORE_SRC/dstx-dbus.service" "$RPM_TOPDIR/SOURCES/" 2>/dev/null || echo "ERROR: dstx-dbus.service not found"
-cp "$CORE_SRC/99-dstx.rules" "$RPM_TOPDIR/SOURCES/" 2>/dev/null || echo "ERROR: 99-dstx.rules not found"
-cp "$CORE_SRC/org.dstx.Bridge.conf" "$RPM_TOPDIR/SOURCES/" 2>/dev/null || echo "ERROR: org.dstx.Bridge.conf not found"
+
+# Copy system files – try both root and data/ subdirectory
+if [ -f "$CORE_SRC/dstx.service" ]; then
+    cp "$CORE_SRC/dstx.service" "$RPM_TOPDIR/SOURCES/"
+else
+    echo "ERROR: dstx.service not found in $CORE_SRC/"
+    exit 1
+fi
+
+if [ -f "$CORE_SRC/dstx-dbus.service" ]; then
+    cp "$CORE_SRC/dstx-dbus.service" "$RPM_TOPDIR/SOURCES/"
+else
+    echo "ERROR: dstx-dbus.service not found in $CORE_SRC/"
+    exit 1
+fi
+
+if [ -f "$CORE_SRC/99-dstx.rules" ]; then
+    cp "$CORE_SRC/99-dstx.rules" "$RPM_TOPDIR/SOURCES/"
+else
+    echo "ERROR: 99-dstx.rules not found in $CORE_SRC/"
+    exit 1
+fi
+
+if [ -f "$CORE_SRC/org.dstx.Bridge.conf" ]; then
+    cp "$CORE_SRC/org.dstx.Bridge.conf" "$RPM_TOPDIR/SOURCES/"
+else
+    echo "ERROR: org.dstx.Bridge.conf not found in $CORE_SRC/"
+    exit 1
+fi
 
 # Build using minimal Fedora container
 docker build -t dstx-fedora-builder -f "$SCRIPT_DIR/containers/fedora-rawhide.Dockerfile" .
