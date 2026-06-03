@@ -1,0 +1,14 @@
+[Unit]
+Description=DSTX D-Bus Bridge
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/dstx-dbus
+Restart=always
+RestartSec=2s
+User=root
+Group=dstx
+
+[Install]
+WantedBy=multi-user.target
