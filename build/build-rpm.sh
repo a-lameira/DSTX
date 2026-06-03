@@ -3,17 +3,16 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 RAW_VERSION=$(cat "$PROJECT_ROOT/VERSION")
-VERSION="${RAW_VERSION//-/.}"
+VERSION="${RAW_VERSION//-/.}"   # Replace dash with dot for RPM compatibility
 CORE_BIN="$PROJECT_ROOT/build/core-static"
 OUTPUT_DIR="$PROJECT_ROOT/build/rpm"
 
 echo "📦 Building RPM package (core only) for version $VERSION"
 
-# Prepare RPM build tree
 RPM_TOPDIR=$(mktemp -d)
 mkdir -p "$RPM_TOPDIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
-# Create a simple spec file for core only
+# Create spec file
 cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << EOF
 Name:           dstx-core
 Version:        $VERSION
@@ -63,12 +62,16 @@ systemctl stop dstx.service dstx-dbus.service || true
 - Core-only package
 EOF
 
-# Copy binaries and system files into SOURCES
+# Copy source files
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$RPM_TOPDIR/SOURCES/"
-cp "$PROJECT_ROOT/dstx/data/dstx.service" "$PROJECT_ROOT/dstx/data/dstx-dbus.service" \
-   "$PROJECT_ROOT/dstx/data/99-dstx.rules" "$PROJECT_ROOT/dstx/data/org.dstx.Bridge.conf" "$RPM_TOPDIR/SOURCES/"
+cp "$PROJECT_ROOT/dstx/data/dstx.service" \
+   "$PROJECT_ROOT/dstx/data/dstx-dbus.service" \
+   "$PROJECT_ROOT/dstx/data/99-dstx.rules" \
+   "$PROJECT_ROOT/dstx/data/org.dstx.Bridge.conf" \
+   "$RPM_TOPDIR/SOURCES/"
 
-# Build RPM
+# Build using the minimal Fedora container
+docker build -t dstx-fedora-builder -f "$SCRIPT_DIR/containers/fedora-rawhide.Dockerfile" .
 docker run --rm -v "$RPM_TOPDIR:/build" dstx-fedora-builder sh -c '
     cd /build
     rpmbuild -bb --define "_topdir $PWD" SPECS/dstx-core.spec
