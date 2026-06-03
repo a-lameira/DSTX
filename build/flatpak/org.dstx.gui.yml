@@ -15,7 +15,7 @@ finish-args:
   - --device=dri
 
 modules:
-  # Core Module (C) - stactic binaries
+  # Core Module (C) - static binaries
   - name: dstx-core-static
     buildsystem: simple
     build-commands:
