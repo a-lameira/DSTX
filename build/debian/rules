@@ -14,6 +14,5 @@ override_dh_auto_build:
 
 override_dh_auto_install:
 	dh_auto_install --destdir=$(CURDIR)/debian/dstx
-	# Copy static binaries (already placed in src/bin/ by the build script)
 	install -Dm755 $(CURDIR)/src/bin/dstx $(CURDIR)/debian/dstx/usr/bin/dstx
 	install -Dm755 $(CURDIR)/src/bin/dstx-dbus $(CURDIR)/debian/dstx/usr/bin/dstx-dbus
