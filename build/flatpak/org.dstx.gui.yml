@@ -19,23 +19,26 @@ modules:
   - name: dstx-core-static
     buildsystem: simple
     build-commands:
-      - install -Dm755 dstx /app/bin/dstx
-      - install -Dm755 dstx-dbus /app/bin/dstx-dbus
+      - install -Dm755 static/dstx /app/bin/dstx
+      - install -Dm755 static/dstx-dbus /app/bin/dstx-dbus
     sources:
       - type: dir
-        path: build/core-static
+        path: static
 
   # GUI Module (Vala)
   - name: dstx-gui
     buildsystem: meson
     config-opts:
       - -Dflatpak=true
-    post-install:
-      # Create locale directories
-      - for lang in pt_BR es_ES fr de it ru; do
-          mkdir -p /app/share/locale/$lang/LC_MESSAGES;
-          cp /run/build/dstx-gui/po/$lang.mo /app/share/locale/$lang/LC_MESSAGES/dstx-gui.mo;
-        done
     sources:
       - type: dir
         path: dstx-gui
+    post-install:
+      - mkdir -p /app/share/locale
+      - cp -r /run/build/dstx-gui/po/*.mo /app/share/locale/ 2>/dev/null || true
+      - for lang in pt_BR es_ES fr de it ru; do
+          if [ -f /run/build/dstx-gui/po/$lang.mo ]; then
+            mkdir -p /app/share/locale/$lang/LC_MESSAGES;
+            cp /run/build/dstx-gui/po/$lang.mo /app/share/locale/$lang/LC_MESSAGES/dstx-gui.mo;
+          fi;
+        done
