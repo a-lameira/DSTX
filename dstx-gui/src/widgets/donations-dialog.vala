@@ -115,7 +115,7 @@ namespace Dstx.Widgets {
         private Adw.ActionRow create_pix_row() {
             var row = new Adw.ActionRow();
             row.set_title(_("PIX (Brazil)"));
-            row.set_subtitle(_("Key: dstx@dstx.org"));
+            row.set_subtitle(_("Key: dstx@dstxapp.org"));
 
             var button = new Gtk.Button.with_label(_("Copy Key"));
             button.add_css_class("suggested-action");
@@ -123,7 +123,7 @@ namespace Dstx.Widgets {
             button.clicked.connect(() => {
                 if (parent != null) {
                     var clipboard = parent.get_clipboard();
-                    clipboard.set_text("dstx@dstx.org");
+                    clipboard.set_text("dstx@dstxapp.org");
 
                     var success_dialog = new Adw.AlertDialog(
                         _("Key copied!"),
