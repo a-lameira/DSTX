@@ -19,7 +19,7 @@ jobs:
 
       - name: Build static core
         run: |
-          chmod +x build-infra/build-core-static.sh
+          chmod +x build/build-core-static.sh
           ./build/build-core-static.sh
 
       - name: Upload core-static artifact
@@ -41,7 +41,7 @@ jobs:
           path: build/core-static/
       - name: Build Flatpak
         run: |
-          chmod +x build-infra/build-flatpak.sh
+          chmod +x build/build-flatpak.sh
           ./build/build-flatpak.sh
       - name: Upload Flatpak bundle
         uses: actions/upload-artifact@v4
@@ -62,7 +62,7 @@ jobs:
           path: build/core-static/
       - name: Build Debian package
         run: |
-          chmod +x build-infra/build-deb.sh
+          chmod +x build/build-deb.sh
           ./build/build-deb.sh
       - name: Upload .deb
         uses: actions/upload-artifact@v4
@@ -83,8 +83,8 @@ jobs:
           path: build/core-static/
       - name: Build RPM
         run: |
-          chmod +x build-infra/build-rpm.sh
-          ./build-infra/build-rpm.sh
+          chmod +x build/build-rpm.sh
+          ./build/build-rpm.sh
       - name: Upload .rpm
         uses: actions/upload-artifact@v4
         with:
@@ -109,7 +109,7 @@ jobs:
           path: build/core-static/
       - name: Build tarball
         run: |
-          chmod +x build-infra/build-tar.sh
+          chmod +x build/build-tar.sh
           ./build/build-tar.sh
       - name: Upload tarball
         uses: actions/upload-artifact@v4
