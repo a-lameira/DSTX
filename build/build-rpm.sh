@@ -5,7 +5,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 RAW_VERSION=$(cat "$PROJECT_ROOT/VERSION")
 VERSION="${RAW_VERSION//-/.}"
 CORE_BIN="$PROJECT_ROOT/build/core-static"
-CORE_SRC="$PROJECT_ROOT/dstx"
+CORE_SRC="$PROJECT_ROOT/dstx"               # Root of core source
 OUTPUT_DIR="$PROJECT_ROOT/build/rpm"
 
 echo "📦 Building RPM package (core only) for version $VERSION"
@@ -13,10 +13,10 @@ echo "📦 Building RPM package (core only) for version $VERSION"
 RPM_TOPDIR=$(mktemp -d)
 mkdir -p "$RPM_TOPDIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
-# Create spec file
-cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << EOF
+# Create spec file (unchanged)
+cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << 'EOF'
 Name:           dstx-core
-Version:        $VERSION
+Version:        @VERSION@
 Release:        1%{?dist}
 Summary:        DSTX Core (daemon and D-Bus bridge)
 License:        GPL-3.0-only
@@ -59,20 +59,21 @@ systemctl stop dstx.service dstx-dbus.service || true
 /etc/dbus-1/system.d/org.dstx.Bridge.conf
 
 %changelog
-* $(date +"%a %b %d %Y") André Lameira <alameira@dstx.org> - $VERSION-1
+* $(date +"%a %b %d %Y") André Lameira <alameira@dstx.org> - @VERSION@-1
 - Core-only package
 EOF
 
-# Copy source files (static binaries and system files)
-cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$RPM_TOPDIR/SOURCES/"
-cp "$CORE_SRC/dstx.service" \
-   "$CORE_SRC/dstx-dbus.service" \
-   "$CORE_SRC/99-dstx.rules" \
-   "$CORE_SRC/org.dstx.Bridge.conf" \
-   "$RPM_TOPDIR/SOURCES/" 2>/dev/null || \
-   echo "Warning: some system files not found, RPM may be incomplete"
+sed -i "s/@VERSION@/$VERSION/g" "$RPM_TOPDIR/SPECS/dstx-core.spec"
 
-# Build using the minimal Fedora container
+# Copy static binaries and system files
+cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$RPM_TOPDIR/SOURCES/"
+# System files are directly under dstx/ (same as for .deb)
+cp "$CORE_SRC/dstx.service" "$RPM_TOPDIR/SOURCES/" 2>/dev/null || echo "ERROR: dstx.service not found"
+cp "$CORE_SRC/dstx-dbus.service" "$RPM_TOPDIR/SOURCES/" 2>/dev/null || echo "ERROR: dstx-dbus.service not found"
+cp "$CORE_SRC/99-dstx.rules" "$RPM_TOPDIR/SOURCES/" 2>/dev/null || echo "ERROR: 99-dstx.rules not found"
+cp "$CORE_SRC/org.dstx.Bridge.conf" "$RPM_TOPDIR/SOURCES/" 2>/dev/null || echo "ERROR: org.dstx.Bridge.conf not found"
+
+# Build using minimal Fedora container
 docker build -t dstx-fedora-builder -f "$SCRIPT_DIR/containers/fedora-rawhide.Dockerfile" .
 docker run --rm -v "$RPM_TOPDIR:/build" dstx-fedora-builder sh -c '
     cd /build
