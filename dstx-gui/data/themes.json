@@ -1,0 +1,904 @@
+{
+  "themes": {
+    "light": {
+      "name": "Light",
+      "type": "light",
+      "thumbnail": {
+        "bg": "#f6f5f4",
+        "accent": "#3584e4",
+        "text": "#2e3436"
+      },
+      "palette": [
+        "#e45a79", "#e59859", "#e7bf6c", "#3fb69d", "#43b4c2",
+        "#1ea2bf", "#a47b9a", "#cd779c", "#a4ada3", "#df7ba9"
+      ],
+      "window": {
+        "--accent-bg": "#3584e4",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#5e9bff",
+        "--accent-active": "#1c71d8",
+        "--window-bg": "#f6f5f4",
+        "--window-fg": "#2e3436",
+        "--headerbar-bg": "#e5e3e0",
+        "--headerbar-fg": "#2e3436",
+        "--popover-bg": "#ffffff",
+        "--popover-fg": "#2e3436",
+        "--card-bg": "#ffffff",
+        "--card-fg": "#2e3436",
+        "--sidebar-bg": "#f0f0ef",
+        "--sidebar-fg": "#2e3436",
+        "--sidebar-border": "#e5e2de",
+        "--border": "#cdc7c2",
+        "--button-bg": "#f0f0ef",
+        "--button-fg": "#2e3436",
+        "--button-hover": "#e5e3e0",
+        "--button-active": "#d9d7d4",
+        "--view-bg": "#ffffff",
+        "--view-fg": "#2e3436",
+        "--dialog-bg": "#ffffff",
+        "--dialog-fg": "#2e3436"
+      },
+      "controller": {
+        "primary": "#c9c4c4",
+        "secondary": "#a69d9d",
+        "accent": "#3584e4",
+        "symbol": "#2e3436"
+      }
+    },
+    "dark": {
+      "name": "Dark",
+      "type": "dark",
+      "thumbnail": {
+        "bg": "#1e1e1e",
+        "accent": "#3584e4",
+        "text": "#e6e6e6"
+      },
+      "palette": [
+        "#cb1b3c", "#e25c26", "#da9b2e", "#1bb19d", "#0da8ca",
+        "#034ec2", "#7b51de", "#e53c6f", "#96a7a5", "#ed6698"
+      ],
+      "window": {
+        "--accent-bg": "#3584e4",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#5e9bff",
+        "--accent-active": "#1c71d8",
+        "--window-bg": "#1e1e1e",
+        "--window-fg": "#e6e6e6",
+        "--headerbar-bg": "#2a2a2a",
+        "--headerbar-fg": "#e6e6e6",
+        "--popover-bg": "#2a2a2a",
+        "--popover-fg": "#e6e6e6",
+        "--card-bg": "#2e2e2e",
+        "--card-fg": "#e6e6e6",
+        "--sidebar-bg": "#252525",
+        "--sidebar-fg": "#e6e6e6",
+        "--sidebar-border": "#0f0f0f",
+        "--border": "#3a3a3a",
+        "--button-bg": "#252525",
+        "--button-fg": "#e6e6e6",
+        "--button-hover": "#3a3a3a",
+        "--button-active": "#4a4a4a",
+        "--view-bg": "#2a2a2a",
+        "--view-fg": "#e6e6e6",
+        "--dialog-bg": "#2a2a2a",
+        "--dialog-fg": "#e6e6e6"
+      },
+      "controller": {
+        "primary": "#666666",
+        "secondary": "#4d4d4d",
+        "accent": "#3584e4",
+        "symbol": "#e6e6e6"
+      }
+    },
+    "algae": {
+      "name": "Algae",
+      "type": "dark",
+      "thumbnail": {
+        "bg": "#0a2f2a",
+        "accent": "#2ecc71",
+        "text": "#e0f2e9"
+      },
+      "palette": [
+        "#c44f45", "#d7853c", "#9ea231", "#5ebe76", "#198fbc",
+        "#250a98", "#888afb", "#601928", "#a1aeb6", "#db99bc"
+      ],
+      "window": {
+        "--accent-bg": "#2ecc71",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#1abc9c",
+        "--accent-active": "#16a085",
+        "--window-bg": "#0a2f2a",
+        "--window-fg": "#e0f2e9",
+        "--headerbar-bg": "#1a4a42",
+        "--headerbar-fg": "#e0f2e9",
+        "--popover-bg": "#1e5a50",
+        "--popover-fg": "#e0f2e9",
+        "--card-bg": "#1e5a50",
+        "--card-fg": "#e0f2e9",
+        "--sidebar-bg": "#0f3f38",
+        "--sidebar-fg": "#e0f2e9",
+        "--sidebar-border": "#051412",
+        "--border": "#2a6b5e",
+        "--button-bg": "#1e5a50",
+        "--button-fg": "#e0f2e9",
+        "--button-hover": "#2a6b5e",
+        "--button-active": "#358072",
+        "--view-bg": "#1a4a42",
+        "--view-fg": "#e0f2e9",
+        "--dialog-bg": "#1e5a50",
+        "--dialog-fg": "#e0f2e9"
+      },
+      "controller": {
+        "primary": "#22825b",
+        "secondary": "#1b5449",
+        "accent": "#2ecc71",
+        "symbol": "#e0f2e9"
+      }
+    },
+    "midnight": {
+      "name": "Midnight",
+      "type": "dark",
+      "thumbnail": {
+        "bg": "#0a0e27",
+        "accent": "#5f27cd",
+        "text": "#e0e4f0"
+      },
+      "palette": [
+        "#98363b", "#cc7939", "#cc9e34", "#618d42", "#478cb8",
+        "#285785", "#5b57a3", "#a5365e", "#979e9c", "#b57aa7"
+      ],
+      "window": {
+        "--accent-bg": "#5f27cd",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#4834d4",
+        "--accent-active": "#341f97",
+        "--window-bg": "#0a0e27",
+        "--window-fg": "#e0e4f0",
+        "--headerbar-bg": "#1a2a4a",
+        "--headerbar-fg": "#e0e4f0",
+        "--popover-bg": "#1e2e5a",
+        "--popover-fg": "#e0e4f0",
+        "--card-bg": "#1e2e5a",
+        "--card-fg": "#e0e4f0",
+        "--sidebar-bg": "#14223e",
+        "--sidebar-fg": "#e0e4f0",
+        "--sidebar-border": "#050728",
+        "--border": "#3a4a8a",
+        "--button-bg": "#1e2e5a",
+        "--button-fg": "#e0e4f0",
+        "--button-hover": "#3a4a8a",
+        "--button-active": "#4a5aaa",
+        "--view-bg": "#1a2a4a",
+        "--view-fg": "#e0e4f0",
+        "--dialog-bg": "#1e2e5a",
+        "--dialog-fg": "#e0e4f0"
+      },
+      "controller": {
+        "primary": "#1e2e6f",
+        "secondary": "#142442",
+        "accent": "#5f27cd",
+        "symbol": "#e0e4f0"
+      }
+    },
+    "volcano": {
+      "name": "Volcano",
+      "type": "dark",
+      "thumbnail": {
+        "bg": "#2a0e0a",
+        "accent": "#e63946",
+        "text": "#f0e0e0"
+      },
+      "palette": [
+        "#f12f2d", "#ff5402", "#fcb804", "#355333", "#7b9dc0",
+        "#003362", "#7e557d", "#8d2522", "#847d77", "#ef8da6"
+      ],
+      "window": {
+        "--accent-bg": "#e63946",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#f4a261",
+        "--accent-active": "#e9c46a",
+        "--window-bg": "#2a0e0a",
+        "--window-fg": "#f0e0e0",
+        "--headerbar-bg": "#4a2a1a",
+        "--headerbar-fg": "#f0e0e0",
+        "--popover-bg": "#5a3a2a",
+        "--popover-fg": "#f0e0e0",
+        "--card-bg": "#5a3a2a",
+        "--card-fg": "#f0e0e0",
+        "--sidebar-bg": "#3e2a1e",
+        "--sidebar-fg": "#f0e0e0",
+        "--sidebar-border": "#200705",
+        "--border": "#8a4a3a",
+        "--button-bg": "#5a3a2a",
+        "--button-fg": "#f0e0e0",
+        "--button-hover": "#8a4a3a",
+        "--button-active": "#aa6a4a",
+        "--view-bg": "#4a2a1a",
+        "--view-fg": "#f0e0e0",
+        "--dialog-bg": "#5a3a2a",
+        "--dialog-fg": "#f0e0e0"
+      },
+      "controller": {
+        "primary": "#733a2a",
+        "secondary": "#4a2604",
+        "accent": "#e63946",
+        "symbol": "#f0e0e0"
+      }
+    },
+    "sand": {
+      "name": "Sand",
+      "type": "light",
+      "thumbnail": {
+        "bg": "#fef7e8",
+        "accent": "#e07a5f",
+        "text": "#4a3b28"
+      },
+      "palette": [
+        "#f5ab9c", "#f9cdb5", "#fcdfbf", "#b0c9b4", "#a5c2cc",
+        "#849db2", "#a5abcb", "#f78f9e", "#d6d6d6", "#efccc9"
+      ],
+      "window": {
+        "--accent-bg": "#e07a5f",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#f4a261",
+        "--accent-active": "#e9c46a",
+        "--window-bg": "#fef7e8",
+        "--window-fg": "#4a3b28",
+        "--headerbar-bg": "#f5ecd9",
+        "--headerbar-fg": "#4a3b28",
+        "--popover-bg": "#fff9ef",
+        "--popover-fg": "#4a3b28",
+        "--card-bg": "#fff9ef",
+        "--card-fg": "#4a3b28",
+        "--sidebar-bg": "#f0e6d4",
+        "--sidebar-fg": "#4a3b28",
+        "--sidebar-border": "#e0cfb5",
+        "--border": "#e0cfb5",
+        "--button-bg": "#fff0e0",
+        "--button-fg": "#4a3b28",
+        "--button-hover": "#f0e0cc",
+        "--button-active": "#e0cfb5",
+        "--view-bg": "#fff9ef",
+        "--view-fg": "#4a3b28",
+        "--dialog-bg": "#fff9ef",
+        "--dialog-fg": "#4a3b28"
+      },
+      "controller": {
+        "primary": "#e0d4b9",
+        "secondary": "#bba897",
+        "accent": "#e07a5f",
+        "symbol": "#4a3b28"
+      }
+    },
+    "sunshine": {
+  "name": "Sunshine",
+  "type": "light",
+  "thumbnail": {
+    "bg": "#fef9e6",
+    "accent": "#e9b35f",
+    "text": "#3e2613"
+  },
+  "palette": [
+    "#eb4a05", "#fdb13a", "#fbda24", "#c8dd44", "#91cef1",
+    "#30ace4", "#a1a1b5", "#ef526f", "#bebdc4", "#e3a0af"
+  ],
+  "window": {
+    "--accent-bg": "#e9b35f",
+    "--accent-fg": "#ffffff",
+    "--accent-hover": "#f0c47a",
+    "--accent-active": "#d49c3a",
+    "--window-bg": "#fefbf0",
+    "--window-fg": "#3e2613",
+    "--headerbar-bg": "#fef2d6",
+    "--headerbar-fg": "#3e2613",
+    "--popover-bg": "#fffef9",
+    "--popover-fg": "#3e2613",
+    "--card-bg": "#fffdf9",
+    "--card-fg": "#3e2613",
+    "--sidebar-bg": "#feeecd",
+    "--sidebar-fg": "#3e2613",
+    "--sidebar-border": "#f0e0b0",
+    "--border": "#f0e0b0",
+    "--button-bg": "#fffef9",
+    "--button-fg": "#3e2613",
+    "--button-hover": "#fef2d6",
+    "--button-active": "#f9e5b3",
+    "--view-bg": "#ffffff",
+    "--view-fg": "#3e2613",
+    "--dialog-bg": "#ffffff",
+    "--dialog-fg": "#3e2613"
+  },
+  "controller": {
+    "primary": "#ffe7ad",
+    "secondary": "#e8ca85",
+    "accent": "#e9b35f",
+    "symbol": "#5e3a1c"
+  }
+},
+"grass": {
+  "name": "Grass",
+  "type": "light",
+  "thumbnail": {
+    "bg": "#f0f7e8",
+    "accent": "#6b8c42",
+    "text": "#213721"
+  },
+  "palette": [
+    "#ed430d", "#fa8f03", "#f2e338", "#b5c335", "#8dc7ec",
+    "#529fd1", "#847eb5", "#ee508f", "#bec2d2", "#fbaff5"
+  ],
+  "window": {
+    "--accent-bg": "#6b8c42",
+    "--accent-fg": "#ffffff",
+    "--accent-hover": "#8aaa62",
+    "--accent-active": "#5a7a38",
+    "--window-bg": "#eef9ec",
+    "--window-fg": "#213721",
+    "--headerbar-bg": "#e8f0de",
+    "--headerbar-fg": "#213721",
+    "--popover-bg": "#ffffff",
+    "--popover-fg": "#213721",
+    "--card-bg": "#f4f7f2",
+    "--card-fg": "#213721",
+    "--sidebar-bg": "#d6eecf",
+    "--sidebar-fg": "#213721",
+    "--sidebar-border": "#d0e0c0",
+    "--border": "#d0e0c0",
+    "--button-bg": "#ffffff",
+    "--button-fg": "#213721",
+    "--button-hover": "#e8f0de",
+    "--button-active": "#d0e0c0",
+    "--view-bg": "#ffffff",
+    "--view-fg": "#213721",
+    "--dialog-bg": "#ffffff",
+    "--dialog-fg": "#213721"
+  },
+  "controller": {
+    "primary": "#c0e0b0",
+    "secondary": "#9fbb8d",
+    "accent": "#6b8c42",
+    "symbol": "#2c4a2c"
+  }
+},
+"tangerine": {
+  "name": "Tangerine",
+  "type": "light",
+  "thumbnail": {
+    "bg": "#fff0e6",
+    "accent": "#e67e22",
+    "text": "#361f09"
+  },
+  "palette": [
+    "#ff4433", "#ec8407", "#f3c32b", "#b3dc59", "#78dbfb",
+    "#2ba9f9", "#995975", "#ff4f7e", "#a8b8c6", "#f6aab6"
+  ],
+  "window": {
+    "--accent-bg": "#e67e22",
+    "--accent-fg": "#ffffff",
+    "--accent-hover": "#f39c12",
+    "--accent-active": "#d35400",
+    "--window-bg": "#fff0e6",
+    "--window-fg": "#361f09",
+    "--headerbar-bg": "#ffe8d9",
+    "--headerbar-fg": "#361f09",
+    "--popover-bg": "#fffaf5",
+    "--popover-fg": "#361f09",
+    "--card-bg": "#fffaf7",
+    "--card-fg": "#361f09",
+    "--sidebar-bg": "#ffdbc4",
+    "--sidebar-fg": "#361f09",
+    "--sidebar-border": "#ffd4b3",
+    "--border": "#ffd4b3",
+    "--button-bg": "#fffaf5",
+    "--button-fg": "#361f09",
+    "--button-hover": "#ffe8d9",
+    "--button-active": "#ffd4b3",
+    "--view-bg": "#ffffff",
+    "--view-fg": "#361f09",
+    "--dialog-bg": "#ffffff",
+    "--dialog-fg": "#361f09"
+  },
+  "controller": {
+    "primary": "#ffcba5",
+    "secondary": "#ffb085",
+    "accent": "#e67e22",
+    "symbol": "#8b4513"
+  }
+},
+"strawberry": {
+  "name": "Strawberry",
+  "type": "light",
+  "thumbnail": {
+    "bg": "#fff0f0",
+    "accent": "#e63946",
+    "text": "#3b1111"
+  },
+  "palette": [
+    "#f93e10", "#f7b24d", "#eed508", "#9dc126", "#9fcce2",
+    "#5ea8d1", "#b48bd9", "#dd597c", "#b5b6b9", "#ffa2b4"
+  ],
+  "window": {
+    "--accent-bg": "#e63946",
+    "--accent-fg": "#ffffff",
+    "--accent-hover": "#ff6b6b",
+    "--accent-active": "#c92a2a",
+    "--window-bg": "#fff3f3",
+    "--window-fg": "#3b1111",
+    "--headerbar-bg": "#ffe6e6",
+    "--headerbar-fg": "#3b1111",
+    "--popover-bg": "#fffafa",
+    "--popover-fg": "#3b1111",
+    "--card-bg": "#fffafa",
+    "--card-fg": "#3b1111",
+    "--sidebar-bg": "#ffdbdb",
+    "--sidebar-fg": "#3b1111",
+    "--sidebar-border": "#ffbbbb",
+    "--border": "#ffcccc",
+    "--button-bg": "#fffafa",
+    "--button-fg": "#ffffff",
+    "--button-hover": "#ffe6e6",
+    "--button-active": "#ffcccc",
+    "--view-bg": "#ffffff",
+    "--view-fg": "#3b1111",
+    "--dialog-bg": "#ffffff",
+    "--dialog-fg": "#3b1111"
+  },
+  "controller": {
+    "primary": "#ffaeae",
+    "secondary": "#f48f92",
+    "accent": "#e63946",
+    "symbol": "#8b2c2c"
+  }
+},
+"steel": {
+  "name": "Steel",
+  "type": "light",
+  "thumbnail": {
+    "bg": "#f0f2f5",
+    "accent": "#5a6e7a",
+    "text": "#22303e"
+  },
+  "palette": [
+"d7635a", "#e08a59", "#e1c055", "#7cbb94", "#65b1c6",    
+"#0091ae", "#918199", "#da3f64", "#adb5c5", "#f49dbc"
+  ],
+  "window": {
+    "--accent-bg": "#5a6e7a",
+    "--accent-fg": "#ffffff",
+    "--accent-hover": "#7a8e9a",
+    "--accent-active": "#3a4e5a",
+    "--window-bg": "#e4e8ed",
+    "--window-fg": "#22303e",
+    "--headerbar-bg": "#e8ecf0",
+    "--headerbar-fg": "#22303e",
+    "--popover-bg": "#ffffff",
+    "--popover-fg": "#22303e",
+    "--card-bg": "#ebedf0",
+    "--card-fg": "#22303e",
+    "--sidebar-bg": "#dae0e8",
+    "--sidebar-fg": "#22303e",
+    "--sidebar-border": "#d0d8e0",
+    "--border": "#d0d8e0",
+    "--button-bg": "#ffffff",
+    "--button-fg": "#22303e",
+    "--button-hover": "#e8ecf0",
+    "--button-active": "#d0d8e0",
+    "--view-bg": "#ffffff",
+    "--view-fg": "#22303e",
+    "--dialog-bg": "#ffffff",
+    "--dialog-fg": "#22303e"
+  },
+  "controller": {
+    "primary": "#c3cbd1",
+    "secondary": "#a7adb3",
+    "accent": "#5a6e7a",
+    "symbol": "#22303e"
+  }
+},
+"grape": {
+  "name": "Grape",
+  "type": "light",
+  "thumbnail": {
+    "bg": "#f5f0ff",
+    "accent": "#9b59b6",
+    "text": "#3f274c"
+  },
+  "palette": [
+    "#f1353d", "#f7a423", "#debd37", "#b2ad02", "#6ccae8",
+    "#81a9d9", "#b875fb", "#e23285", "#a9a29f", "#fd99a1"
+  ],
+  "window": {
+    "--accent-bg": "#9b59b6",
+    "--accent-fg": "#ffffff",
+    "--accent-hover": "#c47dd9",
+    "--accent-active": "#8e44ad",
+    "--window-bg": "#f3ecff",
+    "--window-fg": "#3f274c",
+    "--headerbar-bg": "#f0e6ff",
+    "--headerbar-fg": "#3f274c",
+    "--popover-bg": "#ffffff",
+    "--popover-fg": "#3f274c",
+    "--card-bg": "#f7f4ff",
+    "--card-fg": "#3f274c",
+    "--sidebar-bg": "#e3d0ff",
+    "--sidebar-fg": "#3f274c",
+    "--sidebar-border": "#d6b9ff",
+    "--border": "#e6d6ff",
+    "--button-bg": "#ffffff",
+    "--button-fg": "#3f274c",
+    "--button-hover": "#f0e6ff",
+    "--button-active": "#e6d6ff",
+    "--view-bg": "#ffffff",
+    "--view-fg": "#3f274c",
+    "--dialog-bg": "#ffffff",
+    "--dialog-fg": "#3f274c"
+  },
+  "controller": {
+    "primary": "#b799f6",
+    "secondary": "#947bc7",
+    "accent": "#9b59b6",
+    "symbol": "#4a2e5a"
+  }
+},
+"gold": {
+  "name": "Gold",
+  "type": "dark",
+  "thumbnail": {
+    "bg": "#1a1a0a",
+    "accent": "#ffd700",
+    "text": "#fff6d3"
+  },
+  "palette": [
+    "#dc3005", "#f99513", "#fcc200", "#318d52", "#abced7",
+    "#5e96c6", "#b09bb3", "#d15079", "#cac2c4", "#ecb7ba"
+  ],
+  "window": {
+    "--accent-bg": "#ffd700",
+    "--accent-fg": "#fff6d3",
+    "--accent-hover": "#ffe45c",
+    "--accent-active": "#e6c300",
+    "--window-bg": "#1a1a0a",
+    "--window-fg": "#fff6d3",
+    "--headerbar-bg": "#2a2a14",
+    "--headerbar-fg": "#fff6d3",
+    "--popover-bg": "#2a2a14",
+    "--popover-fg": "#fff6d3",
+    "--card-bg": "#2a2a14",
+    "--card-fg": "#fff6d3",
+    "--sidebar-bg": "#1f1f0f",
+    "--sidebar-fg": "#fff6d3",
+    "--sidebar-border": "#17170b",
+    "--border": "#3a3a1e",
+    "--button-bg": "#2a2a14",
+    "--button-fg": "#fff6d3",
+    "--button-hover": "#3a3a1e",
+    "--button-active": "#4a4a28",
+    "--view-bg": "#2a2a14",
+    "--view-fg": "#fff6d3",
+    "--dialog-bg": "#2a2a14",
+    "--dialog-fg": "#fff6d3"
+  },
+  "controller": {
+    "primary": "#4b4b26",
+    "secondary": "#34341b",
+    "accent": "#ffd700",
+    "symbol": "#fff6d3"
+  }
+},
+"slate": {
+  "name": "Slate",
+  "type": "dark",
+  "thumbnail": {
+    "bg": "#0a1a2a",
+    "accent": "#48d1cc",
+    "text": "#e0f0ff"
+  },
+  "palette": [
+    "#c3453c", "#db9155", "#edbc60", "#709656", "#78a2ba",
+    "#608eb9", "#8d88b0", "#ab4075", "#afa6a1", "#e1a9a7"
+  ],
+  "window": {
+    "--accent-bg": "#48d1cc",
+    "--accent-fg": "#e0f0ff",
+    "--accent-hover": "#6ee5e0",
+    "--accent-active": "#2aa5a0",
+    "--window-bg": "#091724",
+    "--window-fg": "#e0f0ff",
+    "--headerbar-bg": "#142a3a",
+    "--headerbar-fg": "#e0f0ff",
+    "--popover-bg": "#1a2a3a",
+    "--popover-fg": "#e0f0ff",
+    "--card-bg": "#1a2a3a",
+    "--card-fg": "#e0f0ff",
+    "--sidebar-bg": "#0f202e",
+    "--sidebar-fg": "#e0f0ff",
+    "--sidebar-border": "#07121d",
+    "--border": "#2a4050",
+    "--button-bg": "#1a2a3a",
+    "--button-fg": "#e0f0ff",
+    "--button-hover": "#2a4050",
+    "--button-active": "#3a5060",
+    "--view-bg": "#1a2a3a",
+    "--view-fg": "#e0f0ff",
+    "--dialog-bg": "#1a2a3a",
+    "--dialog-fg": "#e0f0ff"
+  },
+  "controller": {
+    "primary": "#2a4050",
+    "secondary": "#1a2a3a",
+    "accent": "#48d1cc",
+    "symbol": "#e0f0ff"
+  }
+},
+"rose": {
+  "name": "Rose",
+  "type": "dark",
+  "thumbnail": {
+    "bg": "#230816",
+    "accent": "#ff69b4",
+    "text": "#ffe5ef"
+  },
+  "palette": [
+    "#ee0017", "#f48062", "#dca734", "#87b258", "#9cb7ce",
+    "#6d99d0", "#c28df4", "#f83475", "#a6a497", "#f77dd9"
+  ],
+  "window": {
+    "--accent-bg": "#ff69b4",
+    "--accent-fg": "#ffe5ef",
+    "--accent-hover": "#ff9fcd",
+    "--accent-active": "#e64d99",
+    "--window-bg": "#230816",
+    "--window-fg": "#ffe5ef",
+    "--headerbar-bg": "#3a1428",
+    "--headerbar-fg": "#ffe5ef",
+    "--popover-bg": "#3a1a2a",
+    "--popover-fg": "#ffe5ef",
+    "--card-bg": "#661845",
+    "--card-fg": "#ffe5ef",
+    "--sidebar-bg": "#420d2b",
+    "--sidebar-fg": "#ffe5ef",
+    "--sidebar-border": "#190610",
+    "--border": "#4a2a3a",
+    "--button-bg": "#3a1a2a",
+    "--button-fg": "#ffe5ef",
+    "--button-hover": "#4a2a3a",
+    "--button-active": "#ffe5ef",
+    "--view-bg": "#3a1a2a",
+    "--view-fg": "#ffe5ef",
+    "--dialog-bg": "#3a1a2a",
+    "--dialog-fg": "#ffe5ef"
+  },
+  "controller": {
+    "primary": "#891e59",
+    "secondary": "#551237",
+    "accent": "#ff69b4",
+    "symbol": "#ffe5ef"
+  }
+},
+    "sky": {
+      "name": "Sky",
+      "type": "light",
+      "thumbnail": {
+        "bg": "#f0f8ff",
+        "accent": "#4a9eff",
+        "text": "#142d3d"
+      },
+      "palette": [
+"#d94f52", "#eb954c", "#e6cb43", "#9ac28c", "#90c8e1",        
+"#2f98da", "#aa9bca", "#d2345b", "#a0abb8", "#e1adc5"
+      ],
+      "window": {
+        "--accent-bg": "#4a9eff",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#6bb5ff",
+        "--accent-active": "#2d88ff",
+        "--window-bg": "#e4f4ff",
+        "--window-fg": "#142d3d",
+        "--headerbar-bg": "#e6f0fa",
+        "--headerbar-fg": "#142d3d",
+        "--popover-bg": "#ffffff",
+        "--popover-fg": "#142d3d",
+        "--card-bg": "#f0f8ff",
+        "--card-fg": "#142d3d",
+        "--sidebar-bg": "#cee6fa",
+        "--sidebar-fg": "#142d3d",
+        "--sidebar-border": "#c0d4e8",
+        "--border": "#c0d4e8",
+        "--button-bg": "#ffffff",
+        "--button-fg": "#1a3b4f",
+        "--button-hover": "#e6f0fa",
+        "--button-active": "#d4e4f0",
+        "--view-bg": "#ffffff",
+        "--view-fg": "#142d3d",
+        "--dialog-bg": "#ffffff",
+        "--dialog-fg": "#142d3d"
+      },
+      "controller": {
+        "primary": "#9bcdf4",
+        "secondary": "#689dcf",
+        "accent": "#4a9eff",
+        "symbol": "#1a3b4f"
+      }
+    },
+    "bubblegum": {
+      "name": "Bubblegum",
+      "type": "light",
+      "thumbnail": {
+        "bg": "#faf0ff",
+        "accent": "#c77dff",
+        "text": "#3a2a4a"
+      },
+      "palette": [
+        "#ed0213", "#f8aa00", "#f5df31", "#01bf03", "#0cbbfa",
+        "#008fed", "#845ab5", "#f51f75", "#d0c2ca", "#fda3d7"
+      ],
+      "window": {
+        "--accent-bg": "#c77dff",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#dd9eff",
+        "--accent-active": "#b25eff",
+        "--window-bg": "#ffebff",
+        "--window-fg": "#3a2a4a",
+        "--headerbar-bg": "#f5e6ff",
+        "--headerbar-fg": "#3a2a4a",
+        "--popover-bg": "#ffffff",
+        "--popover-fg": "#3a2a4a",
+        "--card-bg": "#fff8ff",
+        "--card-fg": "#3a2a4a",
+        "--sidebar-bg": "#ffdbff",
+        "--sidebar-fg": "#3a2a4a",
+        "--sidebar-border": "#e0c8f0",
+        "--border": "#e0c8f0",
+        "--button-bg": "#ffffff",
+        "--button-fg": "#3a2a4a",
+        "--button-hover": "#f5e6ff",
+        "--button-active": "#e8d4fa",
+        "--view-bg": "#ffffff",
+        "--view-fg": "#3a2a4a",
+        "--dialog-bg": "#ffffff",
+        "--dialog-fg": "#3a2a4a"
+      },
+      "controller": {
+        "primary": "#ffc0ee",
+        "secondary": "#d394c4",
+        "accent": "#c77dff",
+        "symbol": "#3a2a4a"
+      }
+    },
+    "mahogany": {
+      "name": "Mahogany",
+      "type": "dark",
+      "thumbnail": {
+        "bg": "#2a2418",
+        "accent": "#c46b3e",
+        "text": "#e8dccc"
+      },
+      "palette": [
+        "#ca3435", "#e97451", "#cba146", "#8b8340", "#0c7d8c",
+        "#3d5a8c", "#82486f", "#d63863", "#a9a0aa", "#c2728d"
+      ],
+      "window": {
+        "--accent-bg": "#c46b3e",
+        "--accent-fg": "#f5e6d4",
+        "--accent-hover": "#e07a5f",
+        "--accent-active": "#f4a261",
+        "--window-bg": "#1f1a10",
+        "--window-fg": "#e8dccc",
+        "--headerbar-bg": "#3a2e20",
+        "--headerbar-fg": "#e8dccc",
+        "--popover-bg": "#4a3a2a",
+        "--popover-fg": "#e8dccc",
+        "--card-bg": "#4a3a2a",
+        "--card-fg": "#e8dccc",
+        "--sidebar-bg": "#3a2e20",
+        "--sidebar-fg": "#e8dccc",
+        "--sidebar-border": "#201a0e",
+        "--border": "#6a4a32",
+        "--button-bg": "#5a422e",
+        "--button-fg": "#e8dccc",
+        "--button-hover": "#6a523a",
+        "--button-active": "#7a624a",
+        "--view-bg": "#3a2e20",
+        "--view-fg": "#e8dccc",
+        "--dialog-bg": "#4a3a2a",
+        "--dialog-fg": "#e8dccc"
+      },
+      "controller": {
+        "primary": "#4f3a1e",
+        "secondary": "#3e2b16",
+        "accent": "#c46b3e",
+        "symbol": "#e8dccc"
+      }
+    },
+    "space": {
+      "name": "Space",
+      "type": "dark",
+      "thumbnail": {
+        "bg": "#0c0a1a",
+        "accent": "#6a4eff",
+        "text": "#e0e4ff"
+      },
+      "palette": [
+        "#b84d3b", "#e37132", "#d6b176", "#00b2aa", "#53b1d5",
+        "#4c4bef", "#826a9e", "#9e3a56", "#81858e", "#df9eb4"
+      ],
+      "window": {
+        "--accent-bg": "#6a4eff",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#8a6eff",
+        "--accent-active": "#4a2eff",
+        "--window-bg": "#0c0a1a",
+        "--window-fg": "#e0e4ff",
+        "--headerbar-bg": "#1a1630",
+        "--headerbar-fg": "#e0e4ff",
+        "--popover-bg": "#222040",
+        "--popover-fg": "#e0e4ff",
+        "--card-bg": "#222040",
+        "--card-fg": "#e0e4ff",
+        "--sidebar-bg": "#16142e",
+        "--sidebar-fg": "#e0e4ff",
+        "--sidebar-border": "#070313",
+        "--border": "#4a3e9a",
+        "--button-bg": "#2a2650",
+        "--button-fg": "#e0e4ff",
+        "--button-hover": "#3a2e6a",
+        "--button-active": "#4a3e8a",
+        "--view-bg": "#1a1630",
+        "--view-fg": "#e0e4ff",
+        "--dialog-bg": "#222040",
+        "--dialog-fg": "#e0e4ff"
+      },
+      "controller": {
+        "primary": "#2a2650",
+        "secondary": "#211746",
+        "accent": "#6a4eff",
+        "symbol": "#e0e4ff"
+      }
+    },
+    "cherry": {
+      "name": "Cherry",
+      "type": "dark",
+      "thumbnail": {
+        "bg": "#1e0a10",
+        "accent": "#e63946",
+        "text": "#ffdede"
+      },
+      "palette": [
+        "#90292f", "#b35900", "#a89000", "#596c08", "#396f98",
+        "#215770", "#7e4a87", "#7b1d3c", "#726868", "#914572"
+      ],
+      "window": {
+        "--accent-bg": "#e63946",
+        "--accent-fg": "#ffffff",
+        "--accent-hover": "#ff6b6b",
+        "--accent-active": "#ff9f4a",
+        "--window-bg": "#1e0a10",
+        "--window-fg": "#ffdede",
+        "--headerbar-bg": "#3a1a24",
+        "--headerbar-fg": "#ffdede",
+        "--popover-bg": "#4a2634",
+        "--popover-fg": "#ffdede",
+        "--card-bg": "#4a2634",
+        "--card-fg": "#ffdede",
+        "--sidebar-bg": "#321a24",
+        "--sidebar-fg": "#ffdede",
+        "--sidebar-border": "#18070c",
+        "--border": "#b33a4a",
+        "--button-bg": "#5a2e3e",
+        "--button-fg": "#ffdede",
+        "--button-hover": "#7a3e52",
+        "--button-active": "#9a4e66",
+        "--view-bg": "#3a1a24",
+        "--view-fg": "#ffdede",
+        "--dialog-bg": "#4a2634",
+        "--dialog-fg": "#ffdede"
+      },
+      "controller": {
+        "primary": "#622634",
+        "secondary": "#4f1f2a",
+        "accent": "#e63946",
+        "symbol": "#ffdede"
+      }
+    }
+  }
+}

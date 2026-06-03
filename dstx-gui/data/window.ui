@@ -1,0 +1,532 @@
+<!--
+ * window.ui - Main window UI definition for DSTX GUI
+ *
+ * Copyright (C) 2026 André Lameira
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * RESPONSIBILITIES:
+ * - Define the main application window layout
+ * - Provide splash, error, and main interface views
+ * - Configure sidebars, center area, and controller display
+ * - Define header bars and menu buttons
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="libadwaita" version="1.4"/>
+  
+  <template class="DstxMainWindow" parent="AdwWindow">
+    <property name="default-width">1200</property>
+    <property name="default-height">800</property>
+    <property name="title" translatable="no"></property>
+    
+    <property name="content">
+      <object class="AdwToolbarView">
+        <property name="content">
+          <object class="GtkStack" id="main_stack">
+            <property name="transition-type">crossfade</property>
+            <property name="vexpand">true</property>
+            <property name="hexpand">true</property>
+            
+            <!-- Page 0: Initialization (Splash) -->
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">splash</property>
+                <property name="child">
+                  <object class="AdwToolbarView">
+                    <child type="top">
+                      <object class="AdwHeaderBar">
+                        <property name="show-start-title-buttons">true</property>
+                        <property name="show-end-title-buttons">true</property>
+                        <property name="show-title">true</property>
+                        <property name="title-widget">
+                          <object class="AdwWindowTitle">
+                            <property name="title" translatable="no">DSTX</property>
+                          </object>
+                        </property>
+                        
+                        <child type="end">
+                          <object class="GtkMenuButton" id="splash_menu_button">
+                            <property name="icon-name">open-menu-symbolic</property>
+                            <property name="tooltip-text" translatable="no"></property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    
+                    <property name="content">
+                      <object class="GtkWindowHandle">
+                        <property name="child">
+                          <object class="GtkBox" id="splash_box">
+                            <property name="orientation">vertical</property>
+                            <property name="vexpand">true</property>
+                            <property name="hexpand">true</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="spacing">24</property>
+                            
+                            <child>
+                              <object class="AdwSpinner">
+                                <property name="width-request">64</property>
+                                <property name="height-request">64</property>
+                              </object>
+                            </child>
+                            
+                            <child>
+                              <object class="GtkLabel" id="splash_title_label">
+                                <property name="label" translatable="no"></property>
+                                <property name="css-classes">title-3</property>
+                              </object>
+                            </child>
+                            
+                            <child>
+                              <object class="GtkLabel" id="splash_status_label">
+                                <property name="label" translatable="no">Checking service...</property>
+                                <property name="css-classes">dim-label</property>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            
+            <!-- Page 1: Daemon offline -->
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">no_daemon</property>
+                <property name="child">
+                  <object class="AdwToolbarView">
+                    <child type="top">
+                      <object class="AdwHeaderBar">
+                        <property name="show-start-title-buttons">true</property>
+                        <property name="show-end-title-buttons">true</property>
+                        <property name="show-title">true</property>
+                        <property name="title-widget">
+                          <object class="AdwWindowTitle">
+                            <property name="title" translatable="no">DSTX</property>
+                          </object>
+                        </property>
+                        <child type="end">
+                          <object class="GtkMenuButton" id="no_daemon_menu_button">
+                            <property name="icon-name">open-menu-symbolic</property>
+                            <property name="tooltip-text" translatable="no"></property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    
+                    <property name="content">
+                      <object class="GtkWindowHandle">
+                        <property name="child">
+                          <object class="AdwStatusPage" id="no_daemon_page">
+                            <property name="title" translatable="no"></property>
+                            <property name="description" translatable="no"></property>
+                            <property name="icon-name">computer-fail-symbolic</property>
+                            <property name="vexpand">true</property>
+                            
+                            <child>
+                              <object class="GtkButton" id="start_service_button">
+                                <property name="label" translatable="no"></property>
+                                <property name="halign">center</property>
+                                <style>
+                                  <class name="pill"/>
+                                  <class name="suggested-action"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            
+            <!-- Page 2: Service not installed (fallback) -->
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">no_service</property>
+                <property name="child">
+                  <object class="AdwToolbarView">
+                    <child type="top">
+                      <object class="AdwHeaderBar">
+                        <property name="show-start-title-buttons">true</property>
+                        <property name="show-end-title-buttons">true</property>
+                        <property name="show-title">true</property>
+                        <property name="title-widget">
+                          <object class="AdwWindowTitle">
+                            <property name="title" translatable="no">DSTX</property>
+                          </object>
+                        </property>
+                        <child type="end">
+                          <object class="GtkMenuButton" id="no_service_menu_button">
+                            <property name="icon-name">open-menu-symbolic</property>
+                            <property name="tooltip-text" translatable="no"></property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    
+                    <property name="content">
+                      <object class="GtkWindowHandle">
+                        <property name="child">
+                          <object class="AdwStatusPage" id="no_service_page">
+                            <property name="title" translatable="no">DSTX Service Not Installed</property>
+                            <property name="description" translatable="no">Install the DSTX system service to use controllers.</property>
+                            <property name="icon-name">computer-fail-symbolic</property>
+                            <property name="vexpand">true</property>
+                            <child>
+                              <object class="GtkButton" id="install_service_button">
+                                <property name="label" translatable="no">Install Service</property>
+                                <property name="halign">center</property>
+                                <style>
+                                  <class name="pill"/>
+                                  <class name="suggested-action"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            
+            <!-- Page 3: No controllers -->
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">no_controllers</property>
+                <property name="child">
+                  <object class="AdwToolbarView">
+                    <child type="top">
+                      <object class="AdwHeaderBar" id="empty_header">
+                        <property name="show-start-title-buttons">true</property>
+                        <property name="show-end-title-buttons">true</property>
+                        <property name="show-title">true</property>
+                        <property name="title-widget">
+                          <object class="AdwWindowTitle">
+                            <property name="title" translatable="no">DSTX</property>
+                          </object>
+                        </property>
+                        
+                        <child type="end">
+                          <object class="GtkMenuButton" id="no_controllers_menu_button">
+                            <property name="icon-name">open-menu-symbolic</property>
+                            <property name="tooltip-text" translatable="no"></property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    
+                    <property name="content">
+                      <object class="GtkWindowHandle">
+                        <property name="child">
+                          <object class="AdwStatusPage" id="no_controllers_page">
+                            <property name="title" translatable="no"></property>
+                            <property name="description" translatable="no"></property>
+                            <property name="icon-name">input-gaming-symbolic</property>
+                            <property name="vexpand">true</property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            
+            <!-- Page 4: Main interface -->
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">main</property>
+                <property name="child">
+                  <object class="AdwOverlaySplitView" id="left_split_view">
+                    <property name="min-sidebar-width">250</property>
+                    <property name="max-sidebar-width">300</property>
+                    <property name="sidebar-width-fraction">0.25</property>
+                    <property name="sidebar-position">start</property>
+                    <property name="show-sidebar">true</property>
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
+                    <style>
+                      <class name="main-split-view"/>
+                      <class name="left-split-view"/>
+                    </style>
+                    
+                    <property name="sidebar">
+                      <object class="AdwToolbarView">
+                        <style>
+                          <class name="sidebar-toolbar"/>
+                          <class name="left-sidebar-toolbar"/>
+                        </style>
+                        <child type="top">
+                          <object class="AdwHeaderBar" id="left_sidebar_header">
+                            <property name="show-start-title-buttons">false</property>
+                            <property name="show-end-title-buttons">false</property>
+                            <property name="show-title">true</property>
+                            <property name="title-widget">
+                              <object class="AdwWindowTitle" id="left_sidebar_title">
+                                <property name="title" translatable="no"></property>
+                              </object>
+                            </property>
+                            
+                            <child type="end">
+                              <object class="GtkButton" id="hide_sidebar_button">
+                                <property name="icon-name">go-previous-symbolic</property>
+                                <property name="tooltip-text" translatable="no"></property>
+                                <signal name="clicked" handler="on_hide_sidebar_clicked" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        
+                        <property name="content">
+                          <object class="GtkWindowHandle">
+                            <property name="child">
+                              <object class="GtkScrolledWindow">
+                                <property name="vexpand">true</property>
+                                <property name="hscrollbar-policy">never</property>
+                                <style>
+                                  <class name="sidebar-scrolled"/>
+                                </style>
+                                <child>
+                                  <object class="GtkBox" id="cards_container">
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">8</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-end">12</property>
+                                    <property name="margin-top">12</property>
+                                    <property name="margin-bottom">12</property>
+                                    <style>
+                                      <class name="cards-container"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                    
+                    <property name="content">
+                      <object class="AdwOverlaySplitView" id="right_split_view">
+                        <property name="min-sidebar-width">340</property>
+                        <property name="max-sidebar-width">400</property>
+                        <property name="sidebar-width-fraction">0.3</property>
+                        <property name="sidebar-position">end</property>
+                        <property name="show-sidebar">true</property>
+                        <property name="vexpand">true</property>
+                        <property name="hexpand">true</property>
+                        <style>
+                          <class name="main-split-view"/>
+                          <class name="right-split-view"/>
+                        </style>
+                        
+                        <property name="sidebar">
+                          <object class="AdwToolbarView">
+                            <style>
+                              <class name="sidebar-toolbar"/>
+                              <class name="right-sidebar-toolbar"/>
+                            </style>
+                            <child type="top">
+                              <!-- Right sidebar header with centered title and spacers -->
+                              <object class="AdwHeaderBar" id="right_sidebar_header">
+                                <property name="show-start-title-buttons">true</property>
+                                <property name="show-end-title-buttons">true</property>
+                                <property name="show-title">true</property>
+                                <property name="title-widget">
+                                  <object class="GtkCenterBox">
+                                    <!-- Left expandable spacer -->
+                                    <property name="start-widget">
+                                      <object class="GtkBox">
+                                        <property name="hexpand">true</property>
+                                        <property name="width-request">35</property>
+                                      </object>
+                                    </property>
+                                    <!-- Centered title -->
+                                    <property name="center-widget">
+                                      <object class="AdwWindowTitle">
+                                        <property name="title" translatable="yes">DSTX</property>
+                                      </object>
+                                    </property>
+                                    <!-- Right expandable spacer -->
+                                    <property name="end-widget">
+                                      <object class="GtkBox">
+                                        <property name="hexpand">true</property>
+                                        <property name="width-request">12</property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </property>
+                                
+                                <child type="start">
+                                  <object class="GtkButton" id="hide_right_sidebar_button">
+                                    <property name="icon-name">go-previous-symbolic</property>
+                                    <property name="tooltip-text" translatable="no"></property>
+                                    <property name="visible">false</property>
+                                    <signal name="clicked" handler="on_hide_right_sidebar_clicked" swapped="no"/>
+                                  </object>
+                                </child>
+                                
+                                <child type="end">
+                                  <object class="GtkMenuButton" id="main_menu_button">
+                                    <property name="icon-name">open-menu-symbolic</property>
+                                    <property name="tooltip-text" translatable="no"></property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            
+                            <property name="content">
+                              <object class="GtkWindowHandle">
+                                <property name="child">
+                                  <object class="GtkScrolledWindow">
+                                    <property name="vexpand">true</property>
+                                    <property name="hscrollbar-policy">never</property>
+                                    <style>
+                                      <class name="settings-scrolled"/>
+                                    </style>
+                                    <child>
+                                      <object class="AdwPreferencesPage" id="settings_page">
+                                        <property name="vexpand">true</property>
+                                        <style>
+                                          <class name="settings-page"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        
+                        <property name="content">
+                          <object class="AdwToolbarView" id="center_area">
+                            <property name="hexpand">true</property>
+                            <property name="vexpand">true</property>
+                            <style>
+                              <class name="center-area"/>
+                            </style>
+                            
+                            <child type="top">
+                              <object class="AdwHeaderBar" id="center_header">
+                                <property name="show-start-title-buttons">false</property>
+                                <property name="show-end-title-buttons">false</property>
+                                <property name="show-title">true</property>
+                                <property name="title-widget">
+                                  <object class="AdwWindowTitle" id="window_title">
+                                    <property name="title" translatable="no"></property>
+                                  </object>
+                                </property>
+                                
+                                <child type="start">
+                                  <object class="GtkButton" id="show_sidebar_button">
+                                    <property name="icon-name">sidebar-show-symbolic</property>
+                                    <property name="tooltip-text" translatable="no"></property>
+                                    <property name="visible">false</property>
+                                    <signal name="clicked" handler="on_show_sidebar_clicked" swapped="no"/>
+                                  </object>
+                                </child>
+                                
+                                <child type="end">
+                                  <object class="GtkButton" id="info_button">
+                                    <property name="icon-name">help-about-symbolic</property>
+                                    <property name="tooltip-text" translatable="no"></property>
+                                    <property name="visible">true</property>
+                                    <property name="sensitive">false</property>
+                                    <style>
+                                      <class name="flat"/>
+                                    </style>
+                                    <signal name="clicked" handler="on_info_button_clicked" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            
+                            <property name="content">
+                              <object class="GtkWindowHandle">
+                                <property name="child">
+                                  <object class="GtkBox" id="center_content_box">
+                                    <property name="orientation">vertical</property>
+                                    <property name="vexpand">true</property>
+                                    <property name="hexpand">true</property>
+                                    <property name="halign">fill</property>
+                                    <property name="valign">fill</property>
+                                    <property name="spacing">0</property>
+                                    <style>
+                                      <class name="center-content-box"/>
+                                    </style>
+                                    
+                                    <!-- NEW SECOND HEADER (no title, flat) -->
+                                    <child>
+                                      <object class="AdwHeaderBar" id="center_second_header">
+                                        <property name="show-start-title-buttons">false</property>
+                                        <property name="show-end-title-buttons">false</property>
+                                        <property name="show-title">false</property>
+                                        <property name="css-classes">flat</property>
+                                        <property name="title-widget">
+                                          <object class="GtkCenterBox">
+                                            <property name="center-widget">
+                                              <object class="GtkBox" id="second_header_buttons_box">
+                                                <property name="orientation">horizontal</property>
+                                                <property name="spacing">6</property>
+                                                <property name="halign">center</property>
+                                              </object>
+                                            </property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    
+                                    <!-- Main content: controller + info -->
+                                    <child>
+                                      <object class="GtkCenterBox" id="controller_center_container">
+                                        <property name="orientation">vertical</property>
+                                        <property name="vexpand">true</property>
+                                        <property name="hexpand">true</property>
+                                        <property name="margin-start">50</property>
+                                        <property name="margin-end">50</property>
+                                        <property name="margin-top">50</property>
+                                        <property name="margin-bottom">50</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+</interface>
