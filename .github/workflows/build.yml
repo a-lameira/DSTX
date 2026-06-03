@@ -1,3 +1,4 @@
+# .github/workflows/build.yml
 name: Build DSTX packages
 
 on:
@@ -7,6 +8,9 @@ on:
   workflow_dispatch:
 
 jobs:
+  # --------------------------------------------------------------------------
+  # 1. Build static core (common for all packages)
+  # --------------------------------------------------------------------------
   build-core-static:
     runs-on: ubuntu-latest
     outputs:
@@ -42,13 +46,16 @@ jobs:
           name: version-file
           path: VERSION
 
+  # --------------------------------------------------------------------------
+  # 2. Flatpak – complete package (core + GUI)
+  # --------------------------------------------------------------------------
   build-flatpak:
     needs: build-core-static
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install flatpak-builder and SDK
+      - name: Install flatpak-builder and SDK (GNOME 49)
         run: |
           sudo apt-get update
           sudo apt-get install -y flatpak-builder
@@ -72,19 +79,20 @@ jobs:
           name: dstx-flatpak
           path: build/flatpak-bundle/*.flatpak
 
+  # --------------------------------------------------------------------------
+  # 3. Debian package – core only (no GUI)
+  # --------------------------------------------------------------------------
   build-deb:
     needs: build-core-static
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create VERSION file
-        run: |
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
-            echo "${GITHUB_REF_NAME#v}" > VERSION
-          else
-            echo "0.0.0-dev" > VERSION
-          fi
+      - name: Download VERSION file
+        uses: actions/download-artifact@v4
+        with:
+          name: version-file
+          path: ./
 
       - name: Download core-static
         uses: actions/download-artifact@v4
@@ -92,7 +100,7 @@ jobs:
           name: core-static
           path: build/core-static/
 
-      - name: Build Debian package
+      - name: Build Debian package (core only)
         run: |
           chmod +x build/build-deb.sh
           ./build/build-deb.sh
@@ -103,19 +111,20 @@ jobs:
           name: dstx-deb
           path: build/deb/*.deb
 
+  # --------------------------------------------------------------------------
+  # 4. RPM package – core only (no GUI)
+  # --------------------------------------------------------------------------
   build-rpm:
     needs: build-core-static
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create VERSION file
-        run: |
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
-            echo "${GITHUB_REF_NAME#v}" > VERSION
-          else
-            echo "0.0.0-dev" > VERSION
-          fi
+      - name: Download VERSION file
+        uses: actions/download-artifact@v4
+        with:
+          name: version-file
+          path: ./
 
       - name: Download core-static
         uses: actions/download-artifact@v4
@@ -123,7 +132,7 @@ jobs:
           name: core-static
           path: build/core-static/
 
-      - name: Build RPM package
+      - name: Build RPM package (core only)
         run: |
           chmod +x build/build-rpm.sh
           ./build/build-rpm.sh
@@ -134,26 +143,20 @@ jobs:
           name: dstx-rpm
           path: build/rpm/*.rpm
 
+  # --------------------------------------------------------------------------
+  # 5. Tarball – core only (no GUI)
+  # --------------------------------------------------------------------------
   build-tar:
     needs: build-core-static
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install GUI build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y meson ninja-build valac gettext \
-               libgtk-4-dev libadwaita-1-dev libgee-0.8-dev \
-               libjson-glib-dev librsvg2-dev
-
-      - name: Create VERSION file
-        run: |
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
-            echo "${GITHUB_REF_NAME#v}" > VERSION
-          else
-            echo "0.0.0-dev" > VERSION
-          fi
+      - name: Download VERSION file
+        uses: actions/download-artifact@v4
+        with:
+          name: version-file
+          path: ./
 
       - name: Download core-static
         uses: actions/download-artifact@v4
@@ -161,7 +164,7 @@ jobs:
           name: core-static
           path: build/core-static/
 
-      - name: Build tarball
+      - name: Build tarball (core only)
         run: |
           chmod +x build/build-tar.sh
           ./build/build-tar.sh
@@ -172,9 +175,34 @@ jobs:
           name: dstx-tar
           path: build/tar/*.tar.gz
 
+  # --------------------------------------------------------------------------
+  # 6. AppImage – GUI only (requires recent GTK/libadwaita)
+  # --------------------------------------------------------------------------
+  build-appimage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build GUI and create AppImage inside Ubuntu rolling container
+        run: |
+          chmod +x build/build-appimage.sh
+          ./build/build-appimage.sh
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: dstx-appimage
+          path: build/appimage/*.AppImage
+
+  # --------------------------------------------------------------------------
+  # 7. GitHub Release – attach all artifacts
+  # --------------------------------------------------------------------------
   release:
     runs-on: ubuntu-latest
-    needs: [build-flatpak, build-deb, build-rpm, build-tar]
+    needs: [build-flatpak, build-deb, build-rpm, build-tar, build-appimage]
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download all artifacts
@@ -190,4 +218,5 @@ jobs:
             artifacts/dstx-deb/*
             artifacts/dstx-rpm/*
             artifacts/dstx-tar/*
+            artifacts/dstx-appimage/*
           generate_release_notes: true
