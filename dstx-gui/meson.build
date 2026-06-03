@@ -369,7 +369,7 @@ message('')
 message('==================== SOURCES ====================')
 source_list = ''
 foreach src : vala_sources
-    source_list += ' ' + src.full_path()
+    source_list += ' ' + src.path()
 endforeach
 message('Vala sources:   ' + source_list)
 message('')
