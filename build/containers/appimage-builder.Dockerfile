@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install all build dependencies, including missing flex and bison
+# Install all build dependencies
 RUN apt-get update && apt-get install -y \
     build-essential meson ninja-build pkg-config wget gettext desktop-file-utils file \
     libglib2.0-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf-2.0-dev \
