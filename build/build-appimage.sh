@@ -20,29 +20,29 @@ meson setup builddir --prefix=/usr
 ninja -C builddir
 DESTDIR=/work/AppDir ninja -C builddir install
 
-# Verifica se o arquivo .desktop foi criado
+# Validate desktop file
 cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Baixa o linuxdeploy (AppImage) e o script do plugin GTK
+# Download linuxdeploy and GTK plugin script
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 wget --no-verbose https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
 
 chmod +x linuxdeploy-x86_64.AppImage
 chmod +x linuxdeploy-plugin-gtk.sh
 
-# Extrai o linuxdeploy para evitar problemas com FUSE
+# Extract linuxdeploy (to avoid FUSE)
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
 
-# Executa o linuxdeploy usando o script do plugin GTK
+# Run linuxdeploy with GTK plugin (no --verbose, use --verbosity=1 for info)
 ./linuxdeploy-extracted/AppRun \
     --appdir /work/AppDir \
     --plugin /work/linuxdeploy-plugin-gtk.sh \
     --output appimage \
-    --verbose
+    --verbosity=1
 
-# Move o AppImage gerado para o diretório de saída
+# Move generated AppImage
 mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
