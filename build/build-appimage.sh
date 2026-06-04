@@ -22,7 +22,8 @@ apt-get install -y --no-install-recommends \
     libglib2.0-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf-2.0-dev \
     libwayland-dev libx11-dev libxrandr-dev libxrender-dev libxi-dev \
     libgl1-mesa-dev libgles2-mesa-dev libvulkan-dev \
-    flex bison gperf
+    flex bison gperf \
+    gsettings-desktop-schemas adwaita-icon-theme
 
 cd /work/dstx-gui
 meson setup builddir --prefix=/usr
@@ -48,8 +49,8 @@ export LINUXDEPLOY=/work/dstx-gui/linuxdeploy-extracted/AppRun
 # Primeira passagem: bibliotecas básicas
 $LINUXDEPLOY --appdir /work/AppDir --verbosity=1
 
-# Correção para o plugin: criar diretório que ele espera mas que não existe no Debian Sid
-mkdir -p /work/AppDir/usr/lib/x86_64-linux-gnu/gtk-4.0
+# Criar link simbólico para que o plugin encontre os módulos GTK
+ln -sf /usr/lib/x86_64-linux-gnu/gtk-4.0 /usr/lib/gtk-4.0
 
 # Segunda passagem: plugin GTK
 ./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
