@@ -1,4 +1,4 @@
-name: Build DSTX RPM Package (core only)
+name: Build DSTX RPM Package
 
 on:
   workflow_dispatch:
