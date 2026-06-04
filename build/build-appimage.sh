@@ -27,8 +27,13 @@ docker run --rm -v "$PROJECT_ROOT:/work" ubuntu:rolling bash -c '
     wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/continuous/linuxdeploy-plugin-gtk-x86_64.AppImage
     chmod +x linuxdeploy*.AppImage
 
-    # Run linuxdeploy – it will automatically find the .desktop file and icon inside AppDir
-    ./linuxdeploy-x86_64.AppImage --appdir /work/AppDir --plugin gtk --output appimage
+    # Run linuxdeploy with explicit desktop file and icon
+    ./linuxdeploy-x86_64.AppImage \
+        --appdir /work/AppDir \
+        --desktop-file /work/AppDir/usr/share/applications/dstx-gui.desktop \
+        --icon-file /work/AppDir/usr/share/icons/hicolor/scalable/apps/dstx.svg \
+        --plugin gtk \
+        --output appimage
 
     # Move result
     mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
