@@ -1,44 +1,14 @@
-FROM ubuntu:22.04
+FROM ghcr.io/flatpak/gnome-sdk:49
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install all build dependencies
+# O SDK já contém GTK4, libadwaita e todas as libs necessárias.
+# Instalamos apenas ferramentas adicionais que o SDK pode não ter.
 RUN apt-get update && apt-get install -y \
-    build-essential meson ninja-build pkg-config wget gettext desktop-file-utils file \
-    libglib2.0-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf-2.0-dev \
-    libffi-dev libxml2-dev libepoxy-dev libwayland-dev libx11-dev \
-    libxrandr-dev libxext-dev libxrender-dev libxcomposite-dev \
-    libxdamage-dev libxcb-shm0-dev libxcb-render0-dev libxkbcommon-dev \
-    libjpeg-dev libpng-dev libtiff-dev librsvg2-dev \
-    libxi-dev libxtst-dev libxfixes-dev libxinerama-dev libgl1-mesa-dev \
-    libgles2-mesa-dev libvulkan-dev wayland-protocols \
-    git python3 python3-pip \
-    flex bison gperf \
+    wget \
+    desktop-file-utils \
+    file \
+    gettext \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade meson to a recent version
-RUN pip3 install --upgrade meson
-
-WORKDIR /tmp
-
-# ========== Build GTK 4.20.1 ==========
-RUN wget -q https://download.gnome.org/sources/gtk/4.20/gtk-4.20.1.tar.xz \
-    && tar -xf gtk-4.20.1.tar.xz \
-    && cd gtk-4.20.1 \
-    && meson setup _build --prefix=/usr/local --libdir=lib/x86_64-linux-gnu \
-    && ninja -C _build \
-    && ninja -C _build install \
-    && cd /tmp && rm -rf gtk-4.20.1*
-
-# ========== Build libadwaita 1.8.0 ==========
-RUN wget -q https://download.gnome.org/sources/libadwaita/1.8/libadwaita-1.8.0.tar.xz \
-    && tar -xf libadwaita-1.8.0.tar.xz \
-    && cd libadwaita-1.8.0 \
-    && meson setup _build --prefix=/usr/local --libdir=lib/x86_64-linux-gnu \
-    && ninja -C _build \
-    && ninja -C _build install \
-    && cd /tmp && rm -rf libadwaita-1.8.0*
-
-RUN ldconfig
+# Não é mais necessário instalar ou compilar GTK4 ou libadwaita
 
 WORKDIR /work
