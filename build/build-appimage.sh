@@ -26,26 +26,29 @@ sed -i "s/Icon=org.dstx.gui/Icon=dstx/" /work/AppDir/usr/share/applications/dstx
 cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy and GTK plugin script
+# Download linuxdeploy and the GTK plugin script
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 wget --no-verbose https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
 chmod +x linuxdeploy-x86_64.AppImage
 chmod +x linuxdeploy-plugin-gtk.sh
 
-# Extract linuxdeploy
+# Extract linuxdeploy (avoid FUSE)
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
 
-# First pass: basic deployment
-./linuxdeploy-extracted/AppRun --appdir /work/AppDir --output appimage --verbosity=1
+# Set environment variable for linuxdeploy
+export LINUXDEPLOY=/work/dstx-gui/linuxdeploy-extracted/AppRun
 
-# Second pass: GTK plugin
+# First pass: deploy basic libraries (no AppImage output yet)
+$LINUXDEPLOY --appdir /work/AppDir --verbosity=1
+
+# Second pass: deploy GTK4 libraries using the plugin
 ./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
 
-# Third pass: finalize
-./linuxdeploy-extracted/AppRun --appdir /work/AppDir --output appimage --verbosity=1
+# Third pass: finally create the AppImage
+$LINUXDEPLOY --appdir /work/AppDir --output appimage --verbosity=1
 
-# Move result
+# Move the generated AppImage to the output directory
 mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
