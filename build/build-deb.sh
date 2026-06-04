@@ -22,7 +22,7 @@ mkdir -p "$TEMP_DIR/etc/sudoers.d"
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$TEMP_DIR/usr/local/bin/"
 
 # Copy system files from dstx/data/
-cp "$CORE_SRC/data/dstx.service" "$TEMP_DIR/lib/systemd/system/"
+cp "$CORE_SRC/data/dstx-daemon.service" "$TEMP_DIR/lib/systemd/system/"
 cp "$CORE_SRC/data/dstx-dbus.service" "$TEMP_DIR/lib/systemd/system/"
 cp "$CORE_SRC/data/99-dstx.rules" "$TEMP_DIR/lib/udev/rules.d/"
 cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$TEMP_DIR/etc/dbus-1/system.d/"
@@ -50,8 +50,8 @@ cat > "$TEMP_DIR/DEBIAN/postinst" << 'EOF'
 set -e
 
 if command -v systemctl >/dev/null 2>&1; then
-    systemctl enable dstx.service dstx-dbus.service || true
-    systemctl start dstx.service dstx-dbus.service || true
+    systemctl enable dstx-daemon.service dstx-dbus.service || true
+    systemctl start dstx-daemon.service dstx-dbus.service || true
 fi
 
 if command -v udevadm >/dev/null 2>&1; then
@@ -68,8 +68,8 @@ cat > "$TEMP_DIR/DEBIAN/prerm" << 'EOF'
 set -e
 
 if command -v systemctl >/dev/null 2>&1; then
-    systemctl stop dstx.service dstx-dbus.service || true
-    systemctl disable dstx.service dstx-dbus.service || true
+    systemctl stop dstx-daemon.service dstx-dbus.service || true
+    systemctl disable dstx-daemon.service dstx-dbus.service || true
 fi
 
 exit 0
