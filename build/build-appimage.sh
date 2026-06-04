@@ -5,17 +5,14 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 OUTPUT_DIR="$PROJECT_ROOT/build/appimage"
 mkdir -p "$OUTPUT_DIR"
 
-echo "📦 Building AppImage (GUI only) using Fedora 40 (glibc 2.38, GTK4 4.20+, libadwaita 1.8+)"
+echo "📦 Building AppImage (GUI only) using GNOME 49 SDK from GitLab registry"
 
-docker run --rm -v "$PROJECT_ROOT:/work" fedora:40 /bin/bash -c '
+docker run --rm -v "$PROJECT_ROOT:/work" registry.gitlab.gnome.org/gnome/gnome-sdk-image:49 /bin/bash -c '
 set -ex
 
-# Install build dependencies and required libraries
-dnf install -y meson ninja-build gcc gcc-c++ vala pkg-config wget gettext desktop-file-utils file \
-    libgtk4-devel libadwaita-devel libgee-devel json-glib-devel librsvg2-devel \
-    libxml2-devel glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel \
-    wayland-devel libX11-devel libXrandr-devel libXrender-devel libXi-devel \
-    mesa-libGL-devel mesa-libEGL-devel vulkan-devel
+# Install additional tools needed for linuxdeploy and desktop file validation
+apt-get update
+apt-get install -y wget desktop-file-utils file gettext
 
 cd /work/dstx-gui
 meson setup builddir --prefix=/usr
@@ -25,24 +22,27 @@ DESTDIR=/work/AppDir ninja -C builddir install
 # Fix desktop file icon name
 sed -i "s/Icon=org.dstx.gui/Icon=dstx/" /work/AppDir/usr/share/applications/dstx-gui.desktop
 
+cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy and GTK plugin script
+# Download linuxdeploy and the GTK plugin script
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 wget --no-verbose https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
 chmod +x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-gtk.sh
 
-# Extract linuxdeploy
+# Extract linuxdeploy (avoid FUSE)
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
 
 export LINUXDEPLOY=/work/dstx-gui/linuxdeploy-extracted/AppRun
 
+# Deploy basic libraries
 $LINUXDEPLOY --appdir /work/AppDir --verbosity=1
 
-# Run GTK plugin (it will pick up the system’s GTK4 and libadwaita)
+# Deploy GTK libraries using the plugin
 ./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
 
+# Create AppImage
 $LINUXDEPLOY --appdir /work/AppDir --output appimage --verbosity=1
 
 # Move generated AppImage
