@@ -20,7 +20,40 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build AppImage (GUI only)
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build and push AppImage builder image (if not already cached)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: build/containers/appimage-builder.Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/appimage-builder:latest
+            ghcr.io/${{ github.repository }}/appimage-builder:${{ github.sha }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      # Temp fix to move cache (see https://github.com/docker/build-push-action/issues/252)
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Build AppImage using custom builder
         run: |
           chmod +x build/build-appimage.sh
           ./build/build-appimage.sh
