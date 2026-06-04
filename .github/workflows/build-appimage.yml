@@ -1,4 +1,4 @@
-name: Build DSTX AppImage (GUI only)
+name: Build DSTX AppImage
 
 on:
   workflow_dispatch:
