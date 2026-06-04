@@ -5,16 +5,20 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 OUTPUT_DIR="$PROJECT_ROOT/build/appimage"
 mkdir -p "$OUTPUT_DIR"
 
-echo "📦 Building AppImage (GUI only) using Fedora 40"
+echo "📦 Building AppImage (GUI only) using Debian Sid (glibc 2.42, GTK 4.20+, libadwaita 1.8+)"
 
-docker run --rm -v "$PROJECT_ROOT:/work" fedora:40 /bin/bash -c '
+docker run --rm -v "$PROJECT_ROOT:/work" debian:sid /bin/bash -c '
 set -ex
 
-dnf install -y meson ninja-build gcc gcc-c++ vala pkg-config wget gettext desktop-file-utils file \
-    gtk4-devel libadwaita-devel libgee-devel json-glib-devel librsvg2-devel \
-    libxml2-devel glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel \
-    wayland-devel libX11-devel libXrandr-devel libXrender-devel libXi-devel \
-    mesa-libGL-devel mesa-libEGL-devel vulkan-devel
+# Update and install build dependencies
+apt-get update
+apt-get install -y --no-install-recommends \
+    meson ninja-build gcc g++ valac pkg-config wget gettext desktop-file-utils file \
+    libgtk-4-dev libadwaita-1-dev libgee-0.8-dev libjson-glib-dev librsvg2-dev \
+    libglib2.0-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf-2.0-dev \
+    libwayland-dev libx11-dev libxrandr-dev libxrender-dev libxi-dev \
+    libgl1-mesa-dev libgles2-mesa-dev libvulkan-dev \
+    flex bison gperf
 
 cd /work/dstx-gui
 meson setup builddir --prefix=/usr
