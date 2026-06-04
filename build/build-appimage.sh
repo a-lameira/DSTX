@@ -8,7 +8,7 @@ mkdir -p "$OUTPUT_DIR"
 echo "📦 Building AppImage (GUI only) using Ubuntu rolling"
 
 docker run --rm -v "$PROJECT_ROOT:/work" ubuntu:rolling /bin/bash -c '
-set -ex  # enable debugging
+set -ex
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
@@ -20,25 +20,27 @@ meson setup builddir --prefix=/usr
 ninja -C builddir
 DESTDIR=/work/AppDir ninja -C builddir install
 
-# Validate desktop file
-echo "=== Desktop file content ==="
 cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download and extract linuxdeploy
-wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/continuous/linuxdeploy-plugin-gtk-x86_64.AppImage
+# Download linuxdeploy and its GTK plugin (verbose)
+wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+wget --no-verbose https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/continuous/linuxdeploy-plugin-gtk-x86_64.AppImage
 chmod +x *.AppImage
 
+# Verify downloads
+ls -lh linuxdeploy*.AppImage
+
+# Extract both AppImages (avoid FUSE)
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
 ./linuxdeploy-plugin-gtk-x86_64.AppImage --appimage-extract
 mv squashfs-root plugin-extracted
 
-# Plugin path (adjust according to extracted structure)
-export LINUXDEPLOY_PLUGIN_PATH=/work/plugin-extracted/usr/lib/linuxdeploy/plugins/
+# Set plugin path (exact location depends on extraction)
+export LINUXDEPLOY_PLUGIN_PATH=/work/plugin-extracted/usr/lib/linuxdeploy/plugins
 
-# Run with explicit desktop and icon, and verbose output
+# Run linuxdeploy (extracted) with explicit arguments
 /work/linuxdeploy-extracted/AppRun \
     --appdir /work/AppDir \
     --desktop-file /work/AppDir/usr/share/applications/dstx-gui.desktop \
