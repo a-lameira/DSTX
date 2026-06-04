@@ -17,47 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Convert repository name to lowercase
-        id: repo
-        run: |
-          echo "LOWERCASE_REPO=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Build and push AppImage builder image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: build/containers/appimage-builder.Dockerfile
-          push: true
-          tags: |
-            ghcr.io/${{ steps.repo.outputs.LOWERCASE_REPO }}/appimage-builder:latest
-            ghcr.io/${{ steps.repo.outputs.LOWERCASE_REPO }}/appimage-builder:${{ github.sha }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
-      - name: Build AppImage using custom builder
+      - name: Build AppImage using Flatpak SDK
         run: |
           chmod +x build/build-appimage.sh
           ./build/build-appimage.sh
