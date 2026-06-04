@@ -5,9 +5,8 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 OUTPUT_DIR="$PROJECT_ROOT/build/appimage"
 mkdir -p "$OUTPUT_DIR"
 
-echo "📦 Building AppImage (GUI only) using custom builder with old glibc + recent GTK4"
+echo "📦 Building AppImage (GUI only) using custom builder with old glibc + recent GTK4/libadwaita"
 
-# Replace with your GitHub repository name (e.g., 'yourname/dstx')
 REPO_NAME="${GITHUB_REPOSITORY:-local/dstx}"
 BUILDER_IMAGE="ghcr.io/$REPO_NAME/appimage-builder:latest"
 
@@ -44,7 +43,7 @@ export LINUXDEPLOY=/work/dstx-gui/linuxdeploy-extracted/AppRun
 # First pass: basic libraries
 $LINUXDEPLOY --appdir /work/AppDir --verbosity=1
 
-# Second pass: GTK plugin (will pick up our custom GTK4 and libadwaita)
+# Second pass: GTK plugin (custom GTK4 and libadwaita)
 ./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
 
 # Third pass: create AppImage
