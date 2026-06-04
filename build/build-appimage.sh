@@ -12,7 +12,7 @@ set -ex
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y meson ninja-build valac pkg-config wget gettext desktop-file-utils \
+apt-get install -y meson ninja-build valac pkg-config wget gettext desktop-file-utils file \
     libgtk-4-dev libadwaita-1-dev libgee-0.8-dev libjson-glib-dev librsvg2-dev
 
 cd /work/dstx-gui
