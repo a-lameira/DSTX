@@ -5,56 +5,41 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 OUTPUT_DIR="$PROJECT_ROOT/build/appimage"
 mkdir -p "$OUTPUT_DIR"
 
-echo "📦 Building AppImage (GUI only) using Debian Sid"
+echo "📦 Building AppImage (GUI only) using Fedora 41"
 
-docker run --rm -v "$PROJECT_ROOT:/work" debian:sid /bin/bash -c '
+docker run --rm -v "$PROJECT_ROOT:/work" fedora:41 /bin/bash -c '
 set -ex
 
-# Install CA certificates and dpkg-dev (for plugin architecture detection)
-apt-get update
-apt-get install -y --no-install-recommends ca-certificates dpkg-dev
-update-ca-certificates
-
-# Install remaining build dependencies
-apt-get install -y --no-install-recommends \
-    meson ninja-build gcc g++ valac pkg-config wget gettext desktop-file-utils file \
-    libgtk-4-dev libadwaita-1-dev libgee-0.8-dev libjson-glib-dev librsvg2-dev \
-    libglib2.0-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf-2.0-dev \
-    libwayland-dev libx11-dev libxrandr-dev libxrender-dev libxi-dev \
-    libgl1-mesa-dev libgles2-mesa-dev libvulkan-dev \
-    flex bison gperf
+dnf install -y meson ninja-build gcc gcc-c++ vala pkg-config wget gettext desktop-file-utils file \
+    gtk4-devel libadwaita-devel libgee-devel json-glib-devel librsvg2-devel \
+    libxml2-devel glib2-devel cairo-devel pango-devel gdk-pixbuf2-devel \
+    wayland-devel libX11-devel libXrandr-devel libXrender-devel libXi-devel \
+    mesa-libGL-devel mesa-libEGL-devel vulkan-devel
 
 cd /work/dstx-gui
 meson setup builddir --prefix=/usr
 ninja -C builddir
 DESTDIR=/work/AppDir ninja -C builddir install
 
-# Fix desktop file icon name
 sed -i "s/Icon=org.dstx.gui/Icon=dstx/" /work/AppDir/usr/share/applications/dstx-gui.desktop
 
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy and GTK plugin script
 wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 wget https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
 chmod +x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-gtk.sh
 
-# Extract linuxdeploy (avoid FUSE)
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
 
 export LINUXDEPLOY=/work/dstx-gui/linuxdeploy-extracted/AppRun
 
-# Deploy basic libraries
 $LINUXDEPLOY --appdir /work/AppDir --verbosity=1
 
-# Deploy GTK libraries using the plugin
 ./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
 
-# Create AppImage
 $LINUXDEPLOY --appdir /work/AppDir --output appimage --verbosity=1
 
-# Move generated AppImage
 mv DSTX-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
