@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install build dependencies
+# Install base build tools and dependencies
 RUN apt-get update && apt-get install -y \
     build-essential meson ninja-build pkg-config wget gettext desktop-file-utils file \
     libglib2.0-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf-2.0-dev \
@@ -10,10 +10,13 @@ RUN apt-get update && apt-get install -y \
     libxrandr-dev libxext-dev libxrender-dev libxcomposite-dev \
     libxdamage-dev libxcb-shm0-dev libxcb-render0-dev libxkbcommon-dev \
     libjpeg-dev libpng-dev libtiff-dev librsvg2-dev \
-    git python3 \
+    git python3 python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# Compile GTK 4.14.5 (or newer)
+# Upgrade meson to a version that supports GTK4.14 (>=0.63.0)
+RUN pip3 install --upgrade meson
+
+# Compile GTK 4.14.5
 WORKDIR /tmp
 RUN wget -q https://download.gnome.org/sources/gtk/4.14/gtk-4.14.5.tar.xz \
     && tar -xf gtk-4.14.5.tar.xz \
@@ -23,7 +26,7 @@ RUN wget -q https://download.gnome.org/sources/gtk/4.14/gtk-4.14.5.tar.xz \
     && ninja -C _build install \
     && cd /tmp && rm -rf gtk-4.14.5*
 
-# Compile libadwaita 1.5.0 (or newer)
+# Compile libadwaita 1.5.0
 RUN wget -q https://download.gnome.org/sources/libadwaita/1.5/libadwaita-1.5.0.tar.xz \
     && tar -xf libadwaita-1.5.0.tar.xz \
     && cd libadwaita-1.5.0 \
@@ -34,5 +37,4 @@ RUN wget -q https://download.gnome.org/sources/libadwaita/1.5/libadwaita-1.5.0.t
 
 RUN ldconfig
 
-# The container will run the build script; just need the environment
 WORKDIR /work
