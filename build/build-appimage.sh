@@ -20,25 +20,27 @@ meson setup builddir --prefix=/usr
 ninja -C builddir
 DESTDIR=/work/AppDir ninja -C builddir install
 
-# Validate desktop file
 cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy and GTK plugin script
+# Download linuxdeploy (continuous) and GTK plugin AppImage (stable 1.0.0)
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-wget --no-verbose https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
+wget --no-verbose https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/1.0.0/linuxdeploy-plugin-gtk-x86_64.AppImage
+chmod +x *.AppImage
 
-chmod +x linuxdeploy-x86_64.AppImage
-chmod +x linuxdeploy-plugin-gtk.sh
-
-# Extract linuxdeploy (to avoid FUSE)
+# Extract both AppImages (avoid FUSE)
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
+./linuxdeploy-plugin-gtk-x86_64.AppImage --appimage-extract
+mv squashfs-root gtk-plugin-extracted
 
-# Run linuxdeploy with GTK plugin (no --verbose, use --verbosity=1 for info)
-./linuxdeploy-extracted/AppRun \
+# Set plugin path to where the extracted plugin resides
+export LINUXDEPLOY_PLUGIN_PATH=/work/gtk-plugin-extracted/usr/lib/linuxdeploy/plugins
+
+# Run linuxdeploy with the gtk plugin
+/work/linuxdeploy-extracted/AppRun \
     --appdir /work/AppDir \
-    --plugin /work/linuxdeploy-plugin-gtk.sh \
+    --plugin gtk \
     --output appimage \
     --verbosity=1
 
