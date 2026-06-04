@@ -48,8 +48,8 @@ $LINUXDEPLOY --appdir /work/AppDir --verbosity=1
 # Third pass: finally create the AppImage
 $LINUXDEPLOY --appdir /work/AppDir --output appimage --verbosity=1
 
-# Move the generated AppImage to the output directory
-mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
+# Move the generated AppImage (name is DSTX-x86_64.AppImage) to dstx-gui.AppImage
+mv DSTX-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
 echo "✅ AppImage created: $OUTPUT_DIR/dstx-gui.AppImage"
