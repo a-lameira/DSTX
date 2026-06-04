@@ -7,7 +7,7 @@ mkdir -p "$OUTPUT_DIR"
 
 echo "📦 Building AppImage (GUI only) using custom builder with old glibc + recent GTK4/libadwaita"
 
-REPO_NAME="${GITHUB_REPOSITORY:-local/dstx}"
+REPO_NAME=$(echo "${GITHUB_REPOSITORY:-local/dstx}" | tr '[:upper:]' '[:lower:]')
 BUILDER_IMAGE="ghcr.io/$REPO_NAME/appimage-builder:latest"
 
 # If running locally (not in CI), build the image on the fly
