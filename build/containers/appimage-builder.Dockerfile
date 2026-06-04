@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install base build tools and all dependencies needed for GTK4 and libadwaita
+# Install all build dependencies, including missing flex and bison
 RUN apt-get update && apt-get install -y \
     build-essential meson ninja-build pkg-config wget gettext desktop-file-utils file \
     libglib2.0-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf-2.0-dev \
@@ -13,12 +13,12 @@ RUN apt-get update && apt-get install -y \
     libxi-dev libxtst-dev libxfixes-dev libxinerama-dev libgl1-mesa-dev \
     libgles2-mesa-dev libvulkan-dev wayland-protocols \
     git python3 python3-pip \
+    flex bison gperf \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade meson to a recent version (GTK 4.20 requires meson >= 0.64, we use latest)
+# Upgrade meson to a recent version
 RUN pip3 install --upgrade meson
 
-# Set working directory for source builds
 WORKDIR /tmp
 
 # ========== Build GTK 4.20.1 ==========
