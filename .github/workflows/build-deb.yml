@@ -1,4 +1,4 @@
-name: Build DSTX Debian Package (core only)
+name: Build DSTX Debian Package
 
 on:
   workflow_dispatch:
