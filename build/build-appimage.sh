@@ -5,11 +5,12 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 OUTPUT_DIR="$PROJECT_ROOT/build/appimage"
 mkdir -p "$OUTPUT_DIR"
 
-echo "📦 Building AppImage (GUI only) using Debian Sid (libadwaita 1.9+, GTK 4.20+)"
+echo "📦 Building AppImage (GUI only) using Debian Sid – manual GTK bundling"
 
 docker run --rm -v "$PROJECT_ROOT:/work" debian:sid /bin/bash -c '
 set -ex
 
+# Install base dependencies
 apt-get update
 apt-get install -y --no-install-recommends ca-certificates dpkg-dev
 update-ca-certificates
@@ -28,44 +29,50 @@ meson setup builddir --prefix=/usr
 ninja -C builddir
 DESTDIR=/work/AppDir ninja -C builddir install
 
+# Fix desktop file icon
 sed -i "s/Icon=org.dstx.gui/Icon=dstx/" /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
+# Download linuxdeploy (no plugin, we will do manual GTK bundling)
 wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-wget https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
-chmod +x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-gtk.sh
-
+chmod +x linuxdeploy-x86_64.AppImage
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
-
 export LINUXDEPLOY=/work/dstx-gui/linuxdeploy-extracted/AppRun
 
+# First pass: deploy basic libraries
 $LINUXDEPLOY --appdir /work/AppDir --verbosity=1
 
-# Diagnostic: check where GTK modules are
-echo "=== Checking GTK module locations ==="
-ls -la /usr/lib/x86_64-linux-gnu/ | grep gtk
-ls -la /usr/lib/x86_64-linux-gnu/gtk-4.0 || echo "Not found"
-ls -la /usr/lib/gtk-4.0 || echo "Not found"
-
-# Create a symlink in the location the plugin expects
-# The plugin does: cd /usr/lib/x86_64-linux-gnu && cp -r gtk-4.0 ...
-# So we need that directory to exist. In Debian Sid, the real directory is /usr/lib/x86_64-linux-gnu/gtk-4.0
-# It should exist, but maybe it's a symlink itself? We'll create a hard directory if missing.
-if [ ! -d /usr/lib/x86_64-linux-gnu/gtk-4.0 ]; then
-    echo "Creating /usr/lib/x86_64-linux-gnu/gtk-4.0 symlink"
-    ln -sf /usr/lib/gtk-4.0 /usr/lib/x86_64-linux-gnu/gtk-4.0
+# --- Manual GTK bundling ---
+# Find GTK modules directory and copy it to AppDir
+GTK_MODULES_DIR=$(find /usr/lib -type d -name "gtk-4.0" -print -quit 2>/dev/null)
+if [ -n "$GTK_MODULES_DIR" ]; then
+    echo "Found GTK modules at: $GTK_MODULES_DIR"
+    mkdir -p /work/AppDir/usr/lib
+    cp -r "$GTK_MODULES_DIR" /work/AppDir/usr/lib/
+else
+    echo "WARNING: Could not find GTK modules directory. Trying to use system GTK."
 fi
 
-# Also ensure the modules are present in the system location (they are, but we copy them to AppDir manually)
-mkdir -p /work/AppDir/usr/lib
-cp -r /usr/lib/x86_64-linux-gnu/gtk-4.0 /work/AppDir/usr/lib/ || echo "Failed to copy GTK modules, will rely on plugin"
+# Also copy GLib schemas and GSettings schema files
+mkdir -p /work/AppDir/usr/share/glib-2.0/schemas
+cp -r /usr/share/glib-2.0/schemas/* /work/AppDir/usr/share/glib-2.0/schemas/ 2>/dev/null || true
 
-# Run the plugin again (it may still attempt to copy, but source now exists)
-./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
+# Copy adwaita icon theme and other required icons
+mkdir -p /work/AppDir/usr/share/icons
+cp -r /usr/share/icons/Adwaita /work/AppDir/usr/share/icons/ 2>/dev/null || true
+cp -r /usr/share/icons/hicolor /work/AppDir/usr/share/icons/ 2>/dev/null || true
 
+# Force the use of our bundled GTK libraries
+export LD_LIBRARY_PATH=/work/AppDir/usr/lib:$LD_LIBRARY_PATH
+
+# Second pass: deploy any remaining libraries (should pick up our copied GTK)
+$LINUXDEPLOY --appdir /work/AppDir --verbosity=1
+
+# Create the AppImage
 $LINUXDEPLOY --appdir /work/AppDir --output appimage --verbosity=1
 
+# Move result
 mv DSTX-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
