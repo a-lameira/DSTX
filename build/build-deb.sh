@@ -19,15 +19,11 @@ mkdir -p "$TEMP_DIR/etc/dbus-1/system.d"
 # Copy static binaries
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$TEMP_DIR/usr/bin/"
 
-# Copy system files from dstx/data/ (not from the root)
-cp "$CORE_SRC/data/dstx.service" "$TEMP_DIR/lib/systemd/system/" 2>/dev/null || \
-    echo "Warning: dstx.service not found in $CORE_SRC/data/"
-cp "$CORE_SRC/data/dstx-dbus.service" "$TEMP_DIR/lib/systemd/system/" 2>/dev/null || \
-    echo "Warning: dstx-dbus.service not found in $CORE_SRC/data/"
-cp "$CORE_SRC/data/99-dstx.rules" "$TEMP_DIR/lib/udev/rules.d/" 2>/dev/null || \
-    echo "Warning: 99-dstx.rules not found in $CORE_SRC/data/"
-cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$TEMP_DIR/etc/dbus-1/system.d/" 2>/dev/null || \
-    echo "Warning: org.dstx.Bridge.conf not found in $CORE_SRC/data/"
+# Copy system files from dstx/data/
+cp "$CORE_SRC/data/dstx.service" "$TEMP_DIR/lib/systemd/system/"
+cp "$CORE_SRC/data/dstx-dbus.service" "$TEMP_DIR/lib/systemd/system/"
+cp "$CORE_SRC/data/99-dstx.rules" "$TEMP_DIR/lib/udev/rules.d/"
+cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$TEMP_DIR/etc/dbus-1/system.d/"
 
 # control file
 cat > "$TEMP_DIR/DEBIAN/control" << EOF
@@ -43,25 +39,45 @@ Description: DSTX Core (daemon and D-Bus bridge)
  This package contains only the core daemon and D-Bus bridge, not the graphical interface.
 EOF
 
-# postinst script
+# postinst script (corrected service names and error handling)
 cat > "$TEMP_DIR/DEBIAN/postinst" << 'EOF'
 #!/bin/sh
 set -e
-systemctl enable dstx-daemon.service
-systemctl enable dstx-dbus.service
-systemctl start dstx-daemon.service
-systemctl start dstx-dbus.service
-udevadm control --reload-rules
+
+# Only proceed if systemd is available
+if command -v systemctl >/dev/null 2>&1; then
+    # Enable services if they exist
+    if [ -f /lib/systemd/system/dstx.service ]; then
+        systemctl enable dstx.service || true
+        systemctl start dstx.service || true
+    fi
+    if [ -f /lib/systemd/system/dstx-dbus.service ]; then
+        systemctl enable dstx-dbus.service || true
+        systemctl start dstx-dbus.service || true
+    fi
+fi
+
+# Reload udev rules if udevadm exists
+if command -v udevadm >/dev/null 2>&1; then
+    udevadm control --reload-rules || true
+fi
+
 exit 0
 EOF
 chmod 755 "$TEMP_DIR/DEBIAN/postinst"
 
-# prerm script
+# prerm script (corrected service names)
 cat > "$TEMP_DIR/DEBIAN/prerm" << 'EOF'
 #!/bin/sh
 set -e
-systemctl stop dstx-daemon.service || true
-systemctl stop dstx-dbus.service || true
+
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl stop dstx.service || true
+    systemctl stop dstx-dbus.service || true
+    systemctl disable dstx.service || true
+    systemctl disable dstx-dbus.service || true
+fi
+
 exit 0
 EOF
 chmod 755 "$TEMP_DIR/DEBIAN/prerm"
