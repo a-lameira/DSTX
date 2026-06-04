@@ -19,21 +19,24 @@ docker run --rm -v "$PROJECT_ROOT:/work" ubuntu:rolling bash -c '
     meson setup builddir --prefix=/usr
     ninja -C builddir
 
-    # Install into AppDir
     DESTDIR=/work/AppDir ninja -C builddir install
+
+    # List contents for debugging
+    echo "=== AppDir contents ==="
+    find /work/AppDir -type f | head -20
 
     # Download linuxdeploy and GTK plugin
     wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
     wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/continuous/linuxdeploy-plugin-gtk-x86_64.AppImage
     chmod +x linuxdeploy*.AppImage
 
-    # Run linuxdeploy with explicit desktop file and icon
-    ./linuxdeploy-x86_64.AppImage \
-        --appdir /work/AppDir \
+    # Run with verbose output
+    ./linuxdeploy-x86_64.AppImage --appdir /work/AppDir \
         --desktop-file /work/AppDir/usr/share/applications/dstx-gui.desktop \
         --icon-file /work/AppDir/usr/share/icons/hicolor/scalable/apps/dstx.svg \
         --plugin gtk \
-        --output appimage
+        --output appimage \
+        --verbose
 
     # Move result
     mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
