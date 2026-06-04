@@ -20,7 +20,7 @@ mkdir -p "$TEMP_DIR/etc/dbus-1/system.d"
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$TEMP_DIR/usr/bin/"
 
 # Copy system files from dstx/data/
-cp "$CORE_SRC/data/dstx.service" "$TEMP_DIR/lib/systemd/system/"
+cp "$CORE_SRC/data/dstx-daemon.service" "$TEMP_DIR/lib/systemd/system/"
 cp "$CORE_SRC/data/dstx-dbus.service" "$TEMP_DIR/lib/systemd/system/"
 cp "$CORE_SRC/data/99-dstx.rules" "$TEMP_DIR/lib/udev/rules.d/"
 cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$TEMP_DIR/etc/dbus-1/system.d/"
@@ -48,8 +48,8 @@ set -e
 if command -v systemctl >/dev/null 2>&1; then
     # Enable services if they exist
     if [ -f /lib/systemd/system/dstx.service ]; then
-        systemctl enable dstx.service || true
-        systemctl start dstx.service || true
+        systemctl enable dstx-daemon.service || true
+        systemctl start dstx-daemon.service || true
     fi
     if [ -f /lib/systemd/system/dstx-dbus.service ]; then
         systemctl enable dstx-dbus.service || true
@@ -72,9 +72,9 @@ cat > "$TEMP_DIR/DEBIAN/prerm" << 'EOF'
 set -e
 
 if command -v systemctl >/dev/null 2>&1; then
-    systemctl stop dstx.service || true
+    systemctl stop dstx-daemon.service || true
     systemctl stop dstx-dbus.service || true
-    systemctl disable dstx.service || true
+    systemctl disable dstx-daemon.service || true
     systemctl disable dstx-dbus.service || true
 fi
 
