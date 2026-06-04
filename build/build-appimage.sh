@@ -23,24 +23,21 @@ DESTDIR=/work/AppDir ninja -C builddir install
 cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy and its GTK plugin (verbose)
+# Download linuxdeploy (continuous) and GTK plugin (stable 2.0.0)
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-wget --no-verbose https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/continuous/linuxdeploy-plugin-gtk-x86_64.AppImage
+wget --no-verbose https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/2.0.0/linuxdeploy-plugin-gtk-x86_64.AppImage
 chmod +x *.AppImage
 
-# Verify downloads
 ls -lh linuxdeploy*.AppImage
 
-# Extract both AppImages (avoid FUSE)
+# Extract both AppImages
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
 ./linuxdeploy-plugin-gtk-x86_64.AppImage --appimage-extract
 mv squashfs-root plugin-extracted
 
-# Set plugin path (exact location depends on extraction)
 export LINUXDEPLOY_PLUGIN_PATH=/work/plugin-extracted/usr/lib/linuxdeploy/plugins
 
-# Run linuxdeploy (extracted) with explicit arguments
 /work/linuxdeploy-extracted/AppRun \
     --appdir /work/AppDir \
     --desktop-file /work/AppDir/usr/share/applications/dstx-gui.desktop \
@@ -49,7 +46,6 @@ export LINUXDEPLOY_PLUGIN_PATH=/work/plugin-extracted/usr/lib/linuxdeploy/plugin
     --output appimage \
     --verbose
 
-# Move result
 mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
