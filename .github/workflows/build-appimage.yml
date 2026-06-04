@@ -1,0 +1,32 @@
+name: Build DSTX AppImage (GUI only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (only used for naming, optional)'
+        required: false
+        default: ''
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-appimage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build AppImage (GUI only)
+        run: |
+          chmod +x build/build-appimage.sh
+          ./build/build-appimage.sh
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: dstx-appimage
+          path: build/appimage/*.AppImage
