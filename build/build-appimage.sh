@@ -23,28 +23,28 @@ DESTDIR=/work/AppDir ninja -C builddir install
 cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy (continuous) and GTK plugin AppImage (stable 1.0.0)
+# Download linuxdeploy (AppImage)
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-wget --no-verbose https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/1.0.0/linuxdeploy-plugin-gtk-x86_64.AppImage
-chmod +x *.AppImage
+# Download the GTK plugin script (RAW)
+wget --no-verbose https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
 
-# Extract both AppImages (avoid FUSE)
+chmod +x linuxdeploy-x86_64.AppImage
+chmod +x linuxdeploy-plugin-gtk.sh
+
+# Extract linuxdeploy to avoid FUSE issues in Docker
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
-./linuxdeploy-plugin-gtk-x86_64.AppImage --appimage-extract
-mv squashfs-root gtk-plugin-extracted
 
-# Set plugin path to where the extracted plugin resides
-export LINUXDEPLOY_PLUGIN_PATH=/work/gtk-plugin-extracted/usr/lib/linuxdeploy/plugins
+# First pass: Deploy basic libraries and create a basic AppDir structure
+./linuxdeploy-extracted/AppRun --appdir /work/AppDir --output appimage --verbosity=1
 
-# Run linuxdeploy with the gtk plugin
-/work/linuxdeploy-extracted/AppRun \
-    --appdir /work/AppDir \
-    --plugin gtk \
-    --output appimage \
-    --verbosity=1
+# Second pass: Run the GTK plugin script to bundle all necessary GTK4 resources
+./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
 
-# Move generated AppImage
+# Final pass: Create the actual AppImage
+./linuxdeploy-extracted/AppRun --appdir /work/AppDir --output appimage --verbosity=1
+
+# Move the generated AppImage to the output directory
 mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
