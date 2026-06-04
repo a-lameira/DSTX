@@ -16,7 +16,7 @@ mkdir -p "$RPM_TOPDIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 # Generate changelog date
 CHANGELOG_DATE=$(date +"%a %b %d %Y")
 
-# Create spec file (using double quotes for variable substitution)
+# Create spec file
 cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << EOF
 Name:           dstx-core
 Version:        $VERSION
@@ -70,33 +70,10 @@ EOF
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$RPM_TOPDIR/SOURCES/"
 
 # Copy system files from dstx/data/
-if [ -f "$CORE_SRC/data/dstx.service" ]; then
-    cp "$CORE_SRC/data/dstx.service" "$RPM_TOPDIR/SOURCES/"
-else
-    echo "ERROR: dstx.service not found in $CORE_SRC/data/"
-    exit 1
-fi
-
-if [ -f "$CORE_SRC/data/dstx-dbus.service" ]; then
-    cp "$CORE_SRC/data/dstx-dbus.service" "$RPM_TOPDIR/SOURCES/"
-else
-    echo "ERROR: dstx-dbus.service not found in $CORE_SRC/data/"
-    exit 1
-fi
-
-if [ -f "$CORE_SRC/data/99-dstx.rules" ]; then
-    cp "$CORE_SRC/data/99-dstx.rules" "$RPM_TOPDIR/SOURCES/"
-else
-    echo "ERROR: 99-dstx.rules not found in $CORE_SRC/data/"
-    exit 1
-fi
-
-if [ -f "$CORE_SRC/data/org.dstx.Bridge.conf" ]; then
-    cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$RPM_TOPDIR/SOURCES/"
-else
-    echo "ERROR: org.dstx.Bridge.conf not found in $CORE_SRC/data/"
-    exit 1
-fi
+cp "$CORE_SRC/data/dstx.service" "$RPM_TOPDIR/SOURCES/"
+cp "$CORE_SRC/data/dstx-dbus.service" "$RPM_TOPDIR/SOURCES/"
+cp "$CORE_SRC/data/99-dstx.rules" "$RPM_TOPDIR/SOURCES/"
+cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$RPM_TOPDIR/SOURCES/"
 
 # Build using minimal Fedora container
 docker build -t dstx-fedora-builder -f "$SCRIPT_DIR/containers/fedora-rawhide.Dockerfile" .
@@ -109,4 +86,6 @@ mkdir -p "$OUTPUT_DIR"
 cp "$RPM_TOPDIR/RPMS/x86_64/"*.rpm "$OUTPUT_DIR/"
 echo "✅ RPM package built:"
 ls -lh "$OUTPUT_DIR"
-rm -rf "$RPM_TOPDIR"
+
+# Clean up temporary directory (files are root-owned, use sudo)
+sudo rm -rf "$RPM_TOPDIR"
