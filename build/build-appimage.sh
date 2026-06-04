@@ -20,31 +20,32 @@ meson setup builddir --prefix=/usr
 ninja -C builddir
 DESTDIR=/work/AppDir ninja -C builddir install
 
+# Fix desktop file icon name
+sed -i "s/Icon=org.dstx.gui/Icon=dstx/" /work/AppDir/usr/share/applications/dstx-gui.desktop
+
 cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy (AppImage)
+# Download linuxdeploy and GTK plugin script
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-# Download the GTK plugin script (RAW)
 wget --no-verbose https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
-
 chmod +x linuxdeploy-x86_64.AppImage
 chmod +x linuxdeploy-plugin-gtk.sh
 
-# Extract linuxdeploy to avoid FUSE issues in Docker
+# Extract linuxdeploy
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
 
-# First pass: Deploy basic libraries and create a basic AppDir structure
+# First pass: basic deployment
 ./linuxdeploy-extracted/AppRun --appdir /work/AppDir --output appimage --verbosity=1
 
-# Second pass: Run the GTK plugin script to bundle all necessary GTK4 resources
+# Second pass: GTK plugin
 ./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
 
-# Final pass: Create the actual AppImage
+# Third pass: finalize
 ./linuxdeploy-extracted/AppRun --appdir /work/AppDir --output appimage --verbosity=1
 
-# Move the generated AppImage to the output directory
+# Move result
 mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
