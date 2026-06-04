@@ -5,15 +5,20 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 OUTPUT_DIR="$PROJECT_ROOT/build/appimage"
 mkdir -p "$OUTPUT_DIR"
 
-echo "📦 Building AppImage (GUI only) using Ubuntu rolling"
+echo "📦 Building AppImage (GUI only) using custom builder with old glibc + recent GTK4"
 
-docker run --rm -v "$PROJECT_ROOT:/work" ubuntu:rolling /bin/bash -c '
+# Replace with your GitHub repository name (e.g., 'yourname/dstx')
+REPO_NAME="${GITHUB_REPOSITORY:-local/dstx}"
+BUILDER_IMAGE="ghcr.io/$REPO_NAME/appimage-builder:latest"
+
+# If running locally (not in CI), build the image on the fly
+if [ -z "$GITHUB_ACTIONS" ]; then
+    echo "Local build: building builder image..."
+    docker build -t "$BUILDER_IMAGE" -f "$SCRIPT_DIR/containers/appimage-builder.Dockerfile" "$PROJECT_ROOT"
+fi
+
+docker run --rm -v "$PROJECT_ROOT:/work" "$BUILDER_IMAGE" /bin/bash -c '
 set -ex
-
-export DEBIAN_FRONTEND=noninteractive
-apt-get update
-apt-get install -y meson ninja-build valac pkg-config wget gettext desktop-file-utils file \
-    libgtk-4-dev libadwaita-1-dev libgee-0.8-dev libjson-glib-dev librsvg2-dev
 
 cd /work/dstx-gui
 meson setup builddir --prefix=/usr
@@ -23,32 +28,29 @@ DESTDIR=/work/AppDir ninja -C builddir install
 # Fix desktop file icon name
 sed -i "s/Icon=org.dstx.gui/Icon=dstx/" /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy and the GTK plugin script
+# Download linuxdeploy and GTK plugin script
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 wget --no-verbose https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
-chmod +x linuxdeploy-x86_64.AppImage
-chmod +x linuxdeploy-plugin-gtk.sh
+chmod +x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-gtk.sh
 
 # Extract linuxdeploy (avoid FUSE)
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
 
-# Set environment variable for linuxdeploy
 export LINUXDEPLOY=/work/dstx-gui/linuxdeploy-extracted/AppRun
 
-# First pass: deploy basic libraries (no AppImage output yet)
+# First pass: basic libraries
 $LINUXDEPLOY --appdir /work/AppDir --verbosity=1
 
-# Second pass: deploy GTK4 libraries using the plugin
+# Second pass: GTK plugin (will pick up our custom GTK4 and libadwaita)
 ./linuxdeploy-plugin-gtk.sh --appdir /work/AppDir
 
-# Third pass: finally create the AppImage
+# Third pass: create AppImage
 $LINUXDEPLOY --appdir /work/AppDir --output appimage --verbosity=1
 
-# Move the generated AppImage (name is DSTX-x86_64.AppImage) to dstx-gui.AppImage
+# Move result
 mv DSTX-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
