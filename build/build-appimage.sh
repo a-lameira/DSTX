@@ -20,32 +20,29 @@ meson setup builddir --prefix=/usr
 ninja -C builddir
 DESTDIR=/work/AppDir ninja -C builddir install
 
+# Verifica se o arquivo .desktop foi criado
 cat /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy (continuous) and GTK plugin (stable 2.0.0)
+# Baixa o linuxdeploy (AppImage) e o script do plugin GTK
 wget --no-verbose https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-wget --no-verbose https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/releases/download/2.0.0/linuxdeploy-plugin-gtk-x86_64.AppImage
-chmod +x *.AppImage
+wget --no-verbose https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
 
-ls -lh linuxdeploy*.AppImage
+chmod +x linuxdeploy-x86_64.AppImage
+chmod +x linuxdeploy-plugin-gtk.sh
 
-# Extract both AppImages
+# Extrai o linuxdeploy para evitar problemas com FUSE
 ./linuxdeploy-x86_64.AppImage --appimage-extract
 mv squashfs-root linuxdeploy-extracted
-./linuxdeploy-plugin-gtk-x86_64.AppImage --appimage-extract
-mv squashfs-root plugin-extracted
 
-export LINUXDEPLOY_PLUGIN_PATH=/work/plugin-extracted/usr/lib/linuxdeploy/plugins
-
-/work/linuxdeploy-extracted/AppRun \
+# Executa o linuxdeploy usando o script do plugin GTK
+./linuxdeploy-extracted/AppRun \
     --appdir /work/AppDir \
-    --desktop-file /work/AppDir/usr/share/applications/dstx-gui.desktop \
-    --icon-file /work/AppDir/usr/share/icons/hicolor/scalable/apps/dstx.svg \
-    --plugin gtk \
+    --plugin /work/linuxdeploy-plugin-gtk.sh \
     --output appimage \
     --verbose
 
+# Move o AppImage gerado para o diretório de saída
 mv DSTX_GUI-*.AppImage /work/build/appimage/dstx-gui.AppImage
 '
 
