@@ -1,4 +1,4 @@
-name: Build DSTX Tarball (core only)
+name: Build DSTX Tarball
 
 on:
   workflow_dispatch:
