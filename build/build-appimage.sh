@@ -5,9 +5,9 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 OUTPUT_DIR="$PROJECT_ROOT/build/appimage"
 mkdir -p "$OUTPUT_DIR"
 
-echo "📦 Building AppImage (GUI only) using Flatpak GNOME 49 SDK"
+echo "📦 Building AppImage (GUI only) using GNOME 49 SDK from Quay.io"
 
-docker run --rm -v "$PROJECT_ROOT:/work" ghcr.io/flatpak/gnome-sdk:49 /bin/bash -c '
+docker run --rm -v "$PROJECT_ROOT:/work" quay.io/gnome_infrastructure/gnome-runtime-images:x86_64-gnome-49 /bin/bash -c '
 set -ex
 
 # Install additional tools needed for linuxdeploy and desktop file validation
