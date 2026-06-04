@@ -9,33 +9,6 @@ on:
 
 jobs:
   # --------------------------------------------------------------------------
-  # 0. Build cached AppImage builder
-  # --------------------------------------------------------------------------
-  build-appimage-builder:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push AppImage builder image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: build/containers/appimage-builder.Dockerfile
-          push: true
-          tags: ghcr.io/${{ github.repository }}/appimage-builder:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-  # --------------------------------------------------------------------------
   # 1. Build static core (common for all packages)
   # --------------------------------------------------------------------------
   build-core-static:
@@ -203,10 +176,9 @@ jobs:
           path: build/tar/*.tar.gz
 
   # --------------------------------------------------------------------------
-  # 6. AppImage – GUI only (requires recent GTK/libadwaita)
+  # AppImage – GUI only (using Flatpak GNOME SDK)
   # --------------------------------------------------------------------------
   build-appimage:
-    needs: [build-core-static, build-appimage-builder]   # wait for core and builder
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -217,7 +189,7 @@ jobs:
           name: core-static
           path: build/core-static/
 
-      - name: Build AppImage using custom builder
+      - name: Build AppImage using Flatpak SDK
         run: |
           chmod +x build/build-appimage.sh
           ./build/build-appimage.sh
