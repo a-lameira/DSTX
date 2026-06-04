@@ -1,0 +1,45 @@
+name: Build DSTX Debian Package (core only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (leave empty to auto-detect)'
+        required: false
+        default: ''
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set version
+        run: |
+          if [[ "${{ github.event.inputs.version }}" != "" ]]; then
+            VERSION="${{ github.event.inputs.version }}"
+          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="0.0.0-dev"
+          fi
+          echo "$VERSION" > VERSION
+
+      - name: Build static core (required for binaries)
+        run: |
+          chmod +x build/build-core-static.sh
+          ./build/build-core-static.sh
+
+      - name: Build Debian package
+        run: |
+          chmod +x build/build-deb.sh
+          ./build/build-deb.sh
+
+      - name: Upload .deb packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: dstx-deb
+          path: build/deb/*.deb
