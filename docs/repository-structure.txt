@@ -67,38 +67,53 @@ DSTX/
 │   │   └── uninstall-system-components.sh       # core package uninstaller
 │   ├── src/
 │   │   ├── core/
-│   │   │   ├──
+│   │   │   ├── dbus-client.vala                 # core package uninstaller
+│   │   │   ├── flatpak-utils.vala               # core package uninstaller
+│   │   │   ├── locale-manager.vala              # core package uninstaller
+│   │   │   ├── settings-manager.vala            # core package uninstaller
+│   │   │   └── system-service-manager.vala      # core package uninstaller
 │   │   ├── managers/
-│   │   │   ├──
+│   │   │   ├── app-state-manager.vala           # core package uninstaller
+│   │   │   ├── controller-manager.vala          # core package uninstaller
+│   │   │   ├── keybinds-manager.vala            # core package uninstaller
+│   │   │   ├── profile-manager.vala             # core package uninstaller
+│   │   │   ├── settings-controller.vala         # core package uninstaller
+│   │   │   ├── settings-ui-builder.vala         # core package uninstaller
+│   │   │   └── theme-manager.vala               # core package uninstaller
 │   │   ├── models/
-│   │   │   ├──
+│   │   │   ├── controller.vala                  # core package uninstaller
+│   │   │   ├── controller-info.vala             # core package uninstaller
+│   │   │   └── theme-data.vala                  # core package uninstaller
 │   │   ├── services/
-│   │   │   ├──
+│   │   │   ├── controller-renderer.vala         # core package uninstaller
+│   │   │   ├── svg-colorizer.vala               # core package uninstaller
+│   │   │   ├── texture-cache-manager.vala       # core package uninstaller
+│   │   │   └── thumbnails-renderer.vala         # core package uninstaller
 │   │   ├── view-models/
-│   │   │   ├──
+│   │   │   └── controller-view-model.vala       # core package uninstaller
 │   │   ├── widgets/
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   │   ├──
-│   │   ├── application.vala
-│   │   ├── dstx-dbus-interface.vala
-│   │   ├── i18n.vala
-│   │   ├── main.vala
-│   │   └── window.vala
-│   ├── meson.build
-│   └── meson_options.txt
+│   │   │   ├── about-dialog.vala                # 
+│   │   │   ├── appearance-page.vala             # 
+│   │   │   ├── color-picker-widget.vala         # 
+│   │   │   ├── color-picker-dialog.vala         # 
+│   │   │   ├── controller-card.vala             # 
+│   │   │   ├── donations-dialog.vala            # 
+│   │   │   ├── ds4.vala                         # 
+│   │   │   ├── dualsense.vala                   # 
+│   │   │   ├── nsw.vala                         # 
+│   │   │   ├── keybinds-dialog.vala             # 
+│   │   │   ├── profiles-dialog.vala             # 
+│   │   │   ├── radar-widget.vala                # 
+│   │   │   ├── sticky-header.vala               #
+│   │   │   ├── tips-dialog.vala                 # 
+│   │   │   └── update-dialog.vala               # 
+│   │   ├── application.vala                     # 
+│   │   ├── dstx-dbus-interface.vala             #
+│   │   ├── i18n.vala                            # 
+│   │   ├── main.vala                            # 
+│   │   └── window.vala                          # 
+│   ├── meson.build                              # 
+│   └── meson_options.txt                        #
 │
 ├── build/
 │   ├── containers/
@@ -121,7 +136,8 @@ DSTX/
 │   └── build-tar.sh
 │
 ├── docs/
-│
+│   ├── repository-structure.txt     # this file
+│   └── README.md
 ├── .github/
 │   └── workflows/
 │       └── build.yml
