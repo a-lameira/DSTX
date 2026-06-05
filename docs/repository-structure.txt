@@ -44,16 +44,16 @@ DSTX/
 │
 ├── dstx-gui/                         # Vala/Gtk4 GUI
 │   ├── data/
-│   │   ├── icons/                    # image resources
-│   │   ├── controller-widget.ui      # Vala/Gtk4 GUI
-│   │   ├── dstx-gui.desktop.in       # Vala/Gtk4 GUI
-│   │   ├── dstx.gresource.xml        # Vala/Gtk4 GUI
-│   │   ├── org.dstx.appdata.xml      # Vala/Gtk4 GUI
-│   │   ├── themes.json               # Vala/Gtk4 GUI
-│   │   ├── window.ui                 # Vala/Gtk4 GUI
+│   │   ├── icons/                    # image resources (.svg)
+│   │   ├── controller-widget.ui      # controller interface
+│   │   ├── dstx-gui.desktop.in       # .desktop file
+│   │   ├── dstx.gresource.xml        # list of external resources
+│   │   ├── org.dstx.appdata.xml      # application info
+│   │   ├── themes.json               # centralized themes file
+│   │   ├── window.ui                 # window interface
 │   ├── po/
 │   │   ├── POTFILES                  # list of translatable files
-│   │   ├── LINGUAS                   # available locales
+│   │   ├── LINGUAS                   # supported locales
 │   │   ├── dstx-gui.pot              # translatable strings
 │   │   ├── de.po                     # german translations
 │   │   ├── es_ES.po                  # spanish translations
@@ -67,30 +67,30 @@ DSTX/
 │   │   └── uninstall-system-components.sh       # core package uninstaller
 │   ├── src/
 │   │   ├── core/
-│   │   │   ├── dbus-client.vala                 # core package uninstaller
-│   │   │   ├── flatpak-utils.vala               # core package uninstaller
-│   │   │   ├── locale-manager.vala              # core package uninstaller
-│   │   │   ├── settings-manager.vala            # core package uninstaller
-│   │   │   └── system-service-manager.vala      # core package uninstaller
+│   │   │   ├── dbus-client.vala                 # dbus management
+│   │   │   ├── flatpak-utils.vala               # flatpak detection
+│   │   │   ├── locale-manager.vala              # locale management (language settings)
+│   │   │   ├── settings-manager.vala            # GUI persistence management
+│   │   │   └── system-service-manager.vala      # core package management
 │   │   ├── managers/
-│   │   │   ├── app-state-manager.vala           # core package uninstaller
-│   │   │   ├── controller-manager.vala          # core package uninstaller
-│   │   │   ├── keybinds-manager.vala            # core package uninstaller
-│   │   │   ├── profile-manager.vala             # core package uninstaller
-│   │   │   ├── settings-controller.vala         # core package uninstaller
-│   │   │   ├── settings-ui-builder.vala         # core package uninstaller
-│   │   │   └── theme-manager.vala               # core package uninstaller
+│   │   │   ├── app-state-manager.vala           # state management (states machine)
+│   │   │   ├── controller-manager.vala          # main controllers (gamepads) manager
+│   │   │   ├── keybinds-manager.vala            # business logic for keybinds
+│   │   │   ├── profile-manager.vala             # business logic for profiles
+│   │   │   ├── settings-controller.vala         # business logic for controller settings
+│   │   │   ├── settings-ui-builder.vala         # ui logic for controller settings
+│   │   │   └── theme-manager.vala               # centralized theme and appearance management
 │   │   ├── models/
-│   │   │   ├── controller.vala                  # core package uninstaller
-│   │   │   ├── controller-info.vala             # core package uninstaller
-│   │   │   └── theme-data.vala                  # core package uninstaller
+│   │   │   ├── controller.vala                  # data structures model for a single controller
+│   │   │   ├── controller-info.vala             # information model for a single controller
+│   │   │   └── theme-data.vala                  # data model for a theme
 │   │   ├── services/
-│   │   │   ├── controller-renderer.vala         # core package uninstaller
-│   │   │   ├── svg-colorizer.vala               # core package uninstaller
-│   │   │   ├── texture-cache-manager.vala       # core package uninstaller
-│   │   │   └── thumbnails-renderer.vala         # core package uninstaller
+│   │   │   ├── controller-renderer.vala         # base controller renderer
+│   │   │   ├── svg-colorizer.vala               # SVG colorization using rsvg
+│   │   │   ├── texture-cache-manager.vala       # GPU texture cache manager
+│   │   │   └── thumbnails-renderer.vala         # thumbnail renderer for AppearancePage
 │   │   ├── view-models/
-│   │   │   └── controller-view-model.vala       # core package uninstaller
+│   │   │   └── controller-view-model.vala       # controller representation (determines state and emits signals)
 │   │   ├── widgets/
 │   │   │   ├── about-dialog.vala                # 
 │   │   │   ├── appearance-page.vala             # 
