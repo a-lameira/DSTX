@@ -52,9 +52,9 @@ DSTX/
 │   │   ├── themes.json               # Vala/Gtk4 GUI
 │   │   ├── window.ui                 # Vala/Gtk4 GUI
 │   ├── po/
-│   │   ├── POTFILES                  # Vala/Gtk4 GUI
-│   │   ├── LINGUAS                   # Vala/Gtk4 GUI
-│   │   ├── dstx-gui.pot              # Vala/Gtk4 GUI
+│   │   ├── POTFILES                  # list of translatable files
+│   │   ├── LINGUAS                   # available locales
+│   │   ├── dstx-gui.pot              # translatable strings
 │   │   ├── de.po                     # german translations
 │   │   ├── es_ES.po                  # spanish translations
 │   │   ├── fr.po                     # french translations
@@ -99,6 +99,7 @@ DSTX/
 │   │   └── window.vala
 │   ├── meson.build
 │   └── meson_options.txt
+│
 ├── build/
 │   ├── containers/
 │   │   ├── alpine-static.Dockerfile
@@ -118,6 +119,9 @@ DSTX/
 │   ├── build-rpm.sh
 │   ├── build-flatpak.sh
 │   └── build-tar.sh
+│
+├── docs/
+│
 ├── .github/
 │   └── workflows/
 │       └── build.yml
