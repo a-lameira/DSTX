@@ -53,14 +53,18 @@ DSTX/
 │   │   ├── window.ui                 # Vala/Gtk4 GUI
 │   ├── po/
 │   │   ├── POTFILES                  # Vala/Gtk4 GUI
-│   │   ├──
-│   │   ├──
-│   │   ├──
-│   │   ├──
-│   │   ├──
-│   │   ├──
+│   │   ├── LINGUAS                   # Vala/Gtk4 GUI
+│   │   ├── dstx-gui.pot              # Vala/Gtk4 GUI
+│   │   ├── de.po                     # german translations
+│   │   ├── es_ES.po                  # spanish translations
+│   │   ├── fr.po                     # french translations
+│   │   ├── it.po                     # italian translations
+│   │   ├── pt_BR.po                  # brazilian portuguese translations
+│   │   ├── ru.po                     # russian translations
+│   │   └── meson.build               # .po -> .mo compilation
 │   ├── scripts/
-│   │   ├──
+│   │   ├── install-system-components.sh         # core package installer
+│   │   └── uninstall-system-components.sh       # core package uninstaller
 │   ├── src/
 │   │   ├── core/
 │   │   │   ├──
