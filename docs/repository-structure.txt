@@ -1,0 +1,122 @@
+Repository Structure
+
+DSTX/
+├── dstx/                             # C core - daemon, CLI, TUI, D-Bus
+│   ├── data/
+│   │   ├── 10-dstx.rules             # polkit rules
+│   │   ├── 99-dstx.rules             # udev rules
+│   │   ├── dstx-daemon.service       # systemd unit - daemon
+│   │   ├── dstx-dbus.service         # systemd unit - dbus bridge
+│   │   ├── dstx-sudoers              # sudoers - for enabling/disabling the service without password
+│   │   └── org.dstx.Bridge.conf      # dbus interface configuration
+│   ├── src/
+│   │   ├── dstx.h                    # main header
+│   │   ├── axes.c                    # analog sticks processing
+│   │   ├── axes.h                    # axis.c header
+│   │   ├── commands.c                # command line interface
+│   │   ├── commands.h                # commands.c header
+│   │   ├── daemon.c                  # main daemon loop
+│   │   ├── dbus-common.h             # dbus
+│   │   ├── dbus-handlers.c           # dbus
+│   │   ├── dbus-main.c               # dbus
+│   │   ├── dbus-monitor.c            # dbus  
+│   │   ├── dbus-signals.c            # dbus
+│   │   ├── dbus-systemd.c            # dbus
+│   │   ├── dbus-systemd.h            # dbus
+│   │   ├── dbus-utils.c              # dbus
+│   │   ├── display.c                 # TUI rendering
+│   │   ├── display.h                 # display.c header
+│   │   ├── drivers.c                 # input translation for DualShock 4 and DualSense
+│   │   ├── keys.c                    # keybinds logic
+│   │   ├── keys.h                    # keys.c header
+│   │   ├── led.c                     # LED effects
+│   │   ├── led.h                     # led.c header
+│   │   ├── main.c                    # entry point
+│   │   ├── nsw.c                     # Nintendo Switch Pro implementation
+│   │   ├── output.c                  # output handling (LED, Rumble)
+│   │   ├── settings.c                # settings management
+│   │   ├── settings.h                # settings.c header
+│   │   ├── uhid.c                    # uhid implementation (HID descriptor, input emission)
+│   │   ├── ui.c                      # TUI main loop
+│   │   └── utils.c                   # utilities
+│   ├── Makefile                      # build static/dynamic
+│   └── setup-dstx.sh                 # installer/uninstaller script
+│
+├── dstx-gui/                         # Vala/Gtk4 GUI
+│   ├── data/
+│   │   ├── icons/                    # image resources
+│   │   ├── controller-widget.ui      # Vala/Gtk4 GUI
+│   │   ├── dstx-gui.desktop.in       # Vala/Gtk4 GUI
+│   │   ├── dstx.gresource.xml        # Vala/Gtk4 GUI
+│   │   ├── org.dstx.appdata.xml      # Vala/Gtk4 GUI
+│   │   ├── themes.json               # Vala/Gtk4 GUI
+│   │   ├── window.ui                 # Vala/Gtk4 GUI
+│   ├── po/
+│   │   ├── POTFILES                  # Vala/Gtk4 GUI
+│   │   ├──
+│   │   ├──
+│   │   ├──
+│   │   ├──
+│   │   ├──
+│   │   ├──
+│   ├── scripts/
+│   │   ├──
+│   ├── src/
+│   │   ├── core/
+│   │   │   ├──
+│   │   ├── managers/
+│   │   │   ├──
+│   │   ├── models/
+│   │   │   ├──
+│   │   ├── services/
+│   │   │   ├──
+│   │   ├── view-models/
+│   │   │   ├──
+│   │   ├── widgets/
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   │   ├──
+│   │   ├── application.vala
+│   │   ├── dstx-dbus-interface.vala
+│   │   ├── i18n.vala
+│   │   ├── main.vala
+│   │   └── window.vala
+│   ├── meson.build
+│   └── meson_options.txt
+├── build/
+│   ├── containers/
+│   │   ├── alpine-static.Dockerfile
+│   │   └── fedora-rawhide.Dockerfile
+│   ├── debian/
+│   │   ├── control
+│   │   ├── format
+│   │   ├── rules
+│   │   ├── changelog.in
+│   │   └── source/format
+│   ├── rpm/
+│   │   └── dstx.spec
+│   ├── flatpak/
+│   │   └── org.dstx.gui.yml
+│   ├── build-core-static.sh
+│   ├── build-deb.sh
+│   ├── build-rpm.sh
+│   ├── build-flatpak.sh
+│   └── build-tar.sh
+├── .github/
+│   └── workflows/
+│       └── build.yml
+├── VERSION                    # tag version
+├── LICENSE                    # GPLv3 copy
+└── README.md                  # repository info
