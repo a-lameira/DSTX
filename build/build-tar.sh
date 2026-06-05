@@ -4,21 +4,34 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 VERSION=$(cat "$PROJECT_ROOT/VERSION")
 CORE_BIN="$PROJECT_ROOT/build/core-static"
+CORE_SRC="$PROJECT_ROOT/dstx"
 OUTPUT_DIR="$PROJECT_ROOT/build/tar"
 
 echo "📦 Creating tarball dstx-core-$VERSION.tar.gz"
 
-STAGING="$OUTPUT_DIR/dstx-core-$VERSION"
-mkdir -p "$STAGING/bin"
-cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$STAGING/bin/"
+# Create a temporary staging directory
+STAGING_DIR=$(mktemp -d)
+trap 'rm -rf "$STAGING_DIR"' EXIT
 
-# Optionally include system files (udev, systemd, dbus) for convenience
-mkdir -p "$STAGING/system"
-cp "$PROJECT_ROOT/dstx/data/"*.service "$STAGING/system/" 2>/dev/null || true
-cp "$PROJECT_ROOT/dstx/data/"*.rules "$STAGING/system/" 2>/dev/null || true
-cp "$PROJECT_ROOT/dstx/data/"*.conf "$STAGING/system/" 2>/dev/null || true
+# Copy static binaries to staging root
+cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$STAGING_DIR/"
 
-cd "$OUTPUT_DIR"
-tar czf "dstx-core-$VERSION.tar.gz" "dstx-core-$VERSION"
-rm -rf "$STAGING"
+# Copy the setup script
+if [ -f "$CORE_SRC/setup-dstx.sh" ]; then
+    cp "$CORE_SRC/setup-dstx.sh" "$STAGING_DIR/"
+else
+    echo "ERROR: setup-dstx.sh not found in $CORE_SRC/ or $CORE_SRC/data/"
+    exit 1
+fi
+
+# Make sure the script is executable
+chmod +x "$STAGING_DIR/setup-dstx.sh"
+
+# Create the tarball
+mkdir -p "$OUTPUT_DIR"
+cd "$STAGING_DIR"
+tar czf "$OUTPUT_DIR/dstx-core-$VERSION.tar.gz" *
+
 echo "✅ Tarball created: $OUTPUT_DIR/dstx-core-$VERSION.tar.gz"
+echo "Contents:"
+tar tzf "$OUTPUT_DIR/dstx-core-$VERSION.tar.gz"
