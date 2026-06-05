@@ -16,14 +16,14 @@ DSTX/
 │   │   ├── commands.c                # command line interface
 │   │   ├── commands.h                # commands.c header
 │   │   ├── daemon.c                  # main daemon loop
-│   │   ├── dbus-common.h             # dbus
-│   │   ├── dbus-handlers.c           # dbus
-│   │   ├── dbus-main.c               # dbus
-│   │   ├── dbus-monitor.c            # dbus  
-│   │   ├── dbus-signals.c            # dbus
-│   │   ├── dbus-systemd.c            # dbus
-│   │   ├── dbus-systemd.h            # dbus
-│   │   ├── dbus-utils.c              # dbus
+│   │   ├── dbus-common.h             # dbus bridge main header
+│   │   ├── dbus-handlers.c           # dbus method handlers
+│   │   ├── dbus-main.c               # dbus bridge entry point
+│   │   ├── dbus-monitor.c            # dbus monitoring and signal emission
+│   │   ├── dbus-signals.c            # dbus signal emission
+│   │   ├── dbus-systemd.c            # dbus-systemd communication
+│   │   ├── dbus-systemd.h            # dbus-systemd.c header
+│   │   ├── dbus-utils.c              # dbus bridge utilities
 │   │   ├── display.c                 # TUI rendering
 │   │   ├── display.h                 # display.c header
 │   │   ├── drivers.c                 # input translation for DualShock 4 and DualSense
@@ -115,32 +115,41 @@ DSTX/
 │   ├── meson.build                              # build/install
 │   └── meson_options.txt                        # auxiliary file to meson.build
 │
-├── build/                                   # build infrastructure
+├── build/                               # build infrastructure
 │   ├── containers/
-│   │   ├── alpine-static.Dockerfile
-│   │   └── fedora-rawhide.Dockerfile
+│   │   ├── alpine-static.Dockerfile     # alpine container configuration
+│   │   └── fedora-rawhide.Dockerfile    # fedora container configuration
 │   ├── debian/
-│   │   ├── control
-│   │   ├── format
-│   │   ├── rules
-│   │   ├── changelog.in
-│   │   └── source/format
+│   │   ├── control                      # package metadata
+│   │   ├── format                       # source package format
+│   │   ├── rules                        # .deb build instructions
+│   │   ├── changelog.in                 # changelog template
+│   │   └── install                      # list of installable files
 │   ├── rpm/
-│   │   └── dstx.spec
+│   │   └── dstx.spec                    # .rpm package definitions
 │   ├── flatpak/
-│   │   └── org.dstx.gui.yml
-│   ├── build-core-static.sh
-│   ├── build-deb.sh
-│   ├── build-rpm.sh
-│   ├── build-flatpak.sh
-│   └── build-tar.sh
+│   │   └── org.dstx.gui.yml             # flatpak manifest
+│   ├── build-core-static.sh             # script to build static core binaries using the alpine container
+│   ├── build-deb.sh                     # script to build .deb package
+│   ├── build-rpm.sh                     # script to build .rpm package
+│   ├── build-flatpak.sh                 # script to build flatpak bundle
+│   ├── build-appimage.sh                # script to build AppImage package
+│   └── build-tar.sh                     # script to build tar.gz package (binaries + install script)
 │
-├── docs/
-│   ├── repository-structure.txt     # this file
-│   └── README.md
-├── .github/
+├── docs/                                # project documentation
+│   ├── repository-structure.txt         # this file
+│   └── README.md                        # general documentation file
+│
+├── .github/                             # github automated build jobs (GitHub Actions)
 │   └── workflows/
-│       └── build.yml
-├── VERSION                    # tag version
-├── LICENSE                    # GPLv3 copy
-└── README.md                  # repository info
+│       ├── build-appimage.yml           # automatically build AppImage package
+│       ├── build-core-static.yml        # automatically build core static binaries
+│       ├── build-deb.yml                # automatically build .deb package
+│       ├── build-flatpak.yml            # automatically build flatpak bundle
+│       ├── build-rpm.yml                # automatically build .rpm package
+│       ├── build-tar.yml                # automatically build tar.gz package
+│       └── build.yml                    # automatically build all packages
+│
+├── VERSION                              # tag version
+├── LICENSE                              # GPLv3 copy
+└── README.md                            # repository info
