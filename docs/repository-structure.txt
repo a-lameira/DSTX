@@ -92,30 +92,30 @@ DSTX/
 │   │   ├── view-models/
 │   │   │   └── controller-view-model.vala       # controller representation (determines state and emits signals)
 │   │   ├── widgets/
-│   │   │   ├── about-dialog.vala                # 
-│   │   │   ├── appearance-page.vala             # 
-│   │   │   ├── color-picker-widget.vala         # 
-│   │   │   ├── color-picker-dialog.vala         # 
-│   │   │   ├── controller-card.vala             # 
-│   │   │   ├── donations-dialog.vala            # 
-│   │   │   ├── ds4.vala                         # 
-│   │   │   ├── dualsense.vala                   # 
-│   │   │   ├── nsw.vala                         # 
-│   │   │   ├── keybinds-dialog.vala             # 
-│   │   │   ├── profiles-dialog.vala             # 
-│   │   │   ├── radar-widget.vala                # 
-│   │   │   ├── sticky-header.vala               #
-│   │   │   ├── tips-dialog.vala                 # 
-│   │   │   └── update-dialog.vala               # 
-│   │   ├── application.vala                     # 
-│   │   ├── dstx-dbus-interface.vala             #
-│   │   ├── i18n.vala                            # 
-│   │   ├── main.vala                            # 
-│   │   └── window.vala                          # 
-│   ├── meson.build                              # 
-│   └── meson_options.txt                        #
+│   │   │   ├── about-dialog.vala                # factory for the "About" dialog
+│   │   │   ├── appearance-page.vala             # theme configuration page
+│   │   │   ├── color-picker-widget.vala         # LED color picker
+│   │   │   ├── color-picker-dialog.vala         # dialog for ColorPickerWidget
+│   │   │   ├── controller-card.vala             # selectable controller card
+│   │   │   ├── donations-dialog.vala            # donations dialog
+│   │   │   ├── ds4.vala                         # ds4-specific rendering (used by ControllerRenderer)
+│   │   │   ├── dualsense.vala                   # dualsense-specific rendering (used by ControllerRenderer)
+│   │   │   ├── nsw.vala                         # nintendo switch-specific rendering (used by ControllerRenderer)
+│   │   │   ├── keybinds-dialog.vala             # keybinds dialog (ui)
+│   │   │   ├── profiles-dialog.vala             # profiles dialog (ui)
+│   │   │   ├── radar-widget.vala                # analog sticks and triggers rendering (used by ControllerRenderer)
+│   │   │   ├── sticky-header.vala               # sticky header for AppearancePage
+│   │   │   ├── tips-dialog.vala                 # tips and tricks dialog
+│   │   │   └── update-dialog.vala               # core package update dialog
+│   │   ├── application.vala                     # main application
+│   │   ├── dstx-dbus-interface.vala             # dbus interface declaration
+│   │   ├── i18n.vala                            # internationalization helper functions
+│   │   ├── main.vala                            # main entry point
+│   │   └── window.vala                          # main application window
+│   ├── meson.build                              # build/install
+│   └── meson_options.txt                        # auxiliary file to meson.build
 │
-├── build/
+├── build/                                   # build infrastructure
 │   ├── containers/
 │   │   ├── alpine-static.Dockerfile
 │   │   └── fedora-rawhide.Dockerfile
