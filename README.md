@@ -72,7 +72,7 @@ latency.
 
 ## System Requirements
 
-- x86_64 processor
+- x86_64 processor (packages). Not tested on ARM.
 
 - Linux kernel >= 6.0 (older may work but hid-nintendo, DualSense and UHID features need recent support).
 
