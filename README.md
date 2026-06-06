@@ -89,7 +89,7 @@ latency.
 - meson, ninja, valac (Vala compiler)
 - glib-2.0 >= 2.58, gobject-2.0, gio-2.0, gio-unix-2.0
 - gtk4 >= 4.20.0
-- libadwaita-1 >= 1.5.0
+- libadwaita-1 >= 1.8.0
 - gee-0.8 >= 0.20.0
 - json-glib-1.0 >= 1.6
 - librsvg-2.0 >= 2.48
@@ -171,7 +171,7 @@ Cleanup (remove all object files and binaries):
 
 All GUI sources are in the "dstx-gui/" directory.
 
-Since the GUI uses very recent versions of Gtk4 and libadwaita, a fairly recent distro is needed to compile the GUI (Ubuntu 26.04, Debian Sid, Fedora 44, Arch Linux).
+Since the GUI uses very recent versions of GTK4 and libadwaita, a fairly recent distro is needed to compile the GUI (Ubuntu 26.04, Debian Sid, Fedora 44, Arch Linux).
 
 ### 1. Install the dependencies
 
