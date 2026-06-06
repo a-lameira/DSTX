@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=DSTX
-Comment=Game controller manager and emulator
-Exec=dstx-gui
-Icon=org.dstx.gui
-Terminal=false
-Type=Application
-Categories=Game
-StartupWMClass=org.dstx.gui
