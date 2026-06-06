@@ -292,9 +292,9 @@ This section refers to the command-line interface (CLI). For information on the 
 |`dstx auto-save <on/off>`|enable/disable auto-save
 |`dstx help`|list available commands
 
-### Slot-specific commands (replace `<slot>` with 0,1,2,3):
+### Slot-specific commands:
 
-For a list of connected slots, use the `dstx slots` command.
+For a list of connected slots, use the `dstx slots` command.  Replace `<slot>` with 0,1,2,3.
 
 **Syntax:** `dstx <slot> <command> [argument]`
 
