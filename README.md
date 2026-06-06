@@ -76,7 +76,7 @@ latency.
 
 - Linux kernel >= 6.0 (older may work but hid-nintendo, DualSense and UHID features need recent support).
 
-- Systemd – not strictly required (the daemon can be run manually), but used by the install script for service management, udev, polkit, and sudoers, and by the d-bus bridge to controll the service.
+- Systemd – not strictly required (the daemon can be run manually), but used by the install script for service management, and by the d-bus bridge to control the service.
 
 ### Dependencies for building the C core:
 - gcc, make, pkg-config
