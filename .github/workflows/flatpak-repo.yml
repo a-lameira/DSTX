@@ -1,0 +1,79 @@
+name: Build & Deploy Flatpak Repository (GitHub Pages)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          # Testa se a chave foi importada corretamente
+          gpg --list-secret-keys
+
+      - name: Install flatpak-builder and SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak-builder
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y org.gnome.Sdk//49 org.gnome.Platform//49
+
+      - name: Build static core
+        run: |
+          chmod +x build/build-core-static.sh
+          ./build/build-core-static.sh
+
+      - name: Build Flatpak repository
+        id: build_repo
+        run: |
+          set -e
+          MANIFEST="build/flatpak/org.dstx.gui.yml"
+          REPO_DIR="$GITHUB_WORKSPACE/dstx-flatpak-repo"
+          BUILD_DIR="$GITHUB_WORKSPACE/flatpak-build"
+
+          # Detecta o ID da chave GPG automaticamente
+          GPG_KEY=$(gpg --list-secret-keys --keyid-format LONG dstx@dstxapp.org | grep 'sec' | awk '{print $2}' | cut -d'/' -f2)
+          if [ -z "$GPG_KEY" ]; then
+            echo "ERROR: GPG key not found for dstx@dstxapp.org"
+            exit 1
+          fi
+          echo "Using GPG key: $GPG_KEY"
+
+          # Copia os binários estáticos para o local esperado pelo Flatpak
+          mkdir -p build/flatpak/static
+          cp build/core-static/dstx build/flatpak/static/
+          cp build/core-static/dstx-dbus build/flatpak/static/
+
+          rm -rf "$REPO_DIR" "$BUILD_DIR"
+          flatpak-builder --force-clean --repo="$REPO_DIR" "$BUILD_DIR" "$MANIFEST"
+          flatpak build-update-repo --gpg-sign="$GPG_KEY" "$REPO_DIR"
+
+          # Copia a chave pública para dentro do repositório (acessível via web)
+          gpg --armor --export dstx@dstxapp.org > "$REPO_DIR"/dstx-flatpak-repo.asc
+
+          echo "repo_dir=$REPO_DIR" >> $GITHUB_OUTPUT
+
+      - name: Prepare gh-pages content
+        run: |
+          mkdir -p gh-pages-temp/flatpak
+          cp -r ${{ steps.build_repo.outputs.repo_dir }}/* gh-pages-temp/flatpak/
+          # Garante que o CNAME exista na raiz (será mantido pelo keep_files)
+          echo "flatpak.dstxapp.org" > gh-pages-temp/CNAME
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./gh-pages-temp
+          publish_branch: gh-pages
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy Flatpak repository for ${{ github.ref_name }}'
