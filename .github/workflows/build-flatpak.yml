@@ -28,6 +28,12 @@ jobs:
           fi
           echo "$VERSION" > VERSION
 
+      # NOVO: construir os binários estáticos do core (dstx, dstx-dbus)
+      - name: Build static core
+        run: |
+          chmod +x build/build-core-static.sh
+          ./build/build-core-static.sh
+
       - name: Install flatpak-builder and SDK (GNOME 49)
         run: |
           sudo apt-get update
