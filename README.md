@@ -1,6 +1,6 @@
 # DSTX
 
-Xbox 360 Controller Emulator for Linux
+Xbox 360 Controller Emulator for Linux. Supports Dualshock4, DualSense and Nintendo Switch Pro Controllers
 
 ![DSTX Screenshot](docs/images/dstx-screenshot.png)
 
