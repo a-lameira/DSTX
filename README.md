@@ -289,7 +289,7 @@ This section refers to the command-line interface (CLI). For information on the 
 |`dstx profile load <name>`|load a profile (replaces current settings)
 |`dstx profile save <name>`|save current settings to a new profile
 |`dstx profile delete <name>`|delete a profile
-|`dstx auto-save <on|off>`|enable/disable auto-save
+|`dstx auto-save <on/off>`|enable/disable auto-save
 |`dstx help`|list available commands
 
 ### Slot-specific commands (replace `<slot>` with 0,1,2,3):
@@ -304,20 +304,20 @@ For a list of connected slots, use the `dstx slots` command.
 |`ledfx <effect> [speed]`|set LED effect (see [Appendix 1](#appendix-1-led-effects))
 |`brightness <0-100>`|global LED brightness
 |`pled <0-5>`|player LEDs on DualSense (0=off,1-5=player)
-|`reapply <on|off|status>`|auto-reapply LED when external apps change it
-|`emulation <on|off>`|create/destroy virtual Xbox 360 device
-|`uhid <on|off>`|use UHID backend instead of uinput (requires emulation on)
+|`reapply <on/off/status>`|auto-reapply LED when external apps change it
+|`emulation <on/off>`|create/destroy virtual Xbox 360 device
+|`uhid <on/off>`|use UHID backend instead of uinput (requires emulation on)
 |`rumble <on/off/status>`|enable/disable rumble
 |`gain <0-100>`|rumble motor gain (strength)
 |`deadzone <0-100>`|analog stick deadzone percentage
-|`sensitivity <left|right> <0-7>`|set sensitivity preset (see [Appendix 2](#appendix-2-stick-sensitivity-presets))
-|`invert <ly|ry> <on|off|status>`|invert Y axis for left (ly) or right (ry) stick
-|`triggers-digital <on|off|status>`|treat L2/R2 as digital buttons (on/off) instead of analog
-|`debounce <on|off>`|enable software button debounce filtering
+|`sensitivity <left/right> <0-7>`|set sensitivity preset (see [Appendix 2](#appendix-2-stick-sensitivity-presets))
+|`invert <ly/ry> <on/off/status>`|invert Y axis for left (ly) or right (ry) stick
+|`triggers-digital <on/off/status>`|treat L2/R2 as digital buttons (on/off) instead of analog
+|`debounce <on/off>`|enable software button debounce filtering
 |`keybind <phy> <log>`|map physical button <phy> to logical button <log> (see [Appendix 3](#appendix-3-keybinds-button-remapping))
 |`keymap`|show current mapping table
 |`reset-keybinds`|restore identity mapping (physical->same logical)
-|`layout <switch|xbox>`|Switch layout (A/B reversed) or Xbox layout (normal), only for Nintendo Switch Pro
+|`layout <switch/xbox>`|Switch layout (A/B reversed) or Xbox layout (normal), only for Nintendo Switch Pro
 
 ### Usage:
 
