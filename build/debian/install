@@ -1,5 +1,0 @@
-# systemd units, udev rules, dbus config
-debian/dstx.service /lib/systemd/system/
-debian/dstx-dbus.service /lib/systemd/system/
-debian/99-dstx.rules /lib/udev/rules.d/
-debian/org.dstx.Bridge.conf /etc/dbus-1/system.d/
