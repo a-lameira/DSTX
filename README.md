@@ -298,7 +298,7 @@ For a list of connected slots, use the `dstx slots` command.  Replace `<slot>` w
 **Syntax:** `dstx <slot> <command> [argument]`
 
 |Command  |Description     
-|:-----|:-------
+|:------|:-------
 |`color RRGGBB`|set static LED color (hex, e.g., ff00aa)
 |`ledfx <effect> [speed]`|set LED effect (see [Appendix 1](#appendix-1-led-effects))
 |`brightness <0-100>`|global LED brightness
