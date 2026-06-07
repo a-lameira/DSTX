@@ -23,9 +23,20 @@ else
     echo "ERROR: setup-dstx.sh not found in $CORE_SRC/ or $CORE_SRC/data/"
     exit 1
 fi
-
-# Make sure the script is executable
 chmod +x "$STAGING_DIR/setup-dstx.sh"
+
+# Copy LICENSE and README.md from project root
+if [ -f "$PROJECT_ROOT/LICENSE" ]; then
+    cp "$PROJECT_ROOT/LICENSE" "$STAGING_DIR/"
+else
+    echo "WARNING: LICENSE not found in project root"
+fi
+
+if [ -f "$PROJECT_ROOT/README.md" ]; then
+    cp "$PROJECT_ROOT/README.md" "$STAGING_DIR/"
+else
+    echo "WARNING: README.md not found in project root"
+fi
 
 # Create the tarball
 mkdir -p "$OUTPUT_DIR"
