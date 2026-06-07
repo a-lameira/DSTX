@@ -12,11 +12,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Import GPG key
+      # Import GPG private key and configure batch/pinentry mode
+      - name: Import GPG key and setup batch mode
         run: |
+          # Import the private key
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-          # Testa se a chave foi importada corretamente
-          gpg --list-secret-keys
+
+          # Configure GPG to avoid interactive pinentry
+          mkdir -p ~/.gnupg
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo "batch" >> ~/.gnupg/gpg.conf
+          chmod 600 ~/.gnupg/gpg.conf
+
+          # Reload gpg-agent to apply changes
+          gpg-connect-agent reloadagent /bye
+
+      # Preload the GPG passphrase into the agent
+      - name: Preload GPG passphrase
+        run: |
+          # Get the keygrip of the imported key
+          KEYGRIP=$(gpg --with-keygrip --list-secret-keys dstx@dstxapp.org | grep -A1 'Keygrip' | tail -n1 | tr -d ' ')
+          echo "Keygrip: $KEYGRIP"
+
+          # Write passphrase to a temporary file
+          echo "${{ secrets.GPG_PASSPHRASE }}" > /tmp/passphrase.txt
+
+          # Preset the passphrase in the gpg-agent (non-interactive)
+          /usr/lib/gnupg/gpg-preset-passphrase --preset --passphrase-file /tmp/passphrase.txt "$KEYGRIP"
 
       - name: Install flatpak-builder and SDK
         run: |
@@ -38,7 +60,7 @@ jobs:
           REPO_DIR="$GITHUB_WORKSPACE/dstx-flatpak-repo"
           BUILD_DIR="$GITHUB_WORKSPACE/flatpak-build"
 
-          # Detecta o ID da chave GPG automaticamente
+          # Automatically detect GPG key ID
           GPG_KEY=$(gpg --list-secret-keys --keyid-format LONG dstx@dstxapp.org | grep 'sec' | awk '{print $2}' | cut -d'/' -f2)
           if [ -z "$GPG_KEY" ]; then
             echo "ERROR: GPG key not found for dstx@dstxapp.org"
@@ -46,16 +68,18 @@ jobs:
           fi
           echo "Using GPG key: $GPG_KEY"
 
-          # Copia os binários estáticos para o local esperado pelo Flatpak
+          # Copy static binaries to the location expected by the Flatpak manifest
           mkdir -p build/flatpak/static
           cp build/core-static/dstx build/flatpak/static/
           cp build/core-static/dstx-dbus build/flatpak/static/
 
           rm -rf "$REPO_DIR" "$BUILD_DIR"
           flatpak-builder --force-clean --repo="$REPO_DIR" "$BUILD_DIR" "$MANIFEST"
+
+          # Sign the repository – now GPG uses the preloaded passphrase
           flatpak build-update-repo --gpg-sign="$GPG_KEY" "$REPO_DIR"
 
-          # Copia a chave pública para dentro do repositório (acessível via web)
+          # Copy the public key into the repository directory (web accessible)
           gpg --armor --export dstx@dstxapp.org > "$REPO_DIR"/dstx-flatpak-repo.asc
 
           echo "repo_dir=$REPO_DIR" >> $GITHUB_OUTPUT
@@ -64,7 +88,7 @@ jobs:
         run: |
           mkdir -p gh-pages-temp/flatpak
           cp -r ${{ steps.build_repo.outputs.repo_dir }}/* gh-pages-temp/flatpak/
-          # Garante que o CNAME exista na raiz (será mantido pelo keep_files)
+          # Ensure the CNAME file exists at root (will be preserved by keep_files)
           echo "flatpak.dstxapp.org" > gh-pages-temp/CNAME
 
       - name: Deploy to GitHub Pages
@@ -73,7 +97,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./gh-pages-temp
           publish_branch: gh-pages
-          keep_files: true
+          keep_files: true          # Preserve existing files like CNAME and apt/ folder
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: 'Deploy Flatpak repository for ${{ github.ref_name }}'
