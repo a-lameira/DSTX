@@ -50,7 +50,8 @@ jobs:
           chmod +x build/build-core-static.sh
           ./build/build-core-static.sh
 
-      - name: Build Flatpak repository
+      # Build and sign the Flatpak repository in one step (more reliable)
+      - name: Build and sign Flatpak repository
         id: build_repo
         run: |
           set -e
@@ -72,9 +73,17 @@ jobs:
           cp build/core-static/dstx-dbus build/flatpak/static/
 
           rm -rf "$REPO_DIR" "$BUILD_DIR"
-          flatpak-builder --force-clean --repo="$REPO_DIR" "$BUILD_DIR" "$MANIFEST"
 
-          # Sign the repository – the passphrase is already cached from the dummy signing step
+          # Build and sign the repository in a single command
+          # This ensures the commit is signed immediately
+          flatpak-builder --force-clean \
+                          --repo="$REPO_DIR" \
+                          --gpg-sign="$GPG_KEY" \
+                          --gpg-homedir="$HOME/.gnupg" \
+                          "$BUILD_DIR" \
+                          "$MANIFEST"
+
+          # Update repository metadata (preserves signature)
           flatpak build-update-repo --gpg-sign="$GPG_KEY" "$REPO_DIR"
 
           # Copy the public key into the repository directory (web accessible)
