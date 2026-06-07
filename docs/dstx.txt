@@ -1,0 +1,339 @@
+DSTX – Technical Documentation
+================================================================================
+
+1. OVERVIEW
+--------------------------------------------------------------------------------
+DSTX (DualShock Translation for XInput) is a userspace daemon and control
+interface that translates input from Sony DualShock 4, Sony DualSense, and
+Nintendo Switch Pro controllers into virtual Xbox 360 controller devices on
+Linux.
+
+It supports:
+- Real-time input remapping (keybinds)
+- Stick sensitivity curves (8 presets + custom LUT)
+- Radial deadzone configuration
+- LED effects (9 built‑in effects + static mode)
+- Rumble emulation via FF (uinput) or UHID output reports
+- Profile persistence (JSON, auto‑save, external editing)
+- Dual virtual device backends: uinput (legacy) and UHID (modern)
+
+The program operates in three modes:
+  – Daemon (--daemon) : background service, manages controllers and virtual
+    devices.
+  – CLI   : one‑shot command execution (e.g., `dstx 0 color ff0000`).
+  – TUI   : interactive terminal interface (default when no arguments).
+
+All inter‑process communication is done through a POSIX shared memory segment
+(`/dstx_shared_mem`) protected by a robust process‑shared mutex.
+
+2. ARCHITECTURE
+--------------------------------------------------------------------------------
+2.1 Process model
+  – One daemon process (systemd service) runs with root privileges (required
+    for hidraw, uinput, /dev/uhid).
+  – One or more client processes (CLI, TUI) attach to SHM for monitoring and
+    configuration.
+  – The daemon spawns one worker thread per connected controller.
+  – A dedicated singleton thread (`settings.c`) handles profile I/O and
+    auto‑saving.
+
+2.2 Shared memory layout (shared_data_t)
+  – Magic number validation (0x44535458)
+  – `proc_mutex` : robust, recursive, process‑shared mutex
+  – `controller_t slots[MAX_SLOTS]` : per‑slot state (see 3.1)
+  – `profile_request` / `profile_response` : synchronous command channel
+  – `auto_save_enabled`, `auto_save_delay_ms`
+  – `current_profile_name` : name of active profile
+  – `free_slots_bitmap` : bitmask for slot allocation
+
+2.3 Data flow
+  hidraw/evdev → worker thread → debounce → keymap → sensitivity+deadzone
+  → uinput/UHID → game/application
+
+  Output path (rumble/LED):
+  game → uinput (EV_FF) or UHID output report → worker thread → hidraw/evdev
+  → physical controller
+
+3. KEY DATA STRUCTURES
+--------------------------------------------------------------------------------
+3.1 controller_t (dstx.h)
+  Contains:
+  – Input state: LX, LY, RX, RY (int16_t), LT, RT (uint8_t), digital buttons,
+    HATX, HATY.
+  – Configuration: keymap[PHY_BTN_COUNT], deadzone, rumble_gain,
+    sensitivity_left/right_preset, invert_ly/ry, is_trigger_digital.
+  – LED: led_r/g/b (current), led_base_r/g/b (base color), led_static,
+    led_request_effect/speed/brightness, player_leds.
+  – Rumble: rumble_strong/weak (atomic), rumble_active, ff_effects[],
+    periodic_effects[].
+  – Thread control: worker_heartbeat, worker_stop.
+  – Device info: type, is_bluetooth, dev_path, product_name, uniq, driver,
+    input_nodes[].
+
+3.2 slot_config_t (dstx.h)
+  Persistent subset of controller_t used for profiles. Includes keymap,
+  LED base color, gain, deadzone, brightness, sensitivity presets,
+  trigger mode, and effect settings. No transient fields.
+
+3.3 led_slot_state_t (private in led.c)
+  Per‑slot effect runtime: current_effect, start_time, speed, brightness,
+  last_write timestamp, last color cache.
+
+3.4 nsw_context_t (private in nsw.c)
+  Nintendo Switch Pro per‑slot state: event_fd, inotify_fd, effect_id,
+  last rumble values, uinput cache, UHID fd, raw button states.
+
+4. KEY FUNCTIONS AND MODULES
+--------------------------------------------------------------------------------
+4.1 Daemon core (daemon.c)
+  – `run_daemon_loop()`       : main event loop (inotify, hotplug, watchdog)
+  – `controller_worker()`     : per‑slot thread (reads device, translates,
+                                 manages virtual device, processes rumble/LED)
+  – `try_register_control()`  : called on hotplug; allocates slot, restores
+                                 persistent config, spawns worker.
+  – `scan_existing_devices()` : initial enumeration of /dev/hidraw*.
+
+4.2 Input translation (drivers.c)
+  – `translate_ds4()`         : parses DS4 USB/BT reports (offset detection)
+  – `translate_dualsense()`   : DualSense report parsing (0x31 / 0x02)
+  – `emit()`                  : safe write to uinput with rate‑limited errors
+  – `setup_uinput_indexed()`  : creates /dev/uinput device with Xbox360 caps
+  – `apply_deadzone()`        : radial deadzone (axes.c)
+  – `apply_sensitivity_left/right()` : LUT‑based curve (axes.c)
+
+4.3 Keybinds (keys.c)
+  – `keys_apply_map()`        : zeros logical buttons, applies keymap array
+  – `keys_get_default_map()`  : identity mapping (physical i → logical i+1)
+  – `keys_set_switch_layout()`: swaps A↔B, X↔Y (Nintendo layout)
+  – `keys_set_xbox_layout()`  : identity for face buttons
+  – `keys_reset_all_keybinds()`: full identity restore
+
+4.4 LED effects (led.c)
+  – `ledfx_init()`            : precomputes sine and easing tables
+  – `ledfx_process_requests()`: polls SHM for pending effect changes
+  – `ledfx_update_slot()`     : called periodically (∼60Hz) from worker;
+                                calculates current color and updates SHM
+  – Effect implementations: static, breath, rainbow, pulse, strobe, wave,
+    battery, trigger, button. Each uses precomputed easing tables and
+    per‑effect speed multipliers.
+
+4.5 Output reports (output.c)
+  – `send_output_report()`    : builds USB/BT report for DS4/DualSense
+  – `rumble_handle_ff_upload()`: processes UI_FF_UPLOAD (uinput)
+  – `rumble_handle_ff_event()`: handles EV_FF start/stop
+  – `rumble_process_pipeline()`: periodic effect evaluation, rate‑limited writes
+  – `led_process_pipeline()`  : rate‑limited LED updates, external retry logic
+
+4.6 Nintendo Switch Pro (nsw.c)
+  – `nsw_init()`              : finds evdev node, sets up inotify, tests FF
+  – `nsw_read_events()`       : reads evdev events, applies BT offset correction,
+                                 keymap, sensitivity, deadzone
+  – `nsw_send_rumble()`       : uploads FF_RUMBLE effect via EVIOCSFF
+  – `nsw_monitor()`           : checks inotify for device removal
+
+4.7 UHID backend (uhid.c)
+  – `uhid_create()`           : opens /dev/uhid, sends UHID_CREATE2 with custom
+                                 HID descriptor (13 buttons, 6 axes, hat)
+  – `uhid_send_input()`       : forwards input reports as UHID_INPUT2
+  – `uhid_handle_events()`    : processes UHID_OUTPUT (rumble), GET/SET_REPORT
+
+4.8 Profile management (settings.c)
+  – `settings_init()`         : starts singleton thread, loads "Default" profile
+  – `settings_shutdown()`     : stops thread, saves dirty profile
+  – `profile_sync_shm_to_active()`: compares SHM against active profile,
+                                     marks dirty on change
+  – `profile_handle_auto_save()`: debounced write to disk
+  – `profile_process_requests()`: handles load/save/delete/list/auto‑save cmds
+  – JSON serialisation uses cJSON; all fields are range‑validated.
+
+4.9 CLI / command dispatcher (commands.c)
+  – `process_cli_command()`   : entry point for CLI mode
+  – `execute_slot_command()`  : dispatch table for slot commands
+  – Supports batch mode with `--command1 --command2 ...`
+  – Global commands: slots, profile, auto-save, help
+  – Slot commands: color, emulation, uhid, keybind, invert, sensitivity,
+    triggers-digital, ledfx, brightness, deadzone, gain, rumble, debounce,
+    reapply, pled, layout.
+
+4.10 TUI (ui.c + display.c)
+  – `run_ui_loop()`           : raw terminal mode, render loop, command editing
+  – `render_full_ui()`        : draws controller state, sticks as ASCII art,
+                                 status lines
+  – Help system (4 pages), info screen, profile list viewer.
+  – Notification bar (5 sec timeout).
+
+5. BUILD INSTRUCTIONS
+--------------------------------------------------------------------------------
+The project uses a Makefile with three build profiles:
+
+  $ make static-all       # Fully static binaries (requires prebuilt static dbus)
+  $ make dynamic-all      # Dynamically linked (development)
+  $ make debug-all        # Debug build (-O0 -g -DDSTX_DEBUG_VERBOSE)
+
+Binary outputs:
+  - dstx         : main program (daemon + CLI + TUI)
+  - dstx-dbus    : optional D‑Bus bridge (not covered in this analysis)
+
+Dependencies:
+  – libc (glibc or musl), libm, libpthread, librt, libz, libcjson
+  – Kernel headers: linux/hidraw.h, linux/input.h, linux/uinput.h, linux/uhid.h
+  – pkg-config (for dynamic D‑Bus discovery)
+
+Compilation flags (dynamic):
+  -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -Wall -Wextra -pthread -O2 -g
+
+The static build requires a separately compiled static version of D‑Bus
+(located in /usr/local/dbus-static by default). For core functionality
+(no D‑Bus), static compilation does not need D‑Bus.
+
+6. RUNTIME DEPENDENCIES AND PERMISSIONS
+--------------------------------------------------------------------------------
+  – The daemon must run as root (or with CAP_SYS_ADMIN) to:
+      * open /dev/hidraw* devices
+      * create /dev/uinput or /dev/uhid devices
+      * use inotify on /dev
+  – The service file (dstx-daemon.service) should set User=root.
+  – Shared memory segment is created with group `dstx` (mode 0660).
+  – Profiles are stored in `/etc/dstx/profiles/` (writable by daemon).
+  – The `dstx` binary can be run by any user for CLI/TUI (only requires
+    read/write access to the SHM segment, which is group‑accessible).
+
+7. CONFIGURATION & PROFILES
+--------------------------------------------------------------------------------
+Profiles are JSON files stored in `/etc/dstx/profiles/`. Example structure:
+
+{
+  "version": 1,
+  "last_modified": 1738452345,
+  "slots": [
+    {
+      "led_r": 255, "led_g": 0, "led_b": 0,
+      "led_base_r": 255, "led_base_g": 0, "led_base_b": 0,
+      "rumble_gain": 100,
+      "deadzone": 10,
+      "global_brightness": 80,
+      "player_leds": 0,
+      "debounce": true,
+      "emulate": true,
+      "is_uhid": false,
+      "led_reapply": true,
+      "rumble_active": true,
+      "invert_ly": false,
+      "invert_ry": false,
+      "sensitivity_left": 0,
+      "sensitivity_right": 0,
+      "led_effect": 0,
+      "led_effect_speed": 5,
+      "led_effect_brightness": 80,
+      "triggers_digital": false,
+      "keymap": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+    }
+  ]
+}
+
+All numeric fields are range‑checked at load; invalid values are replaced
+with defaults. The keymap array maps physical button indices (0..17) to
+logical button values (0 = NONE, 1 = CROSS ... 18 = DPAD_RIGHT).
+
+Auto‑save behaviour:
+  – Enabled by default (delay 2000 ms).
+  – Any change made via CLI/TUI triggers a dirty flag.
+  – After no changes for `auto_save_delay_ms`, the active profile is written.
+  – External edits (via inotify) cause reload if no local changes are pending.
+
+8. CONTROLLER-SPECIFIC NOTES
+--------------------------------------------------------------------------------
+8.1 DualShock 4
+  – USB report ID: 0x05, size 32.
+  – Bluetooth report ID: 0x11, size 78, includes CRC32 over 75 bytes.
+  – Battery level: low nibble (0‑10 → 0‑100% step 10), high bit 0x10 = cable.
+  – Supports LED and rumble via output reports.
+
+8.2 DualSense
+  – USB report ID: 0x02, size 48.
+  – Bluetooth report ID: 0x31, size 78 (similar CRC).
+  – Battery status: 4‑bit level + 4‑bit status (0=discharging,1=charging,2=full).
+  – Player LEDs (5 LEDs) controlled via byte 44/45 in output report.
+  – Touchpad button mapped to PHY_BTN_TOUCH.
+
+8.3 Nintendo Switch Pro
+  – Uses evdev (kernel hid-nintendo driver), not raw HID.
+  – Automatic discovery of input nodes via `/sys/class/hidraw/.../input/`.
+  – Bluetooth correction: fixed offsets added to stick values (empirical).
+  – Rumble uses FF_RUMBLE effect uploaded via EVIOCSFF.
+  – Capture button mapped to PHY_BTN_TOUCH.
+
+9. DEBUGGING AND LOGGING
+--------------------------------------------------------------------------------
+Logging is done via syslog (facility LOG_DAEMON for daemon, LOG_USER for CLI).
+Rate limiting is implemented per category (see `log_ratelimit_time()`):
+
+  – LOG_CAT_RUMBLE
+  – LOG_CAT_LED
+  – LOG_CAT_UHID
+  – LOG_CAT_DRIVER
+  – LOG_CAT_NSW
+  – LOG_CAT_OUTPUT
+  – LOG_CAT_WORKER
+
+To enable verbose debug logs, compile with `-DDSTX_DEBUG -DDSTX_DEBUG_VERBOSE`.
+The daemon responds to SIGUSR1 by toggling debug logging (LOG_DEBUG mask) at
+runtime.
+
+Watchdog:
+  – Each worker thread updates `worker_heartbeat` once per loop.
+  – Main thread checks every 5 seconds; if heartbeat is older than 5 sec,
+    the thread is considered stuck, signalled to stop, joined, and recreated.
+
+10. SIGNAL HANDLERS
+--------------------------------------------------------------------------------
+  – SIGINT, SIGTERM: graceful shutdown (daemon) or exit TUI.
+  – SIGHUP: reload configuration (atomic store request_reload).
+  – SIGUSR1: toggle debug logging (daemon only).
+  – SIGPIPE: ignored (avoid crashes on closed virtual device FDs).
+
+11. KNOWN LIMITATIONS
+--------------------------------------------------------------------------------
+  – Maximum 4 controllers simultaneously (MAX_SLOTS).
+  – Nintendo Switch Pro does not support LED control (hardware limitation).
+  – Bluetooth DS4/DualSense may require up to 2 seconds for handshake.
+  – UHID backend does not yet implement full periodic effect support
+    (only simple rumble output reports).
+  – Deadzone is radial only, no separate inner/outer zones.
+  – Sensitivity LUTs are generated at init using float exponent; not
+    user‑customisable without recompilation.
+
+12. EXTENDING THE CODE
+--------------------------------------------------------------------------------
+Adding a new controller type requires:
+  1. Add constant to `controller_type_t`.
+  2. Implement a translation function (e.g., `translate_new()`).
+  3. Call it from `controller_worker()` based on type.
+  4. (Optional) Add output report builder in `send_output_report()`.
+  5. Extend `slot_config_t` with new persistent fields if needed.
+  6. Update JSON serialisation in `settings.c` (load/save).
+
+Adding a new LED effect:
+  1. Add enum entry in `led_effect_t` (led.h).
+  2. Implement update function (prototype in led.c).
+  3. Add entry to `g_effects[]` table.
+  4. (Optional) Assign speed multiplier in `g_speed_multipliers[]`.
+
+All new code must respect the existing locking discipline:
+  – SHM fields that are `_Atomic` can be accessed without mutex.
+  – Non‑atomic fields must be accessed under `proc_mutex`.
+  – The `writing_output` flag prevents inotify‑induced loops.
+
+13. LICENSE
+--------------------------------------------------------------------------------
+Copyright (C) 2026 André Lameira
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+See the file COPYING or <https://www.gnu.org/licenses/> for details.
+
+--------------------------------------------------------------------------------
+End of README
