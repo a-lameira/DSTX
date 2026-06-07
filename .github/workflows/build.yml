@@ -176,21 +176,14 @@ jobs:
           path: build/tar/*.tar.gz
 
   # --------------------------------------------------------------------------
-  # AppImage – GUI only (using Flatpak GNOME SDK)
+  # AppImage – GUI only (using Debian Trixie)
   # --------------------------------------------------------------------------
   build-appimage:
-    needs: build-core-static
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download core-static
-        uses: actions/download-artifact@v4
-        with:
-          name: core-static
-          path: build/core-static/
-
-      - name: Build AppImage using Flatpak SDK
+      - name: Build AppImage using Debian Sid
         run: |
           chmod +x build/build-appimage.sh
           ./build/build-appimage.sh
