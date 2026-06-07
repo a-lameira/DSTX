@@ -42,8 +42,8 @@ namespace Dstx.Widgets {
                 developer_name = "André Lameira",
                 copyright = "© 2026 André Lameira",
                 license_type = Gtk.License.GPL_3_0,
-                website = "https://github.com/dstx/dstx-gui",
-                issue_url = "https://github.com/dstx/dstx-gui/issues",
+                website = "https://dstxapp.org",
+                issue_url = "https://github.com/a-lameira/DSTX/issues",
                 support_url = "https://discord.gg/dstx"
             };
 
