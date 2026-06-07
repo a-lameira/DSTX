@@ -27,18 +27,13 @@ jobs:
           # Reload gpg-agent to apply changes
           gpg-connect-agent reloadagent /bye
 
-      # Preload the GPG passphrase into the agent
-      - name: Preload GPG passphrase
+      # Cache the GPG passphrase by performing a dummy signing operation
+      - name: Cache GPG passphrase
         run: |
-          # Get the keygrip of the imported key
-          KEYGRIP=$(gpg --with-keygrip --list-secret-keys dstx@dstxapp.org | grep -A1 'Keygrip' | tail -n1 | tr -d ' ')
-          echo "Keygrip: $KEYGRIP"
-
           # Write passphrase to a temporary file
           echo "${{ secrets.GPG_PASSPHRASE }}" > /tmp/passphrase.txt
-
-          # Preset the passphrase in the gpg-agent (non-interactive)
-          /usr/lib/gnupg/gpg-preset-passphrase --preset --passphrase-file /tmp/passphrase.txt "$KEYGRIP"
+          # Perform a dummy sign – this caches the passphrase in the agent
+          gpg --batch --passphrase-file /tmp/passphrase.txt --sign --output /dev/null /dev/null
 
       - name: Install flatpak-builder and SDK
         run: |
@@ -76,7 +71,7 @@ jobs:
           rm -rf "$REPO_DIR" "$BUILD_DIR"
           flatpak-builder --force-clean --repo="$REPO_DIR" "$BUILD_DIR" "$MANIFEST"
 
-          # Sign the repository – now GPG uses the preloaded passphrase
+          # Sign the repository – the passphrase is already cached from the dummy signing step
           flatpak build-update-repo --gpg-sign="$GPG_KEY" "$REPO_DIR"
 
           # Copy the public key into the repository directory (web accessible)
