@@ -3,19 +3,18 @@ DSTX – Technical Documentation
 
 1. OVERVIEW
 --------------------------------------------------------------------------------
-DSTX (DualShock Translation for XInput) is a userspace daemon and control
-interface that translates input from Sony DualShock 4, Sony DualSense, and
-Nintendo Switch Pro controllers into virtual Xbox 360 controller devices on
-Linux.
+DSTX is a userspace daemon and control interface that translates input from 
+Sony DualShock 4, Sony DualSense, and Nintendo Switch Pro controllers into 
+virtual Xbox 360 controller devices on Linux.
 
 It supports:
 - Real-time input remapping (keybinds)
 - Stick sensitivity curves (8 presets + custom LUT)
 - Radial deadzone configuration
-- LED effects (9 built‑in effects + static mode)
-- Rumble emulation via FF (uinput) or UHID output reports
+- LED effects (8 built‑in effects + static mode)
+- Rumble emulation via FF (uinput)
 - Profile persistence (JSON, auto‑save, external editing)
-- Dual virtual device backends: uinput (legacy) and UHID (modern)
+- Dual virtual device backends: uinput and UHID (experimental)
 
 The program operates in three modes:
   – Daemon (--daemon) : background service, manages controllers and virtual
@@ -123,6 +122,7 @@ All inter‑process communication is done through a POSIX shared memory segment
   – `rumble_handle_ff_event()`: handles EV_FF start/stop
   – `rumble_process_pipeline()`: periodic effect evaluation, rate‑limited writes
   – `led_process_pipeline()`  : rate‑limited LED updates, external retry logic
+  – The `writing_output` flag prevents inotify‑induced loops.
 
 4.6 Nintendo Switch Pro (nsw.c)
   – `nsw_init()`              : finds evdev node, sets up inotify, tests FF
@@ -297,11 +297,7 @@ Watchdog:
   – Maximum 4 controllers simultaneously (MAX_SLOTS).
   – Nintendo Switch Pro does not support LED control (hardware limitation).
   – Bluetooth DS4/DualSense may require up to 2 seconds for handshake.
-  – UHID backend does not yet implement full periodic effect support
-    (only simple rumble output reports).
-  – Deadzone is radial only, no separate inner/outer zones.
-  – Sensitivity LUTs are generated at init using float exponent; not
-    user‑customisable without recompilation.
+  – Rumble does not work on UHID backend.
 
 12. EXTENDING THE CODE
 --------------------------------------------------------------------------------
@@ -322,7 +318,6 @@ Adding a new LED effect:
 All new code must respect the existing locking discipline:
   – SHM fields that are `_Atomic` can be accessed without mutex.
   – Non‑atomic fields must be accessed under `proc_mutex`.
-  – The `writing_output` flag prevents inotify‑induced loops.
 
 13. LICENSE
 --------------------------------------------------------------------------------
@@ -331,9 +326,9 @@ Copyright (C) 2026 André Lameira
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+any later version.
 
-See the file COPYING or <https://www.gnu.org/licenses/> for details.
+See the file LICENSE or <https://www.gnu.org/licenses/> for details.
 
 --------------------------------------------------------------------------------
 End of README
