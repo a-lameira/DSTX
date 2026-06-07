@@ -238,6 +238,18 @@ DSTX is distributed in several formats, all available from the [releases](https:
   dstx-dbus) and the setup-dstx.sh script. Use for manual installation on
   any distribution.
 
+### Flatpak
+
+You can install a Flatpak package of DSTX adding the project remote and then installing the package.
+
+To add the remote (flatpak needs to be installed already):
+
+	flatpak remote-add --if-not-exists --gpg-import=https://flatpak.dstxapp.org/flatpak/dstx-flatpak-repo.asc dstx-remote https://flatpak.dstxapp.org/flatpak
+
+Install the package:
+
+	flatpak install dstx-remote org.dstx.gui
+
 ## Configuration (Profiles)
 
 All settings are stored in JSON profiles inside /etc/dstx/profiles/. The default profile is "Default.json". Each profile contains configuration for all 4 slots (unused slots are ignored). The structure is:
