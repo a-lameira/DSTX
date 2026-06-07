@@ -138,10 +138,12 @@ DSTX/
 │
 ├── docs/                                # project documentation
 │   ├── repository-structure.txt         # this file
+│   ├── dstx.txt                         # dstx technical overview
 │   └── README.md                        # general documentation file
 │
 ├── .github/                             # github automated build jobs (GitHub Actions)
 │   └── workflows/
+│       ├── flatpak-repo.yml             # build flatpak remote and upload to GitHub Pages
 │       ├── build-appimage.yml           # automatically build AppImage package
 │       ├── build-core-static.yml        # automatically build core static binaries
 │       ├── build-deb.yml                # automatically build .deb package
@@ -150,6 +152,6 @@ DSTX/
 │       ├── build-tar.yml                # automatically build tar.gz package
 │       └── build.yml                    # automatically build all packages
 │
-├── VERSION                              # tag version
+├── VERSION                              # current version
 ├── LICENSE                              # GPLv3 copy
-└── README.md                            # repository info
+└── README.md                            # repository general info
