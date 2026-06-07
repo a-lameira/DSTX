@@ -1,4 +1,4 @@
-name: Build & Deploy Flatpak Repository (GitHub Pages)
+name: Build & Deploy Flatpak Repository
 
 on:
   push:
