@@ -467,7 +467,7 @@ void render_full_ui(shared_data_t *shm, int idx, const char *cmd_line, bool aliv
     const char *braille[] = {"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧"};
 
     // Initial clear and header (line 1)
-    printf(HOME CLR_BOLD CLR_CYAN " ◈ DSTX 0.8.0 " CLR_RESET "│ ");
+    printf(HOME CLR_BOLD CLR_CYAN " ◈ DSTX 0.7.0 " CLR_RESET "│ ");
 
     pid_t current_pid = atomic_load(&shm->daemon_pid);
     if (alive) {
