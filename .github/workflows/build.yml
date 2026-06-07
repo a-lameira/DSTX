@@ -179,6 +179,7 @@ jobs:
   # AppImage – GUI only (using Flatpak GNOME SDK)
   # --------------------------------------------------------------------------
   build-appimage:
+    needs: build-core-static
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
