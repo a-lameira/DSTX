@@ -60,9 +60,9 @@ Offset (hex) | Field                             | Description
 0x00         | ReportID = 0x11                   |
 0x01         | bits 0-5: unknown                 |
              | bit 6: EnableCRC (1 = CRC present)|
-             | bit 7: EnableHID                   |
+             | bit 7: EnableHID                  |
 0x02         | bits 0-6: unknown                 |
-             | bit 7: EnableAudio                 |
+             | bit 7: EnableAudio                |
 0x03         | LeftStickX                        | (same as USB)
 0x04         | LeftStickY                        |
 0x05         | RightStickX                       |
