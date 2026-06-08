@@ -2,9 +2,9 @@
 name: Build DSTX packages
 
 on:
-  push:
-    tags:
-      - 'v*'
+  #push:
+  #  tags:
+  #    - 'v*'
   workflow_dispatch:
 
 jobs:
