@@ -1,0 +1,14 @@
+DSTX – Reverse Engineering
+================================================================================
+
+DualShock 4
+
+INPUT REPORT
+
+OUTPUT REPORT
+
+DualSense
+
+INPUT REPORT
+
+OUTPUT REPORT
