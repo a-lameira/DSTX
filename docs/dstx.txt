@@ -48,7 +48,7 @@ All inter‑process communication is done through a POSIX shared memory segment
 2.3 Data flow
   Input:  hidraw/evdev → worker thread → debounce → keymap → sensitivity+deadzone
           → uinput/UHID → game/application
-  Output: game → uinput (EV_FF) or UHID output report → worker thread → hidraw/evdev
+  Output: game → uinput (EV_FF) → worker thread → hidraw/evdev
           → physical controller
 
 3. KEY DATA STRUCTURES
