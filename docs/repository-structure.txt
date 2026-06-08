@@ -1,4 +1,5 @@
-Repository Structure
+DSTX - Repository Structure
+================================================================================
 
 DSTX/
 ├── dstx/                             # C core - daemon, CLI, TUI, D-Bus
