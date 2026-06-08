@@ -433,7 +433,7 @@ Run "`dstx-gui`". The main window shows:
       * Triggers – digital/analog mode toggle
       * Keybinds – graphical mapping of physical buttons to logical buttons
       * Profiles – load, save, delete, auto-save settings
-  - A "System" section to start/stop the core service (requires Polkit/sudoers)
+  - A "Service" section to start/stop the core service (requires Polkit/sudoers)
 
 The GUI is responsive and uses GPU-accelerated rendering for the controller visualisation. It respects the system theme (Adwaita dark/light) and also provides a built-in color scheme manager.
 
