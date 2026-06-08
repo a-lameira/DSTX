@@ -1,58 +1,321 @@
 DSTX – Reverse Engineering
 ================================================================================
 
-DualShock 4
+This file provides information about the HID reports byte structure (input and
+output) of the Playstation DualShock4 and DualSense controllers, and how DSTX
+interacts with the raw HID data.
 
-INPUT REPORT
+================================================================================
+DUALSHOCK 4 BYTE STRUCTURE – INPUT REPORTS (Data sent from controller)
+================================================================================
 
-BYTE    VALUE   
+Input reports may vary depending on the interface (USB/dongle or Bluetooth)
+and the report type (0x01 basic or 0x11/0x12... with extended data).
 
-0       []
-1       []
-2       []
-3       []
-4       []
-5       []
-6       []
-7       []
-8       []
-9       []
-10      []
-11      []
-12      []
-13      []
+Below are the formats used by DSTX.
 
+-------------------------------------------------------------------------------
+1. USB / Dongle Report – Report ID 0x01 (USBGetStateData structure)
+-------------------------------------------------------------------------------
+Total size: 64+ bytes (DSTX uses up to byte 29 for battery)
 
+Offset (hex) | Field                     | Type     | Values / Notes
+-------------|---------------------------|----------|--------------------------------------------------------
+0x00         | ReportID                  | uint8_t  | 0x01 (report identifier)
+0x01         | LeftStickX                | uint8_t  | 0..255 (128 = center). Converted to -32768..32767
+0x02         | LeftStickY                | uint8_t  | same pattern
+0x03         | RightStickX               | uint8_t  | same pattern
+0x04         | RightStickY               | uint8_t  | same pattern
+0x05         | Buttons (byte 1)          | bitfield | Bits 0-3: D-Pad (0=↑,1=↗,2=→,3=↘,4=↓,5=↙,6=←,7=↖)
+             |                           |          | Bit 4: Square, Bit 5: Cross, Bit 6: Circle, Bit 7: Triangle
+0x06         | Buttons (byte 2)          | bitfield | Bit 0: L1, Bit 1: R1, Bit 2: L2, Bit 3: R2,
+             |                           |          | Bit 4: Share, Bit 5: Options, Bit 6: L3, Bit 7: R3
+0x07         | Buttons (byte 3)          | bitfield | Bit 0: PS (Home), Bit 1: Touchpad click, Bits 2-7: counter
+0x08         | TriggerLeft (L2)          | uint8_t  | 0..255 (0 = released, 255 = fully pressed)
+0x09         | TriggerRight (R2)         | uint8_t  | same pattern
+0x0A         | Timestamp (LSB)           | uint8_t  | low part of timestamp (in 5.33 µs units)
+0x0B         | Timestamp (MSB)           | uint8_t  | high part
+0x0C         | Temperature               | uint8_t  | internal sensor
+0x0D-0x0E    | Angular velocity X        | int16_t  | gyroscope (X axis)
+0x0F-0x10    | Angular velocity Z        | int16_t  | gyroscope (Z axis)
+0x11-0x12    | Angular velocity Y        | int16_t  | gyroscope (Y axis)
+0x13-0x14    | Acceleration X            | int16_t  | accelerometer
+0x15-0x16    | Acceleration Y            | int16_t  |
+0x17-0x18    | Acceleration Z            | int16_t  |
+0x19-0x1D    | ExtData[5]                | uint8_t  | external device data
+0x1E         | Battery and flags         | uint8_t  | Bits 0-3: level (0x00-0x0A). Bit 4: 1 = cable connected.
+             |                           |          | Bits 5-7: headphone/mic/ext flags.
+0x1F-0x20    | Touch data (start)        | ...      | up to 3 touches (see TouchData)
 
+Note: DSTX reads only bytes 0x01 through 0x09 and byte 0x1E for battery.
+The rest are ignored.
 
+-------------------------------------------------------------------------------
+2. Bluetooth Report – Report ID 0x11 (common for basic state)
+-------------------------------------------------------------------------------
+Total size: 78 bytes (with optional CRC)
 
+Offset (hex) | Field                             | Description
+-------------|-----------------------------------|------------------------------------------------
+0x00         | ReportID = 0x11                   |
+0x01         | bits 0-5: unknown                 |
+             | bit 6: EnableCRC (1 = CRC present)|
+             | bit 7: EnableHID                   |
+0x02         | bits 0-6: unknown                 |
+             | bit 7: EnableAudio                 |
+0x03         | LeftStickX                        | (same as USB)
+0x04         | LeftStickY                        |
+0x05         | RightStickX                       |
+0x06         | RightStickY                       |
+0x07         | Buttons (byte 1)                  | identical to USB (D-Pad + face)
+0x08         | Buttons (byte 2)                  | identical (L1, R1, L2, R2, Share, Options, L3, R3)
+0x09         | Buttons (byte 3)                  | identical (PS, touchpad, counter)
+0x0A         | TriggerLeft (L2)                  |
+0x0B         | TriggerRight (R2)                 |
+...          | (extended data)                   | gyro, accelerometer, touch (in reports 0x12-0x19)
+0x4A-0x4D    | CRC32 (if EnableCRC = 1)          | computed over previous bytes
 
+DSTX identifies report 0x11 and adjusts the offset to skip the two header bytes
+(offset = 3). Button and axis data are then at the same relative offsets as USB.
 
+================================================================================
+DUALSHOCK 4 BYTE STRUCTURE – OUTPUT REPORTS (Commands to the controller)
+================================================================================
 
+Output reports are used to control rumble, LEDs, audio, etc.
 
-OUTPUT REPORT
+-------------------------------------------------------------------------------
+1. USB / Dongle Report – Report ID 0x05 (USBSetStateData)
+-------------------------------------------------------------------------------
+Total size: 32 bytes (bytes 0 to 31)
 
-0       []
-1       []
-2       []
-3       []
-4       []
-5       []
-6       []
-7       []
-8       []
-9       []
-10      []
-11      []
-12      []
-13      []
+Offset (dec) | Field                        | Type     | Values / Description
+-------------|------------------------------|----------|----------------------------------------
+0            | ReportID                     | uint8_t  | 0x05
+1            | Enable flags                 | uint8_t  | Bits (1 = enable update):
+             |                              |          | 0: Rumble, 1: LED, 2: LED blink,
+             |                              |          | 3: Ext write, 4: Volume Left,
+             |                              |          | 5: Volume Right, 6: Volume Mic,
+             |                              |          | 7: Volume Speaker
+2            | Empty1 (reserved)            | uint8_t  | typically 0x00
+3            | RumbleRight (weak motor)     | uint8_t  | 0..255 (intensity)
+4            | RumbleLeft (strong motor)    | uint8_t  | 0..255
+5            | LedRed                       | uint8_t  | 0..255
+6            | LedGreen                     | uint8_t  | 0..255
+7            | LedBlue                      | uint8_t  | 0..255
+8            | LedFlashOnPeriod             | uint8_t  | pulse duration (approx. 10ms units)
+9            | LedFlashOffPeriod            | uint8_t  | pause duration
+10-17        | ExtDataSend[8]               | uint8_t  | data for external I2C port
+18           | VolumeLeft                   | uint8_t  | 0x00..0x4F (left headphone)
+19           | VolumeRight                  | uint8_t  | 0x00..0x4F (right headphone)
+20           | VolumeMic                    | uint8_t  | 0x00 (special behavior) or 0x01..0x40
+21           | VolumeSpeaker                | uint8_t  | 0x00..0x4F
+22           | bits 0-6: UNK_AUDIO1         | 7 bits   | typically 5 (when audio active)
+             | bit 7: UNK_AUDIO2             | 1 bit    | typically 1
+23-30        | Pad[8]                       | uint8_t  | reserved, zero
 
+In DSTX, only the Rumble (offsets 3 and 4) and LED (offsets 5,6,7) fields are
+filled. The flags at offset 1 are set as:
+  - DS4_FLAG_RUMBLE = 0x01
+  - DS4_FLAG_LED    = 0x02
+  - DS4_FLAG_FLASH  = 0x04 (optional)
 
+-------------------------------------------------------------------------------
+2. Bluetooth Report – Report ID 0x11 (output) – BTSetStateData
+-------------------------------------------------------------------------------
+Total size: 78 bytes (with optional CRC)
 
+Offset (dec) | Field                         | Size  | Description
+-------------|-------------------------------|-------|----------------------------------------
+0            | ReportID = 0x11               | 1     |
+1            | PollingRate (bits 0-5)        | 6 bits| 1..64 (0 is treated as 1)
+             | EnableCRC (bit 6)             | 1 bit | 1 = include CRC at the end
+             | EnableHID (bit 7)             | 1 bit |
+2            | EnableMic (bits 0-2)          | 3 bits| enables microphone
+             | UnkA4 (bit 3)                 | 1 bit |
+             | UnkB1 (bit 4)                 | 1 bit |
+             | UnkB2 (bit 5)                 | 1 bit | usually 1
+             | UnkB3 (bit 6)                 | 1 bit |
+             | EnableAudio (bit 7)           | 1 bit |
+3            | Enable flags (same as USB)    | 1     | same bits as USB offset 1
+4            | Empty1                        | 1     |
+5            | RumbleRight (weak)            | 1     |
+6            | RumbleLeft (strong)           | 1     |
+7            | LedRed                        | 1     |
+8            | LedGreen                      | 1     |
+9            | LedBlue                       | 1     |
+10           | LedFlashOnPeriod              | 1     |
+11           | LedFlashOffPeriod             | 1     |
+12-19        | ExtDataSend[8]                | 8     |
+20           | VolumeLeft                    | 1     |
+21           | VolumeRight                   | 1     |
+22           | VolumeMic                     | 1     |
+23           | VolumeSpeaker                 | 1     |
+24           | UNK_AUDIO1 + UNK_AUDIO2       | 1     |
+25-76        | Pad[52]                       | 52    |
+77-80        | CRC32 (if EnableCRC = 1)      | 4     |
 
+DSTX fills only the rumble and LED fields, leaving others zeroed.
+The CRC is always calculated and appended.
 
-DualSense
+================================================================================
+DUALSENSE BYTE STRUCTURE – INPUT REPORTS (Data sent from controller)
+================================================================================
 
-INPUT REPORT
+DSTX supports both USB and Bluetooth connections, reading analog sticks, triggers,
+buttons, and battery.
 
-OUTPUT REPORT
+All values are read from the raw HID report. For USB, the report ID (0x01) is at
+byte 0; data follows at offset 1. For Bluetooth, report ID 0x31 is at byte 0,
+with a 2‑byte header; DSTX uses offset = 2 to reach the embedded USBGetStateData.
+
+-------------------------------------------------------------------------------
+1. USB Input – Report ID 0x01 (USBGetStateData, 63 bytes)
+-------------------------------------------------------------------------------
+Total report length: 64 bytes (ID + 63 data). Offsets below are relative to the
+start of the USBGetStateData structure (i.e., after the report ID).
+
+| Offset | Field                                      | Type     | Values / Notes                                         
+|--------|--------------------------------------------|----------|--------------------------------------------------------
+| 0      | LeftStickX                                 | uint8_t  | 0…255, 128 = center. Converted to -32768…32767.       
+| 1      | LeftStickY                                 | uint8_t  | Same pattern.                                          
+| 2      | RightStickX                                | uint8_t  | Same pattern.                                          
+| 3      | RightStickY                                | uint8_t  | Same pattern.                                          
+| 4      | TriggerLeft (L2)                           | uint8_t  | 0…255, 0 = released, 255 = fully pressed.             
+| 5      | TriggerRight (R2)                          | uint8_t  | Same pattern.                                          
+| 6      | SeqNo                                      | uint8_t  | Ignored by DSTX.                                       
+| 7      | Buttons (byte 1)                           | bitfield | Bits 0‑3: D‑Pad (0=↑,1=↗,2=→,3=↘,4=↓,5=↙,6=←,7=↖).    
+|        |                                            |          | Bit 4: Square, Bit 5: Cross, Bit 6: Circle, Bit 7: Triangle. 
+| 8      | Buttons (byte 2)                           | bitfield | Bit 0: L1, Bit 1: R1, Bit 2: L2, Bit 3: R2,           
+|        |                                            |          | Bit 4: Create (Share), Bit 5: Options,                
+|        |                                            |          | Bit 6: L3, Bit 7: R3.                                  
+| 9      | Buttons (byte 3)                           | bitfield | Bit 0: PS (Home), Bit 1: Touchpad click, Bit 2: Mute, 
+|        |                                            |          | Bits 3‑7: reserved.                                    
+| 10‑51  | (various – gyro, accel, touch, timestamps) | –        | Not used by DSTX.                                      
+| 52     | Battery and power state                    | uint8_t  | Bits 0‑3: PowerPercent (0x00‑0x0A).                    
+|        |                                            |          | Bits 4‑7: PowerState (0=Discharging,1=Charging,2=Complete, other = error). 
+| 53‑62  | (headphone flags, CMAC)                    | –        | Not used.                                              
+
+DSTX reads: offsets 0‑5 (sticks + triggers), 7‑9 (buttons), and 52 (battery).
+All other fields are ignored.
+
+-------------------------------------------------------------------------------
+2. Bluetooth Input – Report ID 0x31 (BTGetStateData, 77 bytes)
+-------------------------------------------------------------------------------
+Bluetooth report: byte 0 = 0x31, byte 1 = flags, then the 63‑byte USBGetStateData
+starts at byte 2. DSTX sets `offset = 2` and treats bytes 2…64 as the same
+structure as above. Therefore the effective offsets for data become:
+
+| DSTX read expression         | Overall report byte | Equivalent USBGetStateData offset 
+|------------------------------|---------------------|------------------------------------
+| buf[offset + 0] (LeftStickX) | buf[2]              | 0                                  
+| buf[offset + 1] (LeftStickY) | buf[3]              | 1                                  
+| buf[offset + 2] (RightStickX)| buf[4]              | 2                                  
+| buf[offset + 3] (RightStickY)| buf[5]              | 3                                  
+| buf[offset + 4] (L2)         | buf[6]              | 4                                  
+| buf[offset + 5] (R2)         | buf[7]              | 5                                  
+| buf[offset + 7] (buttons 1)  | buf[9]              | 7                                  
+| buf[offset + 8] (buttons 2)  | buf[10]             | 8                                  
+| buf[offset + 9] (buttons 3)  | buf[11]             | 9                                  
+| buf[offset + 52] (battery)   | buf[54]             | 52                                 
+
+================================================================================
+DUALSENSE BYTE STRUCTURE – OUTPUT REPORTS (Commands to the controller)
+================================================================================
+
+DSTX sends output reports to control rumble, LED color, player LEDs, and
+global brightness. The reports are based on the `SetStateData` structure (47 bytes).
+For USB the report ID is 0x02; for Bluetooth it is 0x31 with a 2‑byte header.
+
+-------------------------------------------------------------------------------
+1. USB Output – Report ID 0x02 (SetStateData, 47 bytes)
+-------------------------------------------------------------------------------
+Total report length: 48 bytes (ID + 47 data). DSTX fills the following bytes
+(all other bytes are zeroed).
+
+| Overall offset | SetStateData offset | Field                    | Value / Description                                    
+|----------------|---------------------|--------------------------|--------------------------------------------------------
+| 0              | –                   | ReportID                 | 0x02                                                   
+| 1              | 0                   | Flags (byte 0)           | 0x13 = 0x01 \| 0x02 \| 0x10 (EnableRumbleEmulation, UseRumbleNotHaptics? Actually bits 0,1,4)
+| 2              | 1                   | Flags (byte 1)           | 0x17 = 0x01 \| 0x02 \| 0x04 \| 0x10 (AllowMuteLight, AllowAudioMute, AllowLedColor, AllowPlayerIndicators) 
+| 3              | 2                   | RumbleRight (weak)       | 0…255 (after gain scaling)                             
+| 4              | 3                   | RumbleLeft (strong)      | 0…255                                                   
+| 40             | 39                  | (AudioControl2[0])       | Fixed 0x02 (required by controller)                    
+| 42             | 41                  | LightBrightness?         | Fixed 0x00 (part of audio/light setup)                 
+| 44             | 43                  | PlayerIndicators         | Pre‑computed byte from `player_leds_to_byte()` (see mapping below) 
+| 45             | 44                  | LedRed                   | 0…255 (scaled by global_led_brightness)                
+| 46             | 45                  | LedGreen                 | 0…255                                                   
+| 47             | 46                  | LedBlue                  | 0…255                                                   
+
+Note: Offsets 40 and 42 are fixed values that DSTX copies from working examples;
+they are not described in public documentation but are required for correct
+controller operation.
+
+Player LEDs mapping (byte written to offset 44 / SetStateData offset 43):
+
+| Player number | Byte value | LED pattern (PS5 layout) 
+|---------------|------------|---------------------------
+| 0 (off)       | 0x00       | all off                   
+| 1             | 0x04       | -x- -                     
+| 2             | 0x06       | x-x -                     
+| 3             | 0x15       | x -x- x                   
+| 4             | 0x1B       | x x-x x                   
+| 5             | 0x1F       | x xxx x                   
+
+-------------------------------------------------------------------------------
+2. Bluetooth Output – Report ID 0x31 (ReportOut31)
+-------------------------------------------------------------------------------
+Bluetooth report: byte 0 = 0x31, byte 1 = flags (0x02 = EnableHID), then the
+47‑byte SetStateData starts at byte 2. DSTX writes:
+
+| Overall offset | SetStateData offset | Field                    | Value                                    
+|----------------|---------------------|--------------------------|------------------------------------------
+| 0              | –                   | ReportID                 | 0x31                                     
+| 1              | –                   | Flags (EnableHID=1)      | 0x02                                     
+| 2              | 0                   | Flags (byte 0)           | 0x13 (same as USB)                       
+| 3              | 1                   | Flags (byte 1)           | 0x17 (same as USB)                       
+| 4              | 2                   | RumbleRight (weak)       | 0…255                                    
+| 5              | 3                   | RumbleLeft (strong)      | 0…255                                    
+| 41             | 39                  | (AudioControl2[0])       | Fixed 0x02                               
+| 44             | 42                  | (LightBrightness?)       | Fixed 0x00                               
+| 45             | 43                  | PlayerIndicators         | `player_leds_to_byte()`                  
+| 46             | 44                  | LedRed                   | scaled value                             
+| 47             | 45                  | LedGreen                 | scaled value                             
+| 48             | 46                  | LedBlue                  | scaled value                             
+
+A 4‑byte CRC is appended at bytes 74‑77.
+
+================================================================================
+PROCESSING DETAILS FROM DSTX CODE
+================================================================================
+
+- Analog sticks: 
+  `safe_normalize()` maps 8‑bit (0‑255) to 16‑bit (-32768…32767) with center 128 → 0.  
+  Deadzone (0‑100%) and sensitivity are applied. Y‑axis inversion is applied if
+  `invert_ly` or `invert_ry` is set, with special handling for -32768 (becomes +32767).
+
+- Triggers L2/R2:
+  * Input: uint8_t (0-255) representing pressure.
+  * Output: in analog mode (default), sent as ABS_Z and ABS_RZ (0-255).
+  * In digital mode, sent as BTN_TL2 and BTN_TR2 (0/1), axes are zeroed.
+
+- Battery (DS4):
+  * Byte at offset 0x1E (USB) or 0x0A+? (Bluetooth) – bits 0-3: level (0-10).
+  * If cable connected (bit 4 = 1) and level = 11 → 100%.
+  * Otherwise, level 0-10 → (level * 10 + 5) %, capped at 100.
+
+- Battery (DualSense):
+  Read from USBGetStateData offset 52.  
+  - If `PowerState` is 0 (Discharging) or 1 (Charging):  
+    `battery% = min(100, (level * 10) + 5)`  
+  - If `PowerState` is 2 (Complete): `battery% = 100`  
+  - Otherwise: `battery% = 0`  
+  The result is stored atomically in `slot->battery`.
+
+- Rumble (output):
+  Strong/weak values (0‑255) are multiplied by `rumble_gain` (0‑100, default 100)
+  before being placed in the output report. Gain is clamped to 0‑100.
+
+- LED brightness: 
+  Each RGB component (0‑255) is scaled by `global_led_brightness` (0‑100, default 80)
+  using `scale_led(value, brightness) = (value * brightness) / 100`.
