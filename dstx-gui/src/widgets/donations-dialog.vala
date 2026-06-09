@@ -50,7 +50,7 @@ namespace Dstx.Widgets {
 
             var info_group = new Adw.PreferencesGroup();
             info_group.set_title(_("Contribute"));
-            info_group.set_description(_("DSTX is completely free and open source. Your support helps us keep development active, cover infrastructure costs, and bring new features. Every contribution – small or large – makes a real difference."));
+            info_group.set_description(_("DSTX is — and will always be — completely free and open source. If you appreciate the work and want to help keep development active, cover server costs, and bring new features, consider donating. Every contribution — small or large — makes a real difference."));
 
             page.add(info_group);
 
