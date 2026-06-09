@@ -169,7 +169,7 @@ namespace Dstx.Widgets {
             };
             string[] config_descs = {
                 _("Create, save, load, or delete profiles. Turn on <b>auto‑save</b> and every change is automatically stored in the current profile."),
-                _("All settings (LED, rumble, deadzone, etc.) apply to the emulated Xbox controller, not the real one. Keep emulation ON for them to work."),
+                _("Only LED talks directly to your hardware. All other settings apply to the emulated Xbox controller. Keep emulation ON for them to work."),
                 _("You choose how the virtual Xbox pad is created. UINPUT is stable and feature‑complete (rumble included). UHID is experimental (no rumble) but can help with double‑input weirdness."),
                 _("In UINPUT mode, you can enable/disable rumble and adjust vibration intensity (gain) from 0 to 100%."),
                 _("Fine‑tune deadzone (how far you must push before it reacts), sensitivity presets, and invert Y‑axis for left and right sticks independently."),
