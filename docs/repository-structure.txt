@@ -109,7 +109,7 @@ DSTX/
 │   │   │   ├── tips-dialog.vala                 # tips and tricks dialog
 │   │   │   └── update-dialog.vala               # core package update dialog
 │   │   ├── application.vala                     # main application
-│   │   ├── dstx-dbus-interface.vala             # dbus interface declaration
+│   │   ├── dstx-dbus-interface.vala             # Vala dbus interface implementation
 │   │   ├── i18n.vala                            # internationalization helper functions
 │   │   ├── main.vala                            # main entry point
 │   │   └── window.vala                          # main application window
