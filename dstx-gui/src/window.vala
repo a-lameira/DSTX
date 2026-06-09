@@ -417,7 +417,7 @@ namespace Dstx {
     			        var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
     			        var icon = new Gtk.Image.from_icon_name("symbolic-link-symbolic");
     			        icon.set_pixel_size(14);
-    			        var label = new Gtk.Label(_("Go to Download Page"));
+    			        var label = new Gtk.Label(_("Go to Downloads Page"));
     			        button_box.append(label);
     			        button_box.append(icon);
     			        download_button.set_child(button_box);
