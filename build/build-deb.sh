@@ -25,7 +25,7 @@ mkdir -p "$TEMP_DIR/usr/share/dbus-1/system.d"
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$TEMP_DIR/usr/local/bin/"
 chmod 755 "$TEMP_DIR/usr/local/bin/"*
 
-# Copy systemd service files (preserve original paths - /usr/local/bin)
+# Copy systemd service files
 cp "$CORE_SRC/data/dstx-daemon.service" "$TEMP_DIR/lib/systemd/system/"
 cp "$CORE_SRC/data/dstx-dbus.service"   "$TEMP_DIR/lib/systemd/system/"
 
