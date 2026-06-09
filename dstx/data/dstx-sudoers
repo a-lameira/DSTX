@@ -1,2 +1,2 @@
 # Allow users of group dstx to enable/disable the DSTX service without password
-%dstx ALL=(ALL) NOPASSWD: /usr/bin/systemctl enable dstx.service, /usr/bin/systemctl disable dstx.service, /usr/bin/systemctl daemon-reload
+%dstx ALL=(ALL) NOPASSWD: /usr/bin/systemctl enable dstx-daemon.service, /usr/bin/systemctl disable dstx-daemon.service, /usr/bin/systemctl daemon-reload
