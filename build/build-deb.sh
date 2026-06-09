@@ -1,105 +1,42 @@
 #!/bin/bash
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Adjust PROJECT_ROOT according to your directory structure.
+# This script expects to be placed in the 'build/' subdirectory of the project root.
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 VERSION=$(cat "$PROJECT_ROOT/VERSION")
-CORE_BIN="$PROJECT_ROOT/build/core-static"
-CORE_SRC="$PROJECT_ROOT/dstx"
-OUTPUT_DIR="$PROJECT_ROOT/build/deb"
+DATE=$(date -R)
 
-echo "📦 Building Debian package (core only) for version $VERSION"
+echo "📦 Building Debian package for dstx-core version $VERSION"
 
-TEMP_DIR=$(mktemp -d)
-mkdir -p "$TEMP_DIR/DEBIAN"
-mkdir -p "$TEMP_DIR/usr/local/bin"
-mkdir -p "$TEMP_DIR/lib/systemd/system"
-mkdir -p "$TEMP_DIR/lib/udev/rules.d"
-mkdir -p "$TEMP_DIR/etc/dbus-1/system.d"
-mkdir -p "$TEMP_DIR/etc/polkit-1/rules.d"
-mkdir -p "$TEMP_DIR/etc/sudoers.d"
+# Ensure static binaries are ready
+if [ ! -f "$PROJECT_ROOT/build/core-static/dstx" ] || [ ! -f "$PROJECT_ROOT/build/core-static/dstx-dbus" ]; then
+    echo "❌ Static binaries not found. Run build-core-static.sh first."
+    exit 1
+fi
 
-# Copy static binaries to /usr/local/bin
-cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$TEMP_DIR/usr/local/bin/"
+# Generate changelog from template if available
+if [ -f "$PROJECT_ROOT/debian/changelog.in" ]; then
+    sed -e "s/@VERSION@/$VERSION/g" -e "s/@DATE@/$DATE/g" \
+        "$PROJECT_ROOT/debian/changelog.in" > "$PROJECT_ROOT/debian/changelog"
+else
+    echo "WARNING: debian/changelog.in not found. Creating minimal changelog."
+    cat > "$PROJECT_ROOT/debian/changelog" << EOF
+dstx-core ($VERSION-1) unstable; urgency=medium
 
-# Copy system files from dstx/data/
-cp "$CORE_SRC/data/dstx-daemon.service" "$TEMP_DIR/lib/systemd/system/"
-cp "$CORE_SRC/data/dstx-dbus.service" "$TEMP_DIR/lib/systemd/system/"
-cp "$CORE_SRC/data/99-dstx.rules" "$TEMP_DIR/lib/udev/rules.d/"
-cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$TEMP_DIR/etc/dbus-1/system.d/"
-cp "$CORE_SRC/data/10-dstx.rules" "$TEMP_DIR/etc/polkit-1/rules.d/"
-cp "$CORE_SRC/data/dstx-sudoers" "$TEMP_DIR/etc/sudoers.d/dstx"
-chmod 440 "$TEMP_DIR/etc/sudoers.d/dstx"
+  * New release
 
-# control file
-cat > "$TEMP_DIR/DEBIAN/control" << EOF
-Package: dstx-core
-Version: $VERSION
-Section: utils
-Priority: optional
-Architecture: amd64
-Maintainer: André Lameira <alameira@dstx.org>
-Depends: systemd, udev, dbus, polkitd
-Description: DSTX Core (daemon and D-Bus bridge)
- Advanced controller driver for PlayStation DualSense, DS4 and Nintendo Switch Pro.
- This package contains only the core daemon and D-Bus bridge, not the graphical interface.
+ -- André Lameira <alameira@dstx.org>  $DATE
 EOF
-
-# postinst script (enable services, reload udev, create group)
-cat > "$TEMP_DIR/DEBIAN/postinst" << 'EOF'
-#!/bin/sh
-set -e
-
-# Create system group 'dstx' if it doesn't exist
-if ! getent group dstx >/dev/null; then
-    groupadd --system dstx
-    echo "Created system group 'dstx'."
 fi
 
-# Reload systemd, enable and start services
-if command -v systemctl >/dev/null 2>&1; then
-    systemctl daemon-reload
-    systemctl enable dstx-daemon.service dstx-dbus.service || true
-    systemctl start dstx-daemon.service dstx-dbus.service || true
-fi
+# Build the package
+cd "$PROJECT_ROOT"
+dpkg-buildpackage -us -uc -b -d
 
-# Reload udev rules
-if command -v udevadm >/dev/null 2>&1; then
-    udevadm control --reload-rules || true
-fi
+# Move generated .deb files to build/deb/
+mkdir -p "$PROJECT_ROOT/build/deb"
+mv "$PROJECT_ROOT/../"*.deb "$PROJECT_ROOT/build/deb/" 2>/dev/null || true
 
-# Reload D-Bus configuration (important for the new policy)
-if command -v systemctl >/dev/null 2>&1; then
-    systemctl reload dbus || true
-fi
-
-# Inform user about group membership
-echo "=================================================="
-echo "DSTX Core installed successfully."
-echo "To allow your user to control the service, run:"
-echo "  sudo usermod -aG dstx $SUDO_USER"
-echo "Then log out and back in (or restart your session)."
-echo "=================================================="
-
-exit 0
-EOF
-chmod 755 "$TEMP_DIR/DEBIAN/postinst"
-
-# prerm script (stop services before removal)
-cat > "$TEMP_DIR/DEBIAN/prerm" << 'EOF'
-#!/bin/sh
-set -e
-
-if command -v systemctl >/dev/null 2>&1; then
-    systemctl stop dstx-daemon.service dstx-dbus.service || true
-    systemctl disable dstx-daemon.service dstx-dbus.service || true
-fi
-
-exit 0
-EOF
-chmod 755 "$TEMP_DIR/DEBIAN/prerm"
-
-mkdir -p "$OUTPUT_DIR"
-dpkg-deb --build "$TEMP_DIR" "$OUTPUT_DIR/dstx-core_${VERSION}_amd64.deb"
-rm -rf "$TEMP_DIR"
-
-echo "✅ Debian package built: $OUTPUT_DIR/dstx-core_${VERSION}_amd64.deb"
+echo "✅ Debian package built: $(ls $PROJECT_ROOT/build/deb/*.deb)"
