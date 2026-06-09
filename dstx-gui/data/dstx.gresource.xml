@@ -23,6 +23,8 @@
     <file>icons/ds4-symbolic.svg</file>
     <file>icons/dualsense-symbolic.svg</file>
     <file>icons/nsw-pro-symbolic.svg</file>
-    
+    <file>icons/symbolic-link-symbolic.svg</file>
+    <file>icons/brush-monitor-symbolic.svg</file>
+
   </gresource>
 </gresources>
