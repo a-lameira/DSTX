@@ -84,6 +84,9 @@ namespace Dstx {
         private uint check_updates_timeout = 0;
         private bool update_dialog_shown = false;
 
+        // Download URL for core package (non-Flatpak)
+        private const string CORE_DOWNLOAD_URL = "https://dstxapp.org/#download";
+
         public MainWindow(DBusClient dbus_client) {
             Object();
             this.dbus_client = dbus_client;
@@ -138,79 +141,79 @@ namespace Dstx {
             this.notify["maximized"].connect(on_window_maximized_changed);
         }
 
-private void setup_center_header_buttons() {
-    if (center_header == null) {
-        warning("MainWindow: center_header not found");
-        return;
-    }
+        private void setup_center_header_buttons() {
+            if (center_header == null) {
+                warning("MainWindow: center_header not found");
+                return;
+            }
 
-    var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
-    button_box.set_halign(Gtk.Align.CENTER);
+            var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+            button_box.set_halign(Gtk.Align.CENTER);
 
-    // Profiles button
-    var profiles_btn = new Gtk.Button();
-    var profiles_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
-    var profiles_icon = new Gtk.Image.from_icon_name("accessories-dictionary-symbolic");
-    profiles_icon.set_pixel_size(16);
-    var profiles_label = new Gtk.Label(_("Profiles"));
-    profiles_box.append(profiles_icon);
-    profiles_box.append(profiles_label);
-    profiles_btn.set_child(profiles_box);
-    profiles_btn.set_tooltip_text(_("Manage profiles"));
-    profiles_btn.clicked.connect(() => {
-        var dialog = new ProfilesDialog(this, profile_manager);
-        dialog.close_request.connect(() => {
-            settings_ui_builder.refresh_current_profile.begin();
-            return false;
-        });
-        dialog.present();
-    });
-
-    // Keybinds button
-    var keybinds_btn = new Gtk.Button();
-    var keybinds_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
-    var keybinds_icon = new Gtk.Image.from_icon_name("year-symbolic");
-    keybinds_icon.set_pixel_size(16);
-    var keybinds_label = new Gtk.Label(_("Keybinds"));
-    keybinds_box.append(keybinds_icon);
-    keybinds_box.append(keybinds_label);
-    keybinds_btn.set_child(keybinds_box);
-    keybinds_btn.set_tooltip_text(_("Configure button mappings"));
-    
-    // Single clicked connection
-    keybinds_btn.clicked.connect(() => {
-        if (controller_manager.selected_controller == null) {
-            show_toast(_("No controller selected"));
-            return;
-        }
-        var dialog = new KeybindsDialog(this, keybinds_manager, controller_manager.selected_controller);
-        dialog.layout_changed.connect(() => {
-            // Force keymap refresh in the next cycle to avoid conflicts
-            Idle.add(() => {
-                if (current_view_model != null) {
-                    current_view_model.refresh_keymap();
-                }
-                return Source.REMOVE;
+            // Profiles button
+            var profiles_btn = new Gtk.Button();
+            var profiles_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+            var profiles_icon = new Gtk.Image.from_icon_name("accessories-dictionary-symbolic");
+            profiles_icon.set_pixel_size(16);
+            var profiles_label = new Gtk.Label(_("Profiles"));
+            profiles_box.append(profiles_icon);
+            profiles_box.append(profiles_label);
+            profiles_btn.set_child(profiles_box);
+            profiles_btn.set_tooltip_text(_("Manage profiles"));
+            profiles_btn.clicked.connect(() => {
+                var dialog = new ProfilesDialog(this, profile_manager);
+                dialog.close_request.connect(() => {
+                    settings_ui_builder.refresh_current_profile.begin();
+                    return false;
+                });
+                dialog.present();
             });
-        });
-        dialog.present();
-    });
 
-    button_box.append(profiles_btn);
-    button_box.append(keybinds_btn);
-    center_header.set_title_widget(button_box);
+            // Keybinds button
+            var keybinds_btn = new Gtk.Button();
+            var keybinds_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+            var keybinds_icon = new Gtk.Image.from_icon_name("year-symbolic");
+            keybinds_icon.set_pixel_size(16);
+            var keybinds_label = new Gtk.Label(_("Keybinds"));
+            keybinds_box.append(keybinds_icon);
+            keybinds_box.append(keybinds_label);
+            keybinds_btn.set_child(keybinds_box);
+            keybinds_btn.set_tooltip_text(_("Configure button mappings"));
+            
+            // Single clicked connection
+            keybinds_btn.clicked.connect(() => {
+                if (controller_manager.selected_controller == null) {
+                    show_toast(_("No controller selected"));
+                    return;
+                }
+                var dialog = new KeybindsDialog(this, keybinds_manager, controller_manager.selected_controller);
+                dialog.layout_changed.connect(() => {
+                    // Force keymap refresh in the next cycle to avoid conflicts
+                    Idle.add(() => {
+                        if (current_view_model != null) {
+                            current_view_model.refresh_keymap();
+                        }
+                        return Source.REMOVE;
+                    });
+                });
+                dialog.present();
+            });
 
-    profiles_btn.set_sensitive(false);
-    keybinds_btn.set_sensitive(false);
+            button_box.append(profiles_btn);
+            button_box.append(keybinds_btn);
+            center_header.set_title_widget(button_box);
 
-    controller_manager.controller_selected.connect((controller) => {
-        bool enabled = (controller != null);
-        profiles_btn.set_sensitive(enabled);
-        keybinds_btn.set_sensitive(enabled);
-    });
+            profiles_btn.set_sensitive(false);
+            keybinds_btn.set_sensitive(false);
 
-    message("MainWindow: Profiles and Keybinds buttons configured with icons on center toolbar");
-}
+            controller_manager.controller_selected.connect((controller) => {
+                bool enabled = (controller != null);
+                profiles_btn.set_sensitive(enabled);
+                keybinds_btn.set_sensitive(enabled);
+            });
+
+            message("MainWindow: Profiles and Keybinds buttons configured with icons on center toolbar");
+        }
 
         // ==================== EXISTING METHODS ====================
         private Gtk.ScrolledWindow? find_settings_scrolled() {
@@ -378,15 +381,75 @@ private void setup_center_header_buttons() {
             }
         }
 
-        private void setup_no_service_buttons() {
-            if (install_service_button != null) {
-                install_service_button.clicked.connect(() => {
-                    confirm_installation.begin();
-                });
-            }
-        }
+		private void setup_no_service_buttons() {
+    			if (Core.is_flatpak()) {
+    			    // Flatpak: uses the install button from UI
+    			    if (install_service_button != null) {
+    			        install_service_button.clicked.connect(() => {
+    			            confirm_installation.begin();
+    			        });
+    			    }
+    			} else {
+    			    // Non-Flatpak: core missing – show download link
+    			    if (no_service_page != null) {
+    			        no_service_page.set_title(_("DSTX Core Package Required"));
+    			        no_service_page.set_description(
+    			            _("The DSTX core service is not installed on your system.\n\n" +
+    			              "Please download and install the core package from the official website.")
+    			        );
+    		        
+    			        // Remove existing child
+    			        var old_child = no_service_page.get_child();
+    			        if (old_child != null) {
+    			            no_service_page.set_child(null);
+    			            old_child.destroy();
+    			        }
+    	        
+    			        // Centered container for the button
+    			        var center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+    			        center_box.set_halign(Gtk.Align.CENTER);
+    			        center_box.set_valign(Gtk.Align.CENTER);
+    			        center_box.set_margin_top(12);
+    			        center_box.set_margin_bottom(12);
+            
+    			        // Button with icon
+    			        var download_button = new Gtk.Button();
+    			        var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+    			        var icon = new Gtk.Image.from_icon_name("symbolic-link-symbolic");
+    			        icon.set_pixel_size(14);
+    			        var label = new Gtk.Label(_("Go to Download Page"));
+    			        button_box.append(label);
+    			        button_box.append(icon);
+    			        download_button.set_child(button_box);
+    			        download_button.add_css_class("suggested-action");
+    			        download_button.add_css_class("pill");
+    		        
+    			        download_button.clicked.connect(() => {
+    			            try {
+    			                var launcher = new Gtk.UriLauncher(CORE_DOWNLOAD_URL);
+    			                launcher.launch.begin(this, null, (obj, res) => {
+    			                    try {
+    			                        launcher.launch.end(res);
+    			                    } catch (Error e) {
+    			                        warning("Failed to open URL: %s", e.message);
+    			                        show_toast(_("Could not open browser. Please visit %s").printf(CORE_DOWNLOAD_URL));
+    			                    }
+    			                });
+    			            } catch (Error e) {
+    			                warning("Error creating launcher: %s", e.message);
+    			                show_toast(_("Could not open browser. Please visit %s").printf(CORE_DOWNLOAD_URL));
+    			            }
+    			        });
+    		        
+    			        center_box.append(download_button);
+    			        no_service_page.set_child(center_box);
+    			    }
+    			}
+		}
 
         public async void confirm_installation() {
+            if (!Core.is_flatpak()) return;
+            
             var dialog = new Adw.AlertDialog(
                 _("DSTX System Service Required"),
                 _("Click 'Install' to set up the DSTX system service (dstx-daemon).\n\n" +
@@ -452,9 +515,13 @@ private void setup_center_header_buttons() {
             start_service_button.set_label(_("Start Service"));
             no_controllers_page.set_title(_("No Controller Found"));
             no_controllers_page.set_description(_("Connect a controller to start"));
+            
+            // For non-Flatpak, the title/description will be overwritten in setup_no_service_buttons()
+            // but we set defaults here for Flatpak case
             no_service_page.set_title(_("DSTX Service Not Installed"));
             no_service_page.set_description(_("Install the DSTX system service to use controllers."));
             install_service_button.set_label(_("Install Service"));
+            
             if (left_sidebar_title != null) left_sidebar_title.set_title(_("Controllers"));
             hide_sidebar_button.set_tooltip_text(_("Hide controllers list"));
             show_sidebar_button.set_tooltip_text(_("Show controllers list"));
@@ -828,9 +895,42 @@ private void setup_center_header_buttons() {
             });
         }
 
+        // Helper to check if core is installed (non-Flatpak)
+        private async bool check_core_installed() {
+            // First try to find the dstx binary in PATH
+            string? dstx_path = Environment.find_program_in_path("dstx");
+            if (dstx_path != null) {
+                return true;
+            }
+            // Fallback: try to connect to D-Bus and get version (daemon might be running)
+            try {
+                var connection = yield Bus.get(BusType.SYSTEM);
+                var proxy = yield connection.get_proxy<DstxDBus>(
+                    "org.dstx.Bridge",
+                    "/org/dstx/Bridge",
+                    DBusProxyFlags.NONE,
+                    null
+                );
+                string version = yield proxy.get_core_version();
+                return true;
+            } catch (Error e) {
+                return false;
+            }
+        }
+
         private async void check_for_updates_async() {
             if (update_dialog_shown) return;
 
+            // For non-Flatpak, skip update check if core is not installed
+            if (!Core.is_flatpak()) {
+                bool core_installed = yield check_core_installed();
+                if (!core_installed) {
+                    message("MainWindow: Core package not installed, skipping update check.");
+                    return;
+                }
+            }
+
+            // For Flatpak, check if system components are installed
             if (Core.is_flatpak()) {
                 bool installed = yield SystemServiceManager.are_system_components_installed();
                 if (!installed) {
