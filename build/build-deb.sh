@@ -14,20 +14,20 @@ TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
 mkdir -p "$TEMP_DIR/DEBIAN"
-mkdir -p "$TEMP_DIR/usr/bin"
+mkdir -p "$TEMP_DIR/usr/local/bin"
 mkdir -p "$TEMP_DIR/lib/systemd/system"
 mkdir -p "$TEMP_DIR/lib/udev/rules.d"
 mkdir -p "$TEMP_DIR/usr/share/polkit-1/rules.d"
 mkdir -p "$TEMP_DIR/etc/sudoers.d"
 mkdir -p "$TEMP_DIR/usr/share/dbus-1/system.d"
 
-# Copy static binaries
-cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$TEMP_DIR/usr/bin/"
-chmod 755 "$TEMP_DIR/usr/bin/"*
+# Copy static binaries to /usr/local/bin
+cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$TEMP_DIR/usr/local/bin/"
+chmod 755 "$TEMP_DIR/usr/local/bin/"*
 
-# Copy and fix systemd service files (replace /usr/local/bin with /usr/bin)
-sed 's|/usr/local/bin/|/usr/bin/|g' "$CORE_SRC/data/dstx-daemon.service" > "$TEMP_DIR/lib/systemd/system/dstx-daemon.service"
-sed 's|/usr/local/bin/|/usr/bin/|g' "$CORE_SRC/data/dstx-dbus.service"   > "$TEMP_DIR/lib/systemd/system/dstx-dbus.service"
+# Copy systemd service files (preserve original paths - /usr/local/bin)
+cp "$CORE_SRC/data/dstx-daemon.service" "$TEMP_DIR/lib/systemd/system/"
+cp "$CORE_SRC/data/dstx-dbus.service"   "$TEMP_DIR/lib/systemd/system/"
 
 # Copy udev rules
 cp "$CORE_SRC/data/99-dstx.rules" "$TEMP_DIR/lib/udev/rules.d/"
@@ -38,8 +38,9 @@ cp "$CORE_SRC/data/org.dstx.Bridge.conf" "$TEMP_DIR/usr/share/dbus-1/system.d/"
 # Copy Polkit rule
 cp "$CORE_SRC/data/10-dstx.rules" "$TEMP_DIR/usr/share/polkit-1/rules.d/"
 
-# Copy sudoers file (will set permissions later)
+# Copy sudoers file
 cp "$CORE_SRC/data/dstx-sudoers" "$TEMP_DIR/etc/sudoers.d/dstx"
+chmod 440 "$TEMP_DIR/etc/sudoers.d/dstx"
 
 # Create control file
 cat > "$TEMP_DIR/DEBIAN/control" << EOF
@@ -110,9 +111,6 @@ fi
 exit 0
 EOF
 chmod 755 "$TEMP_DIR/DEBIAN/prerm"
-
-# Set correct permissions for sudoers file (440)
-chmod 440 "$TEMP_DIR/etc/sudoers.d/dstx"
 
 # Build the .deb package
 mkdir -p "$OUTPUT_DIR"
