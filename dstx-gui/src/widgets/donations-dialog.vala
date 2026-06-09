@@ -57,31 +57,34 @@ namespace Dstx.Widgets {
             var donate_group = new Adw.PreferencesGroup();
             donate_group.set_title(_("Donation Platforms"));
 
-            // Ko-fi
+            // Ko-fi (coffee icon)
             donate_group.add(create_donation_row(
                 "Ko-fi",
-                _("Support with coffee ☕"),
+                _("Support with coffee"),
                 "https://ko-fi.com/alameira",
-                _("Donate on Ko-fi")
+                _("Donate on Ko-fi"),
+                "kofi-symbolic"
             ));
 
-            // PayPal
+            // PayPal (money icon)
             donate_group.add(create_donation_row(
                 "PayPal",
                 _("One-time or recurring donation"),
-                "https://paypal.me/a-lameira",
-                _("Donate on PayPal")
+                "https://www.paypal.com/donate/?hosted_button_id=B9NN7MG2LN5XE",
+                _("Donate on PayPal"),
+                "paypal-symbolic"
             ));
 
-            // GitHub Sponsors
+            // GitHub Sponsors (star icon)
             donate_group.add(create_donation_row(
                 "GitHub Sponsors",
                 _("Support via GitHub"),
                 "https://github.com/sponsors/dstx",
-                _("GitHub Sponsors")
+                _("GitHub Sponsors"),
+                "github-symbolic"
             ));
 
-            // PIX (Brazil)
+            // PIX (Brazil) – QR code icon
             donate_group.add(create_pix_row());
 
             page.add(donate_group);
@@ -94,7 +97,7 @@ namespace Dstx.Widgets {
             add(page);
         }
 
-        private Adw.ActionRow create_donation_row(string title, string subtitle, string url, string button_label) {
+        private Adw.ActionRow create_donation_row(string title, string subtitle, string url, string button_label, string icon_name) {
             var row = new Adw.ActionRow();
             row.set_title(title);
             row.set_subtitle(subtitle);
@@ -104,7 +107,8 @@ namespace Dstx.Widgets {
             button.add_css_class("compact-button");
             button.clicked.connect(() => open_url(url));
 
-            var icon = new Gtk.Image.from_icon_name("help-about-symbolic");
+            var icon = new Gtk.Image.from_icon_name(icon_name);
+            icon.set_pixel_size(22);
             row.add_prefix(icon);
             row.add_suffix(button);
             row.set_activatable_widget(button);
@@ -136,7 +140,9 @@ namespace Dstx.Widgets {
                 }
             });
 
-            var icon = new Gtk.Image.from_icon_name("help-about-symbolic");
+            // Use QR code icon for PIX
+            var icon = new Gtk.Image.from_icon_name("pix-symbolic");
+            icon.set_pixel_size(22);
             row.add_prefix(icon);
             row.add_suffix(button);
             row.set_activatable_widget(button);
