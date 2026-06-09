@@ -219,7 +219,7 @@ namespace Dstx.Widgets {
             string[] connection_descs = {
                 _("USB and Bluetooth usually work great. If a controller isn't detected, try disconnecting and reconnecting it a couple of times."),
                 _("Most games auto‑detect the virtual Xbox pad. If one doesn't, restart the game — that often fixes it."),
-                _("DSTX works great with Steam games, but if <b>Steam Input</b> is on, it can interfere. Disable Steam Input for DSTX games, or disable DSTX emulation when using Steam Input.")
+                _("DSTX works great with Steam games, but if <b>Steam Input</b> is on, it can interfere. Disable Steam Input when using DSTX, or disable DSTX emulation when using Steam Input.")
             };
             container.append(create_tip_card(_("Connection"), connection_titles, connection_descs));
             
