@@ -90,7 +90,7 @@ namespace Dstx.Widgets {
             page.add(donate_group);
 
             var thanks_group = new Adw.PreferencesGroup();
-            thanks_group.set_title(_("Thank you for considering supporting the project! 💜"));
+            thanks_group.set_title(_("Thank you for being part of this journey! 💜"));
 
             page.add(thanks_group);
 
