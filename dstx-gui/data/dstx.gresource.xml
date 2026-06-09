@@ -25,6 +25,10 @@
     <file>icons/nsw-pro-symbolic.svg</file>
     <file>icons/symbolic-link-symbolic.svg</file>
     <file>icons/brush-monitor-symbolic.svg</file>
-
+    <file>icons/kofi-symbolic.svg</file>
+    <file>icons/paypal-symbolic.svg</file>
+    <file>icons/github-symbolic.svg</file>
+    <file>icons/pix-symbolic.svg</file>
+    
   </gresource>
 </gresources>
