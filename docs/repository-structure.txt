@@ -83,17 +83,17 @@ DSTX/
 │   │   │   └── theme-manager.vala               # centralized theme and appearance management
 │   │   ├── models/
 │   │   │   ├── controller.vala                  # data structures model for a single controller
-│   │   │   ├── controller-info.vala             # information model for a single controller
+│   │   │   ├── controller-info.vala             # device information model for a single controller
 │   │   │   └── theme-data.vala                  # data model for a theme
 │   │   ├── services/
-│   │   │   ├── controller-renderer.vala         # base controller renderer
+│   │   │   ├── controller-renderer.vala         # base controller renderer (view)
 │   │   │   ├── svg-colorizer.vala               # SVG colorization using rsvg
 │   │   │   ├── texture-cache-manager.vala       # GPU texture cache manager
 │   │   │   └── thumbnails-renderer.vala         # thumbnail renderer for AppearancePage
 │   │   ├── view-models/
 │   │   │   └── controller-view-model.vala       # controller representation (determines state and emits signals)
 │   │   ├── widgets/
-│   │   │   ├── about-dialog.vala                # factory for the "About" dialog
+│   │   │   ├── about-dialog.vala                # factory for the "About" dialog (sealed)
 │   │   │   ├── appearance-page.vala             # theme configuration page
 │   │   │   ├── color-picker-widget.vala         # LED color picker
 │   │   │   ├── color-picker-dialog.vala         # dialog for ColorPickerWidget
