@@ -218,6 +218,14 @@ install_data('data/icons/nsw-pro-symbolic.svg',
     install_dir: icondir_symbolic,
 )
 
+install_data('data/icons/symbolic-link-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
+install_data('data/icons/brush-monitor-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
 icondir_scalable = datadir / 'icons/hicolor/scalable/apps'
 
 install_data('data/icons/ds4-symbolic.svg',
@@ -233,6 +241,16 @@ install_data('data/icons/dualsense-symbolic.svg',
 install_data('data/icons/nsw-pro-symbolic.svg',
     install_dir: icondir_scalable,
     rename: 'nsw-pro-symbolic.svg'
+)
+
+install_data('data/icons/symbolic-link-symbolic.svg',
+    install_dir: icondir_scalable,
+    rename: 'symbolic-link-symbolic.svg'
+)
+
+install_data('data/icons/brush-monitor-symbolic.svg',
+    install_dir: icondir_scalable,
+    rename: 'symbolic-link-symbolic.svg'
 )
 
 # DualSense
@@ -306,7 +324,9 @@ fs = import('fs')
 symbolic_icons = [
     'data/icons/ds4-symbolic.svg',
     'data/icons/dualsense-symbolic.svg',
-    'data/icons/nsw-pro-symbolic.svg'
+    'data/icons/nsw-pro-symbolic.svg',
+    'data/icons/symbolic-link-symbolic.svg',
+    'data/icons/brush-monitor-symbolic.svg'
 ]
 
 foreach icon : symbolic_icons
