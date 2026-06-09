@@ -71,6 +71,36 @@ namespace Dstx.Managers {
             this.dbus_client.daemon_status_changed.connect(on_daemon_status_changed);
         }
         
+        // ==================== CORE INSTALLATION CHECK (NON-FLATPAK) ====================
+        private async bool check_core_installed() {
+            // First try to find the dstx binary in PATH
+            string? dstx_path = Environment.find_program_in_path("dstx");
+            if (dstx_path != null) {
+                message("AppStateManager: dstx binary found at %s", dstx_path);
+                return true;
+            }
+            
+            // Fallback: try to connect to D-Bus and get version (daemon might be running)
+            // but this requires D-Bus connection. We'll attempt a quick D-Bus call.
+            // However, at this point we may not have a connection yet, so we'll try to
+            // create a temporary proxy.
+            try {
+                var connection = yield Bus.get(BusType.SYSTEM);
+                var proxy = yield connection.get_proxy<DstxDBus>(
+                    "org.dstx.Bridge",
+                    "/org/dstx/Bridge",
+                    DBusProxyFlags.NONE,
+                    null
+                );
+                string version = yield proxy.get_core_version();
+                message("AppStateManager: Core version retrieved via D-Bus: %s", version);
+                return true;
+            } catch (Error e) {
+                message("AppStateManager: Core not found via D-Bus: %s", e.message);
+                return false;
+            }
+        }
+        
         // ==================== INITIALIZATION ORDER ====================
         public async void initialize() {
             message("AppStateManager: Starting verification in defined order");
@@ -87,6 +117,18 @@ namespace Dstx.Managers {
                     return;
                 }
                 message("AppStateManager: System components installed");
+            } else {
+                // --- Non-Flatpak: check if core package is installed ---
+                update_splash_status(_("Checking core installation..."));
+                bool core_installed = yield check_core_installed();
+                if (!core_installed) {
+                    message("AppStateManager: Core package not installed");
+                    update_splash_status(_("Core package not installed"));
+                    _initializing = false;
+                    transition_to_state(AppState.NO_SERVICE);
+                    return;
+                }
+                message("AppStateManager: Core package is installed");
             }
             
             // --- 2. Check daemon version (if Flatpak and service installed) ---
@@ -220,15 +262,15 @@ namespace Dstx.Managers {
             }
         }
         
-public async void retry_connection() {
-    if (current_state == AppState.NO_DAEMON) {
-        message("AppStateManager: Retrying connection after service start");
-        yield check_controllers_with_delay();
-    } else {
-        message("AppStateManager: retry_connection called but current state is %s", current_state.to_string());
-    }
-}
-
+        public async void retry_connection() {
+            if (current_state == AppState.NO_DAEMON) {
+                message("AppStateManager: Retrying connection after service start");
+                yield check_controllers_with_delay();
+            } else {
+                message("AppStateManager: retry_connection called but current state is %s", current_state.to_string());
+            }
+        }
+        
         // ==================== DAEMON SIGNAL HANDLING WITH DEBOUNCE ====================
         private void on_daemon_status_changed(bool alive) {
             if (_initializing) return;
