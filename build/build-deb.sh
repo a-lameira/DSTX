@@ -44,19 +44,41 @@ Description: DSTX Core (daemon and D-Bus bridge)
  This package contains only the core daemon and D-Bus bridge, not the graphical interface.
 EOF
 
-# postinst script (enable services, reload udev)
+# postinst script (enable services, reload udev, create group)
 cat > "$TEMP_DIR/DEBIAN/postinst" << 'EOF'
 #!/bin/sh
 set -e
 
+# Create system group 'dstx' if it doesn't exist
+if ! getent group dstx >/dev/null; then
+    groupadd --system dstx
+    echo "Created system group 'dstx'."
+fi
+
+# Reload systemd, enable and start services
 if command -v systemctl >/dev/null 2>&1; then
+    systemctl daemon-reload
     systemctl enable dstx-daemon.service dstx-dbus.service || true
     systemctl start dstx-daemon.service dstx-dbus.service || true
 fi
 
+# Reload udev rules
 if command -v udevadm >/dev/null 2>&1; then
     udevadm control --reload-rules || true
 fi
+
+# Reload D-Bus configuration (important for the new policy)
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl reload dbus || true
+fi
+
+# Inform user about group membership
+echo "=================================================="
+echo "DSTX Core installed successfully."
+echo "To allow your user to control the service, run:"
+echo "  sudo usermod -aG dstx $SUDO_USER"
+echo "Then log out and back in (or restart your session)."
+echo "=================================================="
 
 exit 0
 EOF
