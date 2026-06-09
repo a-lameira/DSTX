@@ -87,7 +87,7 @@ namespace Dstx.Widgets {
         public AppearancePage.with_state(string? theme_id, string? theme_name, Gdk.RGBA? accent_color, int accent_index) {
             Object(
                 title: Dstx._("Appearance"),
-                icon_name: "colorimeter-colorhug-symbolic"
+                icon_name: "brush-monitor-symbolic"
             );
 
             this.theme_manager = ThemeManager.get_default();
