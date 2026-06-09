@@ -1,0 +1,429 @@
+DSTX GUI – Technical Documentation
+================================================================================
+
+1. OVERVIEW
+--------------------------------------------------------------------------------
+DSTX GUI is a graphical front‑end for the DSTX daemon, written in Vala with GTK4
+and libadwaita. It provides a modern, adaptive interface to configure and monitor
+Sony DualShock 4, Sony DualSense, and Nintendo Switch Pro controllers on Linux.
+
+Key features:
+- Real‑time controller visualisation (SVG with overlays for sticks, triggers, buttons)
+- LED configuration (static color, 8 dynamic effects, brightness, player LEDs)
+- Rumble control (enable/disable, gain 0‑100%)
+- Stick deadzone (0‑100), sensitivity (8 preset curves), Y‑axis inversion
+- Digital trigger mode (L2/R2)
+- Button remapping (keybinds) with Xbox / Switch layout toggles
+- Emulation control (enable/disable, UINPUT / UHID mode)
+- Profile management (load/save/delete, auto‑save with debounce)
+- Theme system (light/dark, custom themes with accent color palette)
+- Multi‑language support (gettext: pt_BR, en, es, fr, de, it, ru)
+- Flatpak integration (system service installation/upgrade with pkexec)
+
+The GUI communicates exclusively with the D‑Bus bridge (`dstx-dbus`), which in
+turn talks to the core daemon (`dstx --daemon`) via shared memory. All
+controller state and configuration is fetched and applied asynchronously over
+D‑Bus.
+
+2. ARCHITECTURE
+--------------------------------------------------------------------------------
+2.1 Process model
+- The GUI runs as a normal user process (no root privileges required).
+- It connects to the system D‑Bus and calls methods on `org.dstx.Bridge`.
+- The D‑Bus bridge must be running (started by systemd as root).
+- The GUI does not directly access hidraw, uinput, or /dev/uhid – all
+  privileged operations are delegated to the daemon.
+
+2.2 Threading model
+- Main thread: GTK event loop.
+- D‑Bus calls are asynchronous (async/await pattern). Callbacks are scheduled
+  on the main loop via GLib’s main context.
+- Timers (GLib.Timeout) throttle high‑frequency updates (e.g., telemetry,
+  configuration writes). No dedicated worker threads are created by the GUI.
+
+2.3 Data flow
+  User action (UI) → SettingsController / KeybindsManager / ProfileManager
+  → DBusClient (async D‑Bus call) → dstx-dbus → dstx-daemon → hardware.
+
+  Hardware input → dstx-daemon → dstx-dbus (signals) → DBusClient → signal
+  emission → ControllerManager → Controller (model) → ControllerViewModel
+  (throttled) → ControllerRenderer (visual update).
+
+2.4 Design patterns
+- Singleton: SettingsManager, ThemeManager, LocaleManager, TextureCacheManager,
+  SvgColorizer.
+- Model‑View‑ViewModel (MVVM):
+    * Model: `Controller` (plain data with property change notification).
+    * ViewModel: `ControllerViewModel` (throttles updates, emits semantic signals).
+    * View: `ControllerRenderer` and its subclasses (`DualsenseWidget`,
+      `Ds4Widget`, `NswWidget`).
+- Adapter: `DBusClient` wraps the generated `DstxDBus` interface with
+  async/await sugar.
+- Factory: `AboutDialog.create()` (sealed class).
+- Observer: GLib signals for loose coupling (e.g., `controller_selected`,
+  `telemetry_update`, `theme_changed`).
+
+2.5 Throttling and debounce values (performance tuning)
+- `ControllerViewModel`: 16 ms (sticks, triggers, buttons) – emits aggregated
+  signals at approx. 60 fps.
+- `SettingsUIBuilder` sliders (gain, deadzone, brightness, speed): 200 ms.
+- `ControllerManager` configuration updates: 150 ms.
+- `ControllerManager` connection events: 100 ms.
+- `SettingsManager` JSON save debounce: 100 ms.
+
+These values are hard‑coded in the respective source files and can be adjusted
+for different responsiveness / CPU trade‑offs.
+
+3. KEY DATA STRUCTURES
+--------------------------------------------------------------------------------
+3.1 Controller (src/models/controller.vala)
+Stores full controller state, including:
+- `slot` (int), `connected` (bool), `controller_type` (enum)
+- LED: `led_r/g/b` (current), `led_base_r/g/b` (base), `led_static`,
+  `current_effect`, `effect_speed`, `effect_brightness`, `global_brightness`,
+  `player_leds`, `led_reapply`
+- Rumble: `rumble_gain`, `rumble_active`
+- Sticks: `deadzone`, `sensitivity_left_preset`, `sensitivity_right_preset`,
+  `invert_ly`, `invert_ry`
+- Triggers: `triggers_digital`
+- Emulation: `emulate_active`, `is_uhid`, `debounce_enabled`
+- Telemetry: `lx, ly, rx, ry, lt, rt, hatx, haty`, digital buttons
+- Keymap: `uint8[18]` (physical → logical)
+- Versioning: `version` (global) and `property_versions` (per‑property hash)
+- `bump_version(string property)` updates both global and property version.
+
+3.2 ControllerViewModel (src/view-models/controller-view-model.vala)
+- Maintains a copy of `Controller` state.
+- Listens to `notify` signals from `Controller` and schedules a flush
+  (default 16 ms throttle) to emit aggregated signals:
+  `sticks_changed`, `triggers_changed`, `buttons_changed`, etc.
+- Provides `refresh_keymap()` to reload keymap from the controller.
+- Holds button constants (BTN_CROSS = 0, …) and helper methods.
+
+3.3 ThemeData (src/models/theme-data.vala)
+- Loaded from `themes.json` (embedded in resources).
+- Contains `id`, `name`, `theme_type` ("light"/"dark").
+- `thumbnail` (bg, accent, text) for preview.
+- `palette` (10 accent colors, hex strings).
+- `window` (dictionary of CSS variable names → hex values).
+- `controller` (primary, secondary, accent, symbol – used to color the SVG).
+
+3.4 ControllerColors (src/models/theme-data.vala)
+Holds the four colors used to colorise the controller SVG:
+- `primary` (main body)
+- `secondary` (grips)
+- `accent` (logo / details)
+- `symbol` (button labels)
+
+3.5 WindowColors (src/models/theme-data.vala)
+- `HashMap<string, string> vars` (e.g., `--window-bg`, `--sidebar-bg`).
+- Used to generate dynamic CSS in `ThemeManager`.
+
+3.6 Property versioning (anti‑bouncing)
+The `Controller` class stores per‑property versions (via `property_versions`
+hash table). `SettingsController` keeps a separate `_last_sent_versions`
+table. When a signal like `led_static_changed` is received, the controller
+compares the incoming property version with the last sent version; if the
+incoming version is older, the signal is ignored. This prevents circular
+updates when the GUI modifies a setting and later receives the same change
+back from the daemon.
+
+4. KEY FUNCTIONS AND MODULES
+--------------------------------------------------------------------------------
+4.1 Application (src/application.vala)
+- Extends `Adw.Application`.
+- Manages lifecycle: `startup()` (initialises locale, settings, theme),
+  `activate()` (creates main window, loads global CSS), `shutdown()` (syncs settings).
+- Holds custom CSS (for controller cards, tips dialog, transitions) and
+  `update_global_css()` / `restore_default_css()` for dynamic theme switching.
+
+4.2 MainWindow (src/window.vala)
+- UI entry point (template from `window.ui`).
+- Sets up `AppStateManager`, `ControllerManager`, `SettingsController`,
+  `SettingsUIBuilder`, `ProfileManager`, `KeybindsManager`.
+- Manages stack (splash / no service / no daemon / no controllers / main).
+- Handles window size persistence and maximised state.
+- Contains the center header with Profiles and Keybinds buttons.
+- Shows toasts for user feedback.
+
+4.3 DBusClient (src/core/dbus-client.vala)
+- Proxy to `org.dstx.Bridge` on the system bus.
+- Provides async methods for all D‑Bus calls (see `dstx-dbus-interface.vala`).
+- Subscribes to signals (`ControllerConnected`, `TelemetryUpdate`, …) and
+  forwards them as GLib signals.
+- Automatically reconnects on D‑Bus errors (5‑second timer).
+
+4.4 AppStateManager (src/managers/app-state-manager.vala)
+- Manages application states: SPLASH, NO_SERVICE, NO_DAEMON, NO_CONTROLLERS, MAIN.
+- Orchestrates startup sequence: Flatpak service check → D‑Bus connection →
+  daemon active → controllers ready → transition.
+- Implements retry logic and debouncing for daemon status changes.
+
+4.5 ControllerManager (src/managers/controller-manager.vala)
+- Maintains list of connected controllers (via `dbus_client` signals).
+- Creates `ControllerCard` widgets and places them in the sidebar.
+- Handles controller selection and emits `controller_selected`.
+- Debounces configuration updates (150 ms) and connection events (100 ms).
+
+4.6 SettingsController (src/managers/settings-controller.vala)
+- Business logic for all controller settings (LED, rumble, sticks, triggers,
+  emulation, etc.).
+- Each setting method (e.g., `set_led_static`) calls the corresponding D‑Bus
+  method and updates the local `Controller` model.
+- Uses property version tracking to avoid bouncing updates.
+- Provides global preference methods (theme mode, language, auto‑start,
+  auto‑save status, core version check).
+- Checks system service version: compares daemon’s reported version with
+  `SystemServiceManager.get_expected_version()` (currently "0.7.0"). If
+  outdated, it triggers the `UpdateDialog`.
+
+4.7 SettingsUIBuilder (src/managers/settings-ui-builder.vala)
+- Dynamically builds the right‑hand side preferences page for the selected
+  controller.
+- Creates groups (LED, Emulation, Rumble, Sticks, Triggers, Buttons) with
+  appropriate widgets (`Adw.SwitchRow`, `Adw.ComboRow`, `Adw.SpinRow`).
+- Throttles slider changes (200 ms) to reduce D‑Bus traffic.
+- Observes `SettingsController` signals and updates UI without loops.
+- Also builds the global Preferences dialog (language, appearance, service
+  management, auto‑save, Flatpak component installation).
+
+4.8 ThemeManager (src/managers/theme-manager.vala)
+- Singleton that loads themes from `themes.json`.
+- Manages `Adw.StyleManager` (light/dark system mode).
+- Provides methods to apply a theme + accent color (custom mode) or reset to
+  system/light/dark.
+- Generates dynamic CSS from `WindowColors` and applies it via
+  `Gtk.StyleContext.add_provider_for_display`.
+- Caches textures (thumbnails) and CSS strings.
+- Notifies `controller_colors_changed` when the controller SVG colors change.
+- Thumbnails are cached in `TextureCacheManager` and invalidated when the
+  theme changes (e.g., after switching themes).
+
+4.9 SvgColorizer (src/services/svg-colorizer.vala)
+- Renders an SVG (e.g., `dualsense/base.svg`) with CSS applied to color the
+  `.primary`, `.secondary`, `.accent`, `.symbol` classes.
+- Uses `Rsvg.Handle` and Cairo to render to a `Gdk.MemoryTexture`.
+- Caches results in `TextureCacheManager` (LRU, max 10 textures).
+
+4.10 TextureCacheManager (src/services/texture-cache-manager.vala)
+- Stores `Gdk.Texture` objects (VRAM) with LRU eviction.
+- Keys are strings (e.g., SVG path + colors + dimensions).
+- Used by `SvgColorizer` and `ThumbnailRenderer`.
+
+4.11 ThumbnailRenderer (src/services/thumbnail-renderer.vala)
+- Renders theme thumbnails (160x100 by default) using Cairo.
+- Draws window background, sidebars, cards, controller silhouette, and border.
+- Caches results via `TextureCacheManager`. The cache is cleared when a theme
+  is changed or the application restarts.
+
+4.12 ControllerRenderer (src/services/controller-renderer.vala) (abstract)
+- Base class for controller rendering widgets (`DualsenseWidget`, `Ds4Widget`,
+  `NswWidget`).
+- Subclasses must provide `CANVAS_WIDTH`, `CANVAS_HEIGHT`, stick/trigger
+  coordinates, and the SVG resource path.
+- Uses `SvgColorizer` to color the base SVG.
+- Overlays radars (with deadzone) and stick cursor in `snapshot()`.
+- Overlays buttons and triggers in `draw_button_overlay()` and
+  `draw_triggers_overlay()` (Cairo).
+- Supports emulation mode (shows Xbox labels) and layout mode (Switch vs Xbox).
+
+4.13 AppearancePage (src/widgets/appearance-page.vala)
+- Preferences page for theme selection.
+- Shows standard themes (light/dark) and exclusive themes (algae, midnight,
+  volcano, etc.) with thumbnails.
+- Allows choosing accent color from a palette (10 colors).
+- Integrates with `ThemeManager` and `StickyHeader`.
+
+4.14 StickyHeader (src/widgets/sticky-header.vala)
+- A floating header bar that appears when the Appearance page is scrolled
+  past a threshold. It shows accent color buttons for quick selection.
+- Hysteresis mechanism: the header attaches when scroll > 150 + 50 pixels,
+  and detaches when scroll < 150 – 50 pixels (`THRESHOLD = 150`,
+  `HYSTERESIS = 50`). This prevents rapid flickering at the boundary.
+- If the `ToolbarView` is not immediately available, it retries up to 5 times
+  with increasing delays (200 ms base). This is necessary because
+  `PreferencesDialog` does not expose its internal layout directly.
+
+4.15 KeybindsDialog (src/widgets/keybinds-dialog.vala)
+- Allows remapping of physical buttons to logical functions.
+- Fetches current keymap via `KeybindsManager`.
+- Provides Reset to default, Xbox layout, Switch layout (for Nintendo Switch
+  Pro controllers).
+- Updates the shared `Controller` model and signals `layout_changed`.
+
+4.16 ProfilesDialog (src/widgets/profiles-dialog.vala)
+- Lists existing profiles (via `ProfileManager`).
+- Allows loading, saving (overwrite), deleting, and creating new profiles.
+- Uses confirmation dialogs for destructive actions.
+
+5. BUILD INSTRUCTIONS
+--------------------------------------------------------------------------------
+The project uses Meson as the build system:
+
+  $ meson setup builddir
+  $ cd builddir
+  $ ninja
+  $ sudo ninja install (optional)
+
+Build options (defined in `meson_options.txt`):
+  - `-Dflatpak=true` : enable installation of helper scripts for system
+    component management (used when building as a Flatpak).
+
+Dependencies (pkg-config):
+  - glib-2.0 >= 2.58
+  - gobject-2.0, gio-2.0, gio-unix-2.0
+  - gtk4 >= 4.0.0
+  - libadwaita-1 >= 1.4.0
+  - gee-0.8 >= 0.20.0
+  - json-glib-1.0 >= 1.6
+  - librsvg-2.0 >= 2.48
+  - libm (math library)
+
+The build compiles Vala sources to C, then links with the above libraries.
+Resources (`.ui`, `.svg`, `themes.json`) are compiled into a GResource bundle
+and embedded in the executable.
+
+For Flatpak builds, the `install-system-components.sh` and
+`uninstall-system-components.sh` scripts are installed to allow the GUI to
+manage the DSTX system service.
+
+6. RUNTIME DEPENDENCIES AND PERMISSIONS
+--------------------------------------------------------------------------------
+- The DSTX system service (`dstx-daemon.service` and `dstx-dbus.service`) must
+  be installed and running (root).
+- The GUI connects to the system D‑Bus; no special permissions are required.
+- Configuration is stored in `~/.config/dstx/settings.json` (JSON format).
+- Themes are embedded, but custom CSS can be injected via `Application`
+  (not exposed to user).
+- For Flatpak: the GUI uses `flatpak-spawn --host pkexec` to install/update the
+  system components. The scripts are installed inside the Flatpak at
+  `/app/bin/install-system-components.sh` and `/app/bin/uninstall-system-components.sh`.
+  They are first copied to the user’s data directory
+  `~/.var/app/org.dstx.gui/` and then executed with `pkexec`. The binaries
+  (`dstx`, `dstx-dbus`) are copied from `/app/bin` to `/usr/local/bin`.
+
+7. CONFIGURATION & PROFILES
+--------------------------------------------------------------------------------
+7.1 GUI settings (`settings.json`)
+Stored in `~/.config/dstx/`. Fields include:
+  - `theme` (0=system,1=light,2=dark,3=custom)
+  - `language` (0=system,1=pt_BR,2=en_US,...)
+  - `auto_start` (bool)
+  - `notify_connect`, `notify_battery`, `notify_update` (booleans)
+  - `sidebar_left_visible` (bool)
+  - `custom_theme` (string, e.g. "light"), `custom_theme_name`, `custom_accent_index`
+  - `custom_accent_r/g/b` (double 0..1)
+  - `window_width`, `window_height`, `window_maximized`
+  - `recent_colors` (array of hex strings, used by color picker)
+
+All settings are loaded/saved via `SettingsManager` with a 100 ms debounce.
+
+7.2 Controller profiles
+Handled by the backend daemon; the GUI uses `ProfileManager` to call D‑Bus
+methods (`LoadProfile`, `SaveProfile`, `DeleteProfile`, `ListProfiles`,
+`SetAutoSave`, `GetAutoSaveStatus`, `GetCurrentProfile`). The actual JSON
+files are stored in `/etc/dstx/profiles/` (root‑writable).
+
+The auto‑save feature can be enabled/disabled via the Preferences dialog.
+The debounce delay is read from the daemon (default 2000 ms) but is not
+configurable in the GUI. The GUI only provides an on/off switch; the delay
+value is fixed by the daemon.
+
+8. CONTROLLER-SPECIFIC NOTES
+--------------------------------------------------------------------------------
+8.1 DualShock 4 (DS4)
+- SVG asset: `data/icons/ds4/base.svg`
+- Overlays drawn in `Ds4Widget` (coordinates hardcoded in canvas pixels).
+- Face buttons colored red when pressed (PS style) or colored according to
+  Xbox mapping when emulation is active.
+- Supports LED (static/dynamic) and rumble.
+
+8.2 DualSense
+- SVG: `data/icons/dualsense/base.svg`
+- `DualsenseWidget` draws larger face buttons and includes a touchpad highlight.
+- Player LEDs can be set from 0 to 4 in the LED settings group.
+
+8.3 Nintendo Switch Pro
+- SVG: `data/icons/nsw/base.svg`
+- `NswWidget` draws physical labels (B, A, Y, X) when emulation is off.
+- When emulation is on, it supports both Xbox layout (identity) and Switch
+  layout (swap A/B, X/Y) via `layout_mode` property.
+- No LED support (hardware limitation).
+- The GUI does not apply the Bluetooth offset correction – that is done by the
+  backend daemon.
+
+9. DEBUGGING AND LOGGING
+--------------------------------------------------------------------------------
+- The GUI uses GLib’s `message()` and `warning()` for logging.
+- Compile with `-Dbuildtype=debug` to enable debug symbols and extra messages.
+- Run with `G_MESSAGES_DEBUG=all dstx-gui` to see all debug output.
+- D‑Bus traffic can be monitored with `dbus-monitor --system`.
+
+10. SIGNAL HANDLERS
+--------------------------------------------------------------------------------
+- `Application` handles `activate`, `startup`, `shutdown`.
+- `MainWindow` connects to `destroy` and `close-request` to save window geometry.
+- No custom Unix signal handlers are installed.
+
+11. KNOWN LIMITATIONS
+--------------------------------------------------------------------------------
+- Maximum 4 controllers (backend limit).
+- Nintendo Switch Pro does not support LED configuration.
+- UHID emulation mode is experimental and does not support rumble (the GUI
+  hides the rumble group when UHID is selected).
+- In Flatpak, the user must log out and back in after installing the system
+  service for group permissions to take effect.
+- Gyroscope / accelerometer emulation is not supported (backend limitation).
+- Theme thumbnails are rendered synchronously on first view; may cause a short
+  delay when opening the Appearance page.
+
+12. EXTENDING THE CODE
+--------------------------------------------------------------------------------
+12.1 Adding a new controller type
+- Create SVG asset (with CSS classes `.primary`, `.secondary`, `.accent`,
+  `.symbol`). Place in `data/icons/<newctrl>/base.svg`.
+- Add a new widget class inheriting from `ControllerRenderer` (like
+  `NewCtrlWidget`).
+- Implement abstract methods:
+    `CANVAS_WIDTH`, `CANVAS_HEIGHT`, `LEFT_STICK_CANVAS_X`, etc.
+    `draw_button_overlay()`: Cairo drawing for all buttons.
+- Coordinates convention: all overlay coordinates are expressed in the
+  same coordinate system as the SVG’s `viewBox`. To obtain them, open the SVG
+  in a vector editor (e.g., Inkscape) and record the (x,y) positions of each
+  button or element. The `CANVAS_WIDTH/HEIGHT` must match the SVG’s intrinsic
+  size (usually the `viewBox` dimensions).
+- Add the type to `ControllerType` enum (in `controller.vala`).
+- In `MainWindow.update_controller_widget()`, add a branch for the new type.
+- Extend `DBusClient` if new D‑Bus methods are required (rare).
+
+12.2 Adding a new theme
+- Edit `data/themes.json`: add a new object under `"themes"` with a unique id,
+  `name`, `type` ("light" or "dark"), `thumbnail` (bg, accent, text),
+  `palette` (10 hex colors), `window` (CSS variable overrides), and
+  `controller` (four hex colors).
+- The theme will automatically appear in the Appearance page.
+
+12.3 Adding a new language
+- Update `LocaleManager.LANGUAGE_CODES` and `LANGUAGE_NAMES_NATIVE` / _ENGLISH.
+- Add translations to `po/` files (e.g., `dstx-gui.pot`).
+- Run `ninja dstx-gui-update-po` to update message catalogs.
+
+12.4 Adding a new LED effect
+- This is a backend change (see backend documentation). The GUI automatically
+  picks up the effect via D‑Bus (`current_effect` field).
+
+12.5 Adding a new setting page
+- In `SettingsUIBuilder.build_ui()`, create a new `Adw.PreferencesGroup` and
+  add it to the page. Use existing widgets (`Adw.SwitchRow`, `Adw.ComboRow`,
+  `Adw.SpinRow`) and connect them to `SettingsController` methods.
+
+13. LICENSE
+--------------------------------------------------------------------------------
+Copyright (C) 2026 André Lameira
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+See the file LICENSE or <https://www.gnu.org/licenses/> for details.
