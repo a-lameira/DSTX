@@ -140,6 +140,7 @@ DSTX/
 ├── docs/                                # project documentation
 │   ├── repository-structure.txt         # this file
 │   ├── dstx.txt                         # dstx technical overview
+│   ├── dstx-gui.txt                         # dstx-gui technical overview
 │   ├── reverse-engineering.txt          # raw HID reverse-engineering information
 │   └── README.md                        # general documentation file
 │
