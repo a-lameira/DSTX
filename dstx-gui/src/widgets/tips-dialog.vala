@@ -133,26 +133,26 @@ namespace Dstx.Widgets {
 
             // General Tips
             string[] general_titles = {
-                _("Initial development"),
-                _("DSTX Service"),
-                _("Multiple Controllers"),
-                _("Emulation Modes"),
+                _("Still young"),
+                _("Runs in the background"),
+                _("Up to 4 players"),
+                _("Two emulation engines"),
                 "UINPUT",
                 "UHID",
-                _("Gyroscope and Accelerometer"),
-                _("Detailed Information"),
-                _("Terminal Version")
+                _("Gyro? Not yet"),
+                _("Controller info in one click"),
+                _("Terminal power")
             };
             string[] general_descs = {
-                _("This software is in its initial stage of development. This means it has been little tested. Expect bugs and issues, and if you find a bug, please report it in the 'Issues' section of the repository so that developers can become aware of the problem. Remember that this software provides absolutely no warranty, and any issues arising from its use are the sole responsibility of the user."),
-                _("DSTX is a system service. This graphical interface is just a front-end to this service. This means that if you close this window, your LED and emulation settings will continue to work. Note that after installing the program, you need to restart your session (logout/login or restart) for the service settings to become valid."),
-                _("You can connect up to 4 controllers simultaneously. Each will appear in the left sidebar. Each controller has its own independent settings. Change LED mode, rumble and deadzone individually."),
-                _("DSTX creates a virtual Xbox 360 device that is recognised by the vast majority of games, enabling unsupported controllers to work in games with Xbox (Xinput) controller support. In doing so, the program turns a disadvantage (lack of native support) into a possible advantage (control over all aspects of the gamepad exposed to the game). DSTX offers two emulation modes, UINPUT and UHID."),
-                _("UINPUT is a Linux kernel module that allows the creation of virtual devices from user space. It is the traditional and tested method for emulating virtual controllers, enabling support for all the capabilities of a gamepad."),
-                _("UHID is a relatively new Linux kernel module that allows the creation of HID devices from user space. Currently, the UHID mode implementation is experimental and is limited to input events (buttons, axes), with no rumble support. In some scenarios, using UHID can mitigate double input issues."),
-                _("Gyroscope emulation, while possible, introduces a series of technical complexities that are not planned for the initial version of the program. At present, DSTX does not support gyroscope emulation."),
-                _("Click the information button (ⓘ) on the top bar to see technical details of the selected controller."),
-                _("DSTX can also be used from the terminal with the command <tt>dstx</tt>. A terminal graphical interface (TUI) is provided.")
+                _("DSTX is fresh out of the oven — expect a few rough edges. Found a bug? Please report it on GitHub. No warranty, but we'll do our best to fix it."),
+                _("DSTX runs as a system service. Close the window? Your LED colors and emulation keep working. After install, log out and back in once — that's it."),
+                _("Connect up to 4 controllers at once. Each appears in the left panel with its own independent settings. Customize LED, rumble, deadzone per controller."),
+                _("DSTX creates a virtual Xbox 360 pad — works with almost any game. Two modes: <b>UINPUT</b> (full features, rumble included) and <b>UHID</b> (experimental, no rumble but can fix double inputs)."),
+                _("The classic, rock‑solid method. Creates virtual devices from user space. Full gamepad capabilities, great compatibility."),
+                _("Newer kernel module, still experimental. Only handles buttons and axes (no rumble). Can help if you're experiencing double inputs with UINPUT."),
+                _("Gyroscope emulation is technically possible but complex — not planned for now. Maybe in a future release!"),
+                _("Click the <b>ⓘ</b> button in the top bar to see technical details of your controller: driver, serial, input nodes."),
+                _("Prefer the command line? Run <tt>dstx</tt> in your terminal — a full TUI (text interface) is included.")
             };
             container.append(create_tip_card(_("General Tips"), general_titles, general_descs));
 
@@ -168,14 +168,14 @@ namespace Dstx.Widgets {
                 _("Buttons")
             };
             string[] config_descs = {
-                _("Using the profile dialog, you can create, delete, save, and load configuration profiles. If the 'auto-save' option is enabled, any changes to the settings will be automatically saved to the current profile."),
-                _("Gamepad settings apply to the emulated device, not the real controller. Emulation must be active for the settings to be available and take effect."),
-                _("You can choose the method for creating the virtual Xbox 360 device (UINPUT or UHID). Note that UHID is experimental and does not support rumble."),
-                _("In UINPUT emulation mode, you can enable or disable the rumble feature and set the intensity (gain) of vibration effects (0 to 100%)."),
-                _("For the analog sticks, there are settings for deadzone, sensitivity and Y-axis inversion."),
-                _(_("8 sensitivity modes are available for the analog sticks, each with a different response curve:\n• <b>Default</b> – linear 1:1 curve, natural controller response;\n• <b>Precision</b> – logarithmic curve, smooths movements in the center, allowing greater control over small displacements;\n• <b>Rapid</b> – exponential curve, accentuates movements, allowing quick responses with small displacements, favouring shorter reaction time;\n• <b>Smooth</b> – 'S' curve, starts smooth, accelerates in the middle, smooths at the end;\n• <b>Aggressive</b> – inverted 'S' curve, responds aggressively at the beginning and smooths at the end, favouring quick reflexes;\n• <b>Sniper</b> – extreme logarithmic curve, millimetric control in the centre with a very smooth response;\n• <b>Racing</b> – reduced linear curve, maintains proportionality, but with a longer travel;\n• <b>FPS</b> – attenuated inverted 'S' curve, precision in the centre and fast response at the edges.")),
-                _("DSTX offers a feature to switch the trigger mode from analog to digital. The Xbox 360 controller has only analog triggers, and most games expect analog triggers and do not recognize digital triggers. However, in some niche cases, it is useful to output digital triggers instead of analog ones."),
-                _("For the buttons there is a Debounce option (noise filtering) to attenuate double input originating from the hardware.")
+                _("Create, save, load, or delete profiles. Turn on <b>auto‑save</b> and every change is automatically stored in the current profile."),
+                _("All settings (LED, rumble, deadzone, etc.) apply to the emulated Xbox controller, not the real one. Keep emulation ON for them to work."),
+                _("You choose how the virtual Xbox pad is created. UINPUT is stable and feature‑complete (rumble included). UHID is experimental (no rumble) but can help with double‑input weirdness."),
+                _("In UINPUT mode, you can enable/disable rumble and adjust vibration intensity (gain) from 0 to 100%."),
+                _("Fine‑tune deadzone (how far you must push before it reacts), sensitivity presets, and invert Y‑axis for left and right sticks independently."),
+                _(_("8 curves available:\n• <b>Default</b> – linear, natural\n• <b>Precision</b> – smooth in the center for tiny moves\n• <b>Rapid</b> – fast response, great for reflexes\n• <b>Smooth</b> – S‑curve: gentle start, faster middle\n• <b>Aggressive</b> – inverted S, quick initial snap\n• <b>Sniper</b> – ultra‑smooth for aiming\n• <b>Racing</b> – linear but longer travel\n• <b>FPS</b> – balanced precision + speed")),
+                _("Flip L2/R2 from analog to digital (on/off). Most games expect analog, but in some niche cases digital can be useful."),
+                _("Debounce filters out electrical noise, reducing accidental double presses from the hardware.")
             };
             container.append(create_tip_card(_("Settings"), config_titles, config_descs));
 
@@ -212,45 +212,45 @@ namespace Dstx.Widgets {
 
             // Connection
             string[] connection_titles = {
-                _("General connection Issues"),
-                _("Detection by games"),
-                _("Steam Input")
+                _("Connection hiccups"),
+                _("Game not seeing the controller?"),
+                _("Steam Input conflict")
             };
             string[] connection_descs = {
-                _("This program supports USB and Bluetooth connections. Generally, the connection is successful most of the time. However, in some scenarios the controllers may not be connected correctly by the program. In these cases, we recommend that the controllers be disconnected and reconnected. Some attempts may be necessary."),
-                _("In most cases, games automatically detect the virtual controller created by DSTX. If a game fails to detect the controller, restarting the game usually resolves the issue."),
-                _("The DSTX works perfectly with Steam games. Steam even detects the virtual controller as a native controller. However, if 'Steam Input' is enabled, there may be unwanted interference. To avoid issues, we recommend disabling Steam Input when using the DSTX with Steam games, and vice versa.")
+                _("USB and Bluetooth usually work great. If a controller isn't detected, try disconnecting and reconnecting it a couple of times."),
+                _("Most games auto‑detect the virtual Xbox pad. If one doesn't, restart the game — that often fixes it."),
+                _("DSTX works great with Steam games, but if <b>Steam Input</b> is on, it can interfere. Disable Steam Input for DSTX games, or disable DSTX emulation when using Steam Input.")
             };
             container.append(create_tip_card(_("Connection"), connection_titles, connection_descs));
             
             // DualShock 4
             string[] ds4_titles = {
-                _("USB connections"),
+                _("USB quirks"),
                 _("Bluetooth connections")
             };
             string[] ds4_descs = {
-                _("The DualShock 4 controller has known bugs caused by the kernel driver when connected via USB. Depending on the context, this can result in erratic behavior of the LEDs and rumble function, as well as double-input issues when connected via USB."),
-                _("The DualShock 4 controller performs more stably and predictably when connected to DSTX via Bluetooth. At this time, we recommend using this connection method to minimize unwanted behavior.")
+                _("The kernel driver has some bugs over USB — LEDs and rumble may act weird, and double inputs can happen — it's a known issue."),
+                _("DualShock 4 behaves much better over Bluetooth. We recommend using Bluetooth for the best experience.")
             };
             container.append(create_tip_card("DualShock 4", ds4_titles, ds4_descs));
 
             // DualSense
             string[] dualsense_titles = {
-                _("Specific Issues")
+                _("Solid performer")
             };
             string[] dualsense_descs = {
-                _("The DualSense controller shows consistent behaviour between USB and Bluetooth connection modes. Generally speaking, it is the controller that has worked most consistently and stably with DSTX so far. However, in some cases, the controller may not connect properly to the program via Bluetooth, particularly with regard to the LED functionality. If the connection fails, simply disconnect and reconnect the controller.")
+                _("DualSense is the most stable controller so far — USB and Bluetooth both work well. On rare occasions, Bluetooth LED control may fail; just disconnect and reconnect.")
             };
             container.append(create_tip_card("DualSense", dualsense_titles, dualsense_descs));
 
             // Nintendo Switch Pro
             string[] nsw_titles = {
-                _("USB connections"),
-                _("Bluetooth connections")
+                _("USB works best"),
+                _("Bluetooth quirks")
             };
             string[] nsw_descs = {
-                _("The Nintendo Switch Pro Controller generally works best when connected via USB. A known issue is that when you unplug the USB cable from the controller, it automatically reconnects via Bluetooth. In this case, disconnect the controller through your system’s Bluetooth device manager."),
-                _("The Nintendo Switch Pro controller has some bugs related to Bluetooth connections, notably an offset in the X and Y values of the analog axes. Further testing is needed to determine the exact cause of the bug, but for now, the program applies empirically determined corrections to these offsets. If you are experiencing issues with incorrect analog stick values over Bluetooth connections, please file a bug report.")
+                _("Best experience is over USB. One catch: unplugging USB automatically reconnects via Bluetooth. If that happens, manually disconnect the controller in your system's Bluetooth settings."),
+                _("Over Bluetooth, analog sticks may show a slight offset (Kernel-related). DSTX applies empirical corrections, but if you still see wrong values, please file a bug report.")
             };
             container.append(create_tip_card(_("Nintendo Switch Pro"), nsw_titles, nsw_descs));
 
@@ -287,18 +287,18 @@ namespace Dstx.Widgets {
 
             // LED Effects
             string[] effects_titles = {
-                _("LED System"),
+                _("Light it up"),
                 _("Static Mode"),
                 _("Dynamic Mode"),
                 _("Brightness Adjustment"),
                 _("Player LEDs (DualSense)")
             };
             string[] effects_descs = {
-                _("For DualShock 4 and DualSense controllers, DSTX offers a complete LED configuration system. Two modes are available: Static and Dynamic."),
-                _("In static mode, you can choose a fixed colour for your controller's LED. For efficiency, the program writes the selected colour to the LED only once on the controller. This means that if another program (Steam, OpenRGB, the kernel driver, etc.) also writes an LED colour to your controller, it will overwrite the configured colour. To avoid this, the 'Reapply LED' feature is offered, which monitors these third-party write events and reapplies the colour configured in DSTX on demand."),
-                _("In dynamic mode, you can choose from eight available effects. Depending on the selected effect, you can configure the base colour and speed. Note that using effects at a high speed can affect battery life on Bluetooth connections."),
-                _("The brightness adjustment controls the intensity of the brightness for both operating modes of the LED system. For dynamic mode, keep in mind that the lower the brightness, the lower the resolution of the effects."),
-                _("The DualSense has player indicator LEDs that can be set from 0 to 4.")
+                _("Only for DualShock 4 and DualSense. Two modes: Static (fixed color) and Dynamic (moving effects)."),
+                _("Pick any color. The LED is written only once, so other apps (Steam, OpenRGB) may overwrite it. Turn on <b>Reapply LED</b> to fight back and keep your color."),
+                _("Choose from 8 effects. Depending on the effect, you can set a base color and speed. High speed = more battery drain over Bluetooth."),
+                _("Brightness affects both static and dynamic modes. Lower brightness in dynamic mode reduces effect resolution."),
+                _("DualSense has small player indicator LEDs (0–4). Set which number lights up.")
             };
             container.append(create_tip_card(_("LED Effects"), effects_titles, effects_descs));
 
@@ -311,11 +311,11 @@ namespace Dstx.Widgets {
                 _("Buttons")
             };
             string[] specific_descs = {
-                _("Oscillating effects of the base colour with speed adjustment."),
-                _("These effects do not use the base colour. Rainbow goes through the entire colour spectrum, and Wave alternates between cyan, yellow and magenta tones."),
-                _("The LED shows the battery level: green for charged, yellow for medium, red for low."),
-                _("The LED changes colour according to the intensity of trigger pressure."),
-                _("The LED changes colour according to the buttons pressed.")
+                _("Oscillate your base color — speed adjustable."),
+                _("Rainbow cycles through the spectrum. Wave alternates between cyan, yellow, and magenta — no base color used."),
+                _("LED shows battery level: green = full, yellow = medium, red = low."),
+                _("LED changes color based on how hard you pull L2/R2."),
+                _("Color reacts to button presses.")
             };
             container.append(create_tip_card(_("Specific Effects"), specific_titles, specific_descs));
 
