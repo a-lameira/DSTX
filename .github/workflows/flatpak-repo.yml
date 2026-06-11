@@ -50,7 +50,7 @@ jobs:
           chmod +x build/build-core-static.sh
           ./build/build-core-static.sh
 
-      # Build and sign the Flatpak repository in one step (more reliable)
+      # Build and sign the Flatpak repository in one step
       - name: Build and sign Flatpak repository
         id: build_repo
         run: |
@@ -104,7 +104,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./gh-pages-temp
           publish_branch: gh-pages
-          keep_files: true          # Preserve existing files like CNAME and apt/ folder
+          keep_files: true          # Preserve existing files
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: 'Deploy Flatpak repository for ${{ github.ref_name }}'
