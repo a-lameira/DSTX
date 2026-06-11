@@ -11,17 +11,16 @@ OUTPUT_DIR="$PROJECT_ROOT/build/rpm"
 echo "📦 Building RPM package (core only) for version $VERSION"
 
 RPM_TOPDIR=$(mktemp -d)
-trap 'rm -rf "$RPM_TOPDIR"' EXIT
 
 mkdir -p "$RPM_TOPDIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
 # Generate changelog date
 CHANGELOG_DATE=$(date +"%a %b %d %Y")
 
-# Create spec file (using /usr/local/bin)
-cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << EOF
+# Create spec file
+cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << 'SPECEOF'
 Name:           dstx-core
-Version:        $VERSION
+Version:        VERSION_PLACEHOLDER
 Release:        1%{?dist}
 Summary:        DSTX Core (daemon and D-Bus bridge)
 License:        GPL-3.0-only
@@ -121,9 +120,13 @@ fi
 /usr/share/dbus-1/system.d/org.dstx.Bridge.conf
 
 %changelog
-* $CHANGELOG_DATE André Lameira <alameira@dstx.org> - $VERSION-1
+* CHANGELOG_DATE_PLACEHOLDER André Lameira <alameira@dstx.org> - VERSION_PLACEHOLDER-1
 - Core-only package with /usr/local/bin consistency
-EOF
+SPECEOF
+
+# Replace placeholders in the spec file
+sed -i "s/VERSION_PLACEHOLDER/$VERSION/g" "$RPM_TOPDIR/SPECS/dstx-core.spec"
+sed -i "s/CHANGELOG_DATE_PLACEHOLDER/$CHANGELOG_DATE/g" "$RPM_TOPDIR/SPECS/dstx-core.spec"
 
 # Copy static binaries
 cp "$CORE_BIN/dstx" "$CORE_BIN/dstx-dbus" "$RPM_TOPDIR/SOURCES/"
@@ -144,7 +147,12 @@ docker run --rm -v "$RPM_TOPDIR:/build" dstx-fedora-builder sh -c '
 '
 
 mkdir -p "$OUTPUT_DIR"
-cp "$RPM_TOPDIR/RPMS/x86_64/"*.rpm "$OUTPUT_DIR/"
+# Copy RPM files with sudo to avoid permission issues
+sudo cp "$RPM_TOPDIR/RPMS/x86_64/"*.rpm "$OUTPUT_DIR/" 2>/dev/null || \
+     cp "$RPM_TOPDIR/RPMS/x86_64/"*.rpm "$OUTPUT_DIR/"
+
+# Clean up with sudo to avoid permission issues
+sudo rm -rf "$RPM_TOPDIR"
 
 echo "✅ RPM package built:"
 ls -lh "$OUTPUT_DIR"/*.rpm
