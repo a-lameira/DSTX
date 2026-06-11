@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * RESPONSIBILITIES:
- * - Provide UI for theme selection (standard, light, dark themes)
+ * - Provide UI for theme selection (standard, light, dark, user themes)
  * - Manage accent color palette and selection
  * - Handle theme mode switching (System, Light, Dark, Custom)
  * - Integrate with ThemeManager and SettingsController
@@ -47,6 +47,7 @@ namespace Dstx.Widgets {
         private Gtk.Box standard_gallery;
         private Gtk.Box light_gallery;
         private Gtk.Box dark_gallery;
+        private Gtk.Box user_gallery;
         private List<Gtk.Widget> theme_items;
 
         // Current state
@@ -68,6 +69,7 @@ namespace Dstx.Widgets {
         private Adw.PreferencesGroup? standard_themes_group = null;
         private Adw.PreferencesGroup? light_themes_group = null;
         private Adw.PreferencesGroup? dark_themes_group = null;
+        private Adw.PreferencesGroup? user_themes_group = null;
 
         // Sticky header
         private StickyHeader? sticky_header = null;
@@ -271,6 +273,28 @@ namespace Dstx.Widgets {
             dark_themes_group.add(dark_row);
             this.add(dark_themes_group);
 
+            // ===== SECTION 6: USER THEMES =====
+            user_themes_group = new Adw.PreferencesGroup();
+            user_themes_group.set_title(Dstx._("Community Themes"));
+            user_themes_group.set_description(Dstx._("Custom themes submitted by users"));
+            user_themes_group.visible = false;  // Initially hidden, shown only if there are user themes
+
+            user_gallery = new Gtk.Box(Gtk.Orientation.VERTICAL, 16);
+            user_gallery.halign = Gtk.Align.CENTER;
+            user_gallery.margin_top = 12;
+            user_gallery.margin_bottom = 12;
+            user_gallery.hexpand = true;
+
+            var user_container = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            user_container.hexpand = true;
+            user_container.halign = Gtk.Align.CENTER;
+            user_container.append(user_gallery);
+
+            var user_row = new Adw.ActionRow();
+            user_row.set_child(user_container);
+            user_themes_group.add(user_row);
+            this.add(user_themes_group);
+
             // Connect theme_mode_row signal
             theme_mode_row.notify["selected"].connect(() => {
                 uint selected = theme_mode_row.get_selected();
@@ -384,6 +408,17 @@ namespace Dstx.Widgets {
             if (standard_themes_group != null) standard_themes_group.visible = visible;
             if (light_themes_group != null) light_themes_group.visible = visible;
             if (dark_themes_group != null) dark_themes_group.visible = visible;
+            if (user_themes_group != null) user_themes_group.visible = visible && has_user_themes();
+        }
+
+        private bool has_user_themes() {
+            var all_themes = theme_manager.get_all_themes();
+            foreach (var theme in all_themes) {
+                if (theme.theme_type == "user") {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void update_accent_group_visibility() {
@@ -419,7 +454,9 @@ namespace Dstx.Widgets {
             clear_gallery(standard_gallery);
             clear_gallery(light_gallery);
             clear_gallery(dark_gallery);
+            clear_gallery(user_gallery);
 
+            // 1. Standard themes (Light and Dark)
             var standard_themes = theme_manager.get_standard_themes();
             foreach (var theme in standard_themes) {
                 var item = yield create_theme_item(theme);
@@ -427,66 +464,74 @@ namespace Dstx.Widgets {
                 theme_items.append(item);
             }
 
+            // 2. Get exclusive themes (excluding light/dark)
             var exclusive_themes = theme_manager.get_exclusive_themes();
 
             var light_exclusive = new Gee.ArrayList<ThemeData>();
             var dark_exclusive = new Gee.ArrayList<ThemeData>();
+            var user_exclusive = new Gee.ArrayList<ThemeData>();
 
             foreach (var theme in exclusive_themes) {
                 if (theme.theme_type == "light") {
                     light_exclusive.add(theme);
-                } else {
+                } else if (theme.theme_type == "dark") {
                     dark_exclusive.add(theme);
+                } else if (theme.theme_type == "user") {
+                    user_exclusive.add(theme);
                 }
             }
 
-            int items_per_row = 3;
-            int row = 0;
-            Gtk.Box? current_row = null;
-            int index = 0;
-
-            foreach (var theme in light_exclusive) {
-                if (index % items_per_row == 0) {
-                    current_row = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 24);
-                    current_row.halign = Gtk.Align.CENTER;
-                    current_row.margin_top = row > 0 ? 8 : 0;
-                    current_row.margin_bottom = row < 2 ? 8 : 0;
-                    light_gallery.append(current_row);
-                    row++;
-                }
-
-                var item = yield create_theme_item(theme);
-                if (current_row != null) {
-                    current_row.append(item);
-                    theme_items.append(item);
-                }
-                index++;
+            // 3. Build grid for LIGHT themes
+            if (light_exclusive.size > 0) {
+                yield build_theme_grid(light_gallery, light_exclusive);
             }
 
-            row = 0;
-            index = 0;
+            // 4. Build grid for DARK themes
+            if (dark_exclusive.size > 0) {
+                yield build_theme_grid(dark_gallery, dark_exclusive);
+            }
 
-            foreach (var theme in dark_exclusive) {
-                if (index % items_per_row == 0) {
-                    current_row = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 24);
-                    current_row.halign = Gtk.Align.CENTER;
-                    current_row.margin_top = row > 0 ? 8 : 0;
-                    current_row.margin_bottom = row < 2 ? 8 : 0;
-                    dark_gallery.append(current_row);
-                    row++;
-                }
+            // 5. Build grid for USER themes
+            if (user_exclusive.size > 0) {
+                yield build_theme_grid(user_gallery, user_exclusive);
+            }
 
-                var item = yield create_theme_item(theme);
-                if (current_row != null) {
-                    current_row.append(item);
-                    theme_items.append(item);
-                }
-                index++;
+            // 6. Show/hide user themes group based on existence
+            if (user_themes_group != null) {
+                user_themes_group.visible = user_exclusive.size > 0 && is_custom_mode;
             }
 
             set_theme_galleries_visible(is_custom_mode);
             restore_accent_selection();
-            message("AppearancePage: Galleries built with %u themes", theme_items.length());
+            message("AppearancePage: Galleries built with %u themes (user themes: %d)", 
+                    theme_items.length(), user_exclusive.size);
+        }
+
+        private async void build_theme_grid(Gtk.Box gallery, Gee.ArrayList<ThemeData> themes) {
+            if (themes.size == 0) return;
+            
+            int items_per_row = 3;
+            int row = 0;
+            int index = 0;
+            Gtk.Box? current_row = null;
+            
+            foreach (var theme in themes) {
+                if (index % items_per_row == 0) {
+                    current_row = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 24);
+                    current_row.halign = Gtk.Align.CENTER;
+                    current_row.margin_top = row > 0 ? 8 : 0;
+                    current_row.margin_bottom = row < 2 ? 8 : 0;
+                    gallery.append(current_row);
+                    row++;
+                }
+
+                var item = yield create_theme_item(theme);
+                if (current_row != null) {
+                    current_row.append(item);
+                    theme_items.append(item);
+                }
+                index++;
+            }
         }
 
         private void clear_gallery(Gtk.Box gallery) {
