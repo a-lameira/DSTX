@@ -72,7 +72,7 @@ install_dstx() {
     echo -e "${GREEN}[2/9] Creating system group '$APP_GROUP'...${NC}"
     groupadd -f "$APP_GROUP"
 
-    # UDEV rules (expanded for all known IDs)
+    # UDEV rules (for all known IDs)
     echo -e "${GREEN}[3/9] Creating udev rules...${NC}"
     cat <<EOF > "$UDEV_PATH"
 # DualShock 4 (USB and Bluetooth)
@@ -254,7 +254,7 @@ restore_dstx() {
 # ------------------------------------------------------------------------------
 clear
 echo -e "${BLUE}==========================================${NC}"
-echo -e "${BLUE}          DSTX INFRASTRUCTURE TOOL        ${NC}"
+echo -e "${BLUE}               DSTX SETUP TOOL            ${NC}"
 echo -e "${BLUE}==========================================${NC}"
 echo -e "1) Setup Environment (Install)"
 echo -e "2) Remove Files (Uninstall)"
