@@ -373,6 +373,3 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 See the file LICENSE or <https://www.gnu.org/licenses/> for details.
-
---------------------------------------------------------------------------------
-End of README
