@@ -120,12 +120,6 @@ DSTX/
 │   ├── containers/
 │   │   ├── alpine-static.Dockerfile     # alpine container configuration
 │   │   └── fedora-rawhide.Dockerfile    # fedora container configuration
-│   ├── debian/
-│   │   ├── control                      # package metadata
-│   │   ├── format                       # source package format
-│   │   ├── rules                        # .deb build instructions
-│   │   ├── changelog.in                 # changelog template
-│   │   └── install                      # list of installable files
 │   ├── rpm/
 │   │   └── dstx.spec                    # .rpm package definitions
 │   ├── flatpak/
