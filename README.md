@@ -158,6 +158,14 @@ You must log out and back in (or restart your session) for the group membership 
 
 To uninstall, run the same script and choose option 2 (Remove Files). This stops the services, removes all installed files, and reloads udev/systemd.
 
+To start the daemon using systemd directly:
+
+	sudo systemctl start dstx-daemon.service
+
+To stop the daemon using systemd directly:
+
+	sudo systemctl stop dstx-daemon.service
+
 If you do not use systemd, you can run the daemon manually:
 
 	sudo /usr/local/bin/dstx --daemon
