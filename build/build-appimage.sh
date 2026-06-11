@@ -33,7 +33,7 @@ DESTDIR=/work/AppDir ninja -C builddir install
 sed -i "s/Icon=org.dstx.gui/Icon=dstx/" /work/AppDir/usr/share/applications/dstx-gui.desktop
 desktop-file-validate /work/AppDir/usr/share/applications/dstx-gui.desktop
 
-# Download linuxdeploy (no plugin, we will do manual GTK bundling)
+# Download linuxdeploy
 wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 chmod +x linuxdeploy-x86_64.AppImage
 ./linuxdeploy-x86_64.AppImage --appimage-extract
@@ -54,7 +54,7 @@ else
     echo "WARNING: Could not find GTK modules directory. Trying to use system GTK."
 fi
 
-# Also copy GLib schemas and GSettings schema files
+# Copy GLib schemas and GSettings schema files
 mkdir -p /work/AppDir/usr/share/glib-2.0/schemas
 cp -r /usr/share/glib-2.0/schemas/* /work/AppDir/usr/share/glib-2.0/schemas/ 2>/dev/null || true
 
@@ -66,7 +66,7 @@ cp -r /usr/share/icons/hicolor /work/AppDir/usr/share/icons/ 2>/dev/null || true
 # Force the use of our bundled GTK libraries
 export LD_LIBRARY_PATH=/work/AppDir/usr/lib:$LD_LIBRARY_PATH
 
-# Second pass: deploy any remaining libraries (should pick up our copied GTK)
+# Second pass: deploy any remaining libraries (should pick up the copied GTK)
 $LINUXDEPLOY --appdir /work/AppDir --verbosity=1
 
 # Create the AppImage
