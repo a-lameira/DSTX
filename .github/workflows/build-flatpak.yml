@@ -28,7 +28,6 @@ jobs:
           fi
           echo "$VERSION" > VERSION
 
-      # NOVO: construir os binários estáticos do core (dstx, dstx-dbus)
       - name: Build static core
         run: |
           chmod +x build/build-core-static.sh
