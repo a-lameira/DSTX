@@ -18,7 +18,7 @@ mkdir -p "$RPM_TOPDIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 # Generate changelog date
 CHANGELOG_DATE=$(date +"%a %b %d %Y")
 
-# Create spec file (using /usr/local/bin consistently)
+# Create spec file (using /usr/local/bin)
 cat > "$RPM_TOPDIR/SPECS/dstx-core.spec" << EOF
 Name:           dstx-core
 Version:        $VERSION
@@ -54,7 +54,7 @@ mkdir -p %{buildroot}/usr/share/dbus-1/system.d
 install -Dm755 %{_sourcedir}/dstx %{buildroot}/usr/local/bin/dstx
 install -Dm755 %{_sourcedir}/dstx-dbus %{buildroot}/usr/local/bin/dstx-dbus
 
-# Install systemd units (paths already point to /usr/local/bin)
+# Install systemd units
 install -Dm644 %{_sourcedir}/dstx-daemon.service %{buildroot}/lib/systemd/system/dstx-daemon.service
 install -Dm644 %{_sourcedir}/dstx-dbus.service %{buildroot}/lib/systemd/system/dstx-dbus.service
 
@@ -67,7 +67,7 @@ install -Dm644 %{_sourcedir}/org.dstx.Bridge.conf %{buildroot}/usr/share/dbus-1/
 # Install Polkit rule
 install -Dm644 %{_sourcedir}/10-dstx.rules %{buildroot}/usr/share/polkit-1/rules.d/10-dstx.rules
 
-# Install sudoers file (with correct permissions)
+# Install sudoers file
 install -Dm644 %{_sourcedir}/dstx-sudoers %{buildroot}/etc/sudoers.d/dstx
 chmod 440 %{buildroot}/etc/sudoers.d/dstx
 
