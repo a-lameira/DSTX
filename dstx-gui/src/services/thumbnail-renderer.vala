@@ -54,96 +54,97 @@ namespace Dstx.Services {
             message("ThumbnailRenderer: Initialized (scale=%.4f)", scale);
         }
         
-public Gdk.Texture? get_thumbnail(ThemeData theme, int target_width, int target_height) {
-    string cache_key = @"$(theme.id):$(target_width)x$(target_height)";
-    var cache_mgr = TextureCacheManager.get_default();
+		public Gdk.Texture? get_thumbnail(ThemeData theme, int target_width, int target_height) {
+    			string cache_key = @"$(theme.id):$(target_width)x$(target_height)";
+    			var cache = ThumbnailCache.get_default();
     
-    var cached = cache_mgr.get(cache_key);
-    if (cached != null) {
-        return cached;
-    }
+    			var cached = cache.get_texture(cache_key);
+    			if (cached != null) {
+    			    message("ThumbnailRenderer: Cache hit for %s", cache_key);
+    			    return cached;
+    			}
+    		
+    			message("ThumbnailRenderer: Cache miss for %s, rendering...", cache_key);
+    			var texture = render_to_texture(theme, target_width, target_height);
+    			if (texture != null) {
+    			    cache.put(cache_key, texture);
+    			}
+    			return texture;
+		}
+    	    
+		private Gdk.Texture? render_to_texture(ThemeData theme, int target_width, int target_height) {
+    			message("render_to_texture: Starting for theme %s, size %dx%d", theme.id, target_width, target_height);
     
-    var texture = render_to_texture(theme, target_width, target_height);
-    if (texture != null) {
-        cache_mgr.put(cache_key, texture);
-    }
+    			var snapshot = new Gtk.Snapshot();
     
-    return texture;
-}
-        
-private Gdk.Texture? render_to_texture(ThemeData theme, int target_width, int target_height) {
-    message("render_to_texture: Starting for theme %s, size %dx%d", theme.id, target_width, target_height);
+    			Graphene.Rect bounds = Graphene.Rect();
+    			bounds.init(0.0f, 0.0f, (float)target_width, (float)target_height);
+    			var cr = snapshot.append_cairo(bounds);
     
-    var snapshot = new Gtk.Snapshot();
+    			// Save original values
+    			double old_scale = scale;
+    			double old_offset_x = offset_x;
+    			double old_offset_y = offset_y;
+    	
+    			// Recalculate scale based on CANVAS
+    			double scale_x = (double)target_width / CANVAS_WIDTH;
+    			double scale_y = (double)target_height / CANVAS_HEIGHT;
+    			scale = double.min(scale_x, scale_y);
     
-    Graphene.Rect bounds = Graphene.Rect();
-    bounds.init(0.0f, 0.0f, (float)target_width, (float)target_height);
-    var cr = snapshot.append_cairo(bounds);
+    			// Center the drawing
+    			offset_x = (target_width - (CANVAS_WIDTH * scale)) / 2;
+    			offset_y = (target_height - (CANVAS_HEIGHT * scale)) / 2;
     
-    // Save original values
-    double old_scale = scale;
-    double old_offset_x = offset_x;
-    double old_offset_y = offset_y;
+    			message("render_to_texture: scale=%.4f, offset=(%.1f,%.1f)", scale, offset_x, offset_y);
     
-    // Recalculate scale based on CANVAS
-    double scale_x = (double)target_width / CANVAS_WIDTH;
-    double scale_y = (double)target_height / CANVAS_HEIGHT;
-    scale = double.min(scale_x, scale_y);
+    			draw_thumbnail(cr, theme);
     
-    // Center the drawing
-    offset_x = (target_width - (CANVAS_WIDTH * scale)) / 2;
-    offset_y = (target_height - (CANVAS_HEIGHT * scale)) / 2;
+    			// Restore original values
+    			scale = old_scale;
+    			offset_x = old_offset_x;
+    			offset_y = old_offset_y;
     
-    message("render_to_texture: scale=%.4f, offset=(%.1f,%.1f)", scale, offset_x, offset_y);
+    			cr = null;
     
-    draw_thumbnail(cr, theme);
+    			var node = snapshot.free_to_node();
+    			if (node == null) {
+    			    warning("render_to_texture: Failed to get node for theme %s", theme.id);
+    			    return null;
+    			}
     
-    // Restore original values
-    scale = old_scale;
-    offset_x = old_offset_x;
-    offset_y = old_offset_y;
+    			// Create a Cairo surface
+    			var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32, target_width, target_height);
+    			var ctx = new Cairo.Context(surface);
+    			node.draw(ctx);
+    			surface.flush();
     
-    cr = null;
+    			uint8* data_ptr = surface.get_data();
+    			if (data_ptr == null) {
+    			    warning("render_to_texture: Failed to get surface data for theme %s", theme.id);
+    			    return null;
+    			}
     
-    var node = snapshot.free_to_node();
-    if (node == null) {
-        warning("render_to_texture: Failed to get node for theme %s", theme.id);
-        return null;
-    }
+    			int stride = surface.get_stride();
+    			size_t data_size = target_height * stride;
     
-    // Create a Cairo surface
-    var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32, target_width, target_height);
-    var ctx = new Cairo.Context(surface);
-    node.draw(ctx);
-    surface.flush();
+    			uint8[] data = new uint8[data_size];
+    			GLib.Memory.copy(data, data_ptr, data_size);
     
-    uint8* data_ptr = surface.get_data();
-    if (data_ptr == null) {
-        warning("render_to_texture: Failed to get surface data for theme %s", theme.id);
-        return null;
-    }
+    			var bytes_obj = new GLib.Bytes.take(data);
+    		
+    			Gdk.Texture? texture = null;
+    			try {
+			texture = new Gdk.MemoryTexture(target_width, target_height, 
+    		                            Gdk.MemoryFormat.B8G8R8A8_PREMULTIPLIED, 
+    		                            bytes_obj, stride);
+    	    		message("render_to_texture: Texture created successfully for theme %s", theme.id);
+    			} catch (GLib.Error e) {
+    		    		warning("render_to_texture: Error creating texture: %s", e.message);
+    		    		return null;
+    			}
     
-    int stride = surface.get_stride();
-    size_t data_size = target_height * stride;
-    
-    uint8[] data = new uint8[data_size];
-    GLib.Memory.copy(data, data_ptr, data_size);
-    
-    var bytes_obj = new GLib.Bytes.take(data);
-    
-    Gdk.Texture? texture = null;
-    try {
-texture = new Gdk.MemoryTexture(target_width, target_height, 
-                                Gdk.MemoryFormat.B8G8R8A8_PREMULTIPLIED, 
-                                bytes_obj, stride);
-        message("render_to_texture: Texture created successfully for theme %s", theme.id);
-    } catch (GLib.Error e) {
-        warning("render_to_texture: Error creating texture: %s", e.message);
-        return null;
-    }
-    
-    return texture;
-}
+    			return texture;
+		}
         
         private void draw_thumbnail(Cairo.Context cr, ThemeData theme) {
             string window_bg_str = get_theme_color_string(theme, "--window-bg", theme.thumbnail.bg);
@@ -674,10 +675,10 @@ texture = new Gdk.MemoryTexture(target_width, target_height,
             return color;
         }
         
-        public void clear_cache() {
-            TextureCacheManager.get_default().clear();
-            message("ThumbnailRenderer: Cache cleared");
-        }
+		public void clear_cache() {
+    			ThumbnailCache.get_default().clear();
+    			message("ThumbnailRenderer: Thumbnail cache cleared");
+		}
         
         ~ThumbnailRenderer() {
             message("ThumbnailRenderer: Destroyed");
