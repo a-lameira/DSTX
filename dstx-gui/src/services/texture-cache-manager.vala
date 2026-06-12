@@ -176,6 +176,14 @@ namespace Dstx.Services {
         }
         
         /**
+		 * Invalidates all textures in the cache (useful when theme changes).
+		 */
+		public void invalidate_all() {
+		    clear();
+		    message("TextureCacheManager: All textures invalidated");
+		}
+
+        /**
          * Clears the entire cache
          */
         public void clear() {
