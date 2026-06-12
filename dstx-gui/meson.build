@@ -147,6 +147,7 @@ vala_sources = files(
     'src/services/svg-colorizer.vala',
     'src/services/controller-renderer.vala',
     'src/services/thumbnail-renderer.vala',
+    'src/services/thumbnail-cache.vala',
     'src/services/texture-cache-manager.vala',
 )
 
