@@ -310,6 +310,8 @@ namespace Dstx.Managers {
             schedule_controller_update(new_colors);
             
             message("ThemeManager: Theme %s applied", theme.name);
+			
+			TextureCacheManager.get_default().invalidate_all();
         }
         
         public void apply_accent_color(Gdk.RGBA color, int index) {
@@ -332,6 +334,8 @@ namespace Dstx.Managers {
             }
             
             schedule_interface_accent_update(color);
+            
+            TextureCacheManager.get_default().invalidate_all();
         }
         
         public void set_ui_mode(int mode) {
