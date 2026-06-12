@@ -87,8 +87,9 @@ DSTX/
 │   │   ├── services/
 │   │   │   ├── controller-renderer.vala         # base controller renderer (view)
 │   │   │   ├── svg-colorizer.vala               # SVG colorization using rsvg
-│   │   │   ├── texture-cache-manager.vala       # GPU texture cache manager
+│   │   │   ├── texture-cache-manager.vala       # controller texture cache manager
 │   │   │   └── thumbnails-renderer.vala         # thumbnail renderer for AppearancePage
+│   │   │   └── thumbnails-renderer.vala         # thumbnail texture cache manager
 │   │   ├── view-models/
 │   │   │   └── controller-view-model.vala       # controller representation (determines state and emits signals)
 │   │   ├── widgets/
