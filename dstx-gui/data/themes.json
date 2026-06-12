@@ -935,7 +935,7 @@
         "--button-active": "#9a4e66",
         "--view-bg": "#3a1a24",
         "--view-fg": "#232629",
-        "--dialog-bg": "#4a2634",
+        "--dialog-bg": "#f4f5f6",
         "--dialog-fg": "#232629"
       },
       "controller": {
