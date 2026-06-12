@@ -44,14 +44,14 @@ namespace Dstx {
             
             custom_css = """
     /* ===== CARD STYLES ===== */
-.controller-card {
-    background-color: @sidebar_bg_color;
-    border-radius: 9px;
-    transition: all 200ms ease;
-    border: 1px solid transparent;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.0);
-    margin-bottom: 8px;
-}
+	.controller-card {
+    		background-color: @sidebar_bg_color;
+    		border-radius: 9px;
+    		transition: all 200ms ease;
+    		border: 1px solid transparent;
+    		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.0);
+    		margin-bottom: 8px;
+	}
     
     .controller-card:hover {
         background-color: alpha(@card_bg_color, 0.5);
@@ -59,11 +59,11 @@ namespace Dstx {
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
     
-    .controller-card.selected-card {
-        background-color: alpha(@card_bg_color, 1.0);
-        border-color: alpha(@card_bg_color, 1.0);
-        box-shadow: 0 2px 8px alpha(@card_bg_color, 0.2);
-    }
+	.controller-card.selected-card {
+    		background-color: alpha(@card_bg_color, 1.0);
+    		border-color: alpha(@sidebar_bg_color, 1.0);
+    		box-shadow: 0 3px 9px rgba(0, 0, 0, 0.1),
+	}
     
     .controller-icon {
         color: @theme_text_color;
