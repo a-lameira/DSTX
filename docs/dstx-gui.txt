@@ -102,7 +102,7 @@ Stores full controller state, including:
 
 3.3 ThemeData (src/models/theme-data.vala)
 - Loaded from `themes.json` (embedded in resources).
-- Contains `id`, `name`, `theme_type` ("light"/"dark").
+- Contains `id`, `name`, `theme_type` ("light"/"dark"/"user").
 - `thumbnail` (bg, accent, text) for preview.
 - `palette` (10 accent colors, hex strings).
 - `window` (dictionary of CSS variable names → hex values).
