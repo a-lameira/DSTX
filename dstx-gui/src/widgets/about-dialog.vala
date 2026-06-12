@@ -39,7 +39,7 @@ namespace Dstx.Widgets {
                 application_name = "DSTX",
                 application_icon = "dstx",
                 version = "0.7.0",
-                developer_name = "André Lameira",
+                developer_name = "The DSTX Team",
                 copyright = "© 2026 André Lameira",
                 license_type = Gtk.License.GPL_3_0,
                 website = "https://dstxapp.org",
