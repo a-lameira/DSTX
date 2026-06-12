@@ -124,7 +124,6 @@ vala_sources = files(
     'src/models/theme-data.vala',
     'src/view-models/controller-view-model.vala',
     'src/widgets/controller-card.vala',
-    'src/widgets/radar-widget.vala',
     'src/widgets/color-picker-widget.vala',
     'src/widgets/color-picker-dialog.vala',
     'src/widgets/keybinds-dialog.vala',
