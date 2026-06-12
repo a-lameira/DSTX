@@ -46,7 +46,6 @@ DSTX/
 ├── dstx-gui/                         # Vala/Gtk4 GUI
 │   ├── data/
 │   │   ├── icons/                    # image resources (.svg)
-│   │   ├── controller-widget.ui      # controller interface
 │   │   ├── dstx-gui.desktop.in       # .desktop file
 │   │   ├── dstx.gresource.xml        # list of external resources
 │   │   ├── org.dstx.appdata.xml      # application info
@@ -104,7 +103,6 @@ DSTX/
 │   │   │   ├── nsw.vala                         # nintendo switch-specific rendering (used by ControllerRenderer)
 │   │   │   ├── keybinds-dialog.vala             # keybinds dialog (ui)
 │   │   │   ├── profiles-dialog.vala             # profiles dialog (ui)
-│   │   │   ├── radar-widget.vala                # analog sticks and triggers rendering (used by ControllerRenderer)
 │   │   │   ├── sticky-header.vala               # sticky header for AppearancePage
 │   │   │   ├── tips-dialog.vala                 # tips and tricks dialog
 │   │   │   └── update-dialog.vala               # core package update dialog
