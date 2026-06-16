@@ -808,6 +808,7 @@ namespace Dstx {
                 type_row.set_subtitle(controller.controller_type.to_string());
                 type_row.set_activatable(false);
                 type_row.set_selectable(false);
+                type_row.add_css_class("property");
                 device_group.add(type_row);
 
                 string driver = (detailed != null && detailed.driver != "") ? detailed.driver : _("Not available");
@@ -816,6 +817,7 @@ namespace Dstx {
                 driver_row.set_subtitle(driver);
                 driver_row.set_activatable(false);
                 driver_row.set_selectable(false);
+                driver_row.add_css_class("property");
                 device_group.add(driver_row);
 
                 string serial = (detailed != null && detailed.serial != "") ? detailed.serial : _("Not available");
@@ -824,6 +826,7 @@ namespace Dstx {
                 serial_row.set_subtitle(serial);
                 serial_row.set_activatable(false);
                 serial_row.set_selectable(false);
+                serial_row.add_css_class("property");
                 device_group.add(serial_row);
 
                 var connection_row = new Adw.ActionRow();
@@ -831,6 +834,7 @@ namespace Dstx {
                 connection_row.set_subtitle(controller.is_bluetooth ? _("Bluetooth") : _("USB"));
                 connection_row.set_activatable(false);
                 connection_row.set_selectable(false);
+                connection_row.add_css_class("property");
                 device_group.add(connection_row);
 
                 var slot_row = new Adw.ActionRow();
@@ -839,6 +843,7 @@ namespace Dstx {
                 slot_row.set_activatable(false);
                 slot_row.set_selectable(false);
                 device_group.add(slot_row);
+                slot_row.add_css_class("property");
                 page.add(device_group);
 
                 if (detailed != null && detailed.get_input_nodes().length() > 0) {
@@ -849,6 +854,7 @@ namespace Dstx {
                         var node_row = new Adw.ActionRow();
                         node_row.set_title(_("Node %d").printf(i));
                         node_row.set_subtitle(node.name);
+                        node_row.add_css_class("property");
                         var path_label = new Gtk.Label(node.path);
                         path_label.add_css_class("caption");
                         path_label.add_css_class("dim-label");
