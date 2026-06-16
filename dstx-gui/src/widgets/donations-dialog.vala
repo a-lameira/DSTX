@@ -79,7 +79,7 @@ namespace Dstx.Widgets {
             donate_group.add(create_donation_row(
                 "GitHub Sponsors",
                 _("Support via GitHub"),
-                "https://github.com/sponsors/dstx",
+                "https://github.com/sponsors/a-lameira",
                 _("GitHub Sponsors"),
                 "github-symbolic"
             ));
