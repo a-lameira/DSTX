@@ -114,6 +114,6 @@ chmod 755 "$TEMP_DIR/DEBIAN/prerm"
 
 # Build the .deb package
 mkdir -p "$OUTPUT_DIR"
-dpkg-deb --build "$TEMP_DIR" "$OUTPUT_DIR/dstx-core_${VERSION}_amd64.deb"
+dpkg-deb --build "$TEMP_DIR" "$OUTPUT_DIR/dstx-${VERSION}_amd64.deb"
 
-echo "✅ Debian package built: $OUTPUT_DIR/dstx-core_${VERSION}_amd64.deb"
+echo "✅ Debian package built: $OUTPUT_DIR/dstx-${VERSION}_amd64.deb"
