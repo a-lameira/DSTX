@@ -165,7 +165,7 @@ namespace Dstx.Widgets {
             // ===== SECTION 1: THEME MODE =====
             var theme_mode_section = new Adw.PreferencesGroup();
             theme_mode_section.set_title(Dstx._("Theme Mode"));
-            theme_mode_section.set_description(Dstx._("Defines how the application theme is determined"));
+            theme_mode_section.set_description(Dstx._("System, light, dark, or something completely custom."));
 
             var theme_mode_row = new Adw.ComboRow();
             theme_mode_row.set_title(Dstx._("Mode"));
@@ -191,7 +191,7 @@ namespace Dstx.Widgets {
             // ===== SECTION 2: ACCENT COLOR (ONLY IN CUSTOM MODE) =====
             accent_group = new Adw.PreferencesGroup();
             accent_group.set_title(Dstx._("Accent Color"));
-            accent_group.set_description(Dstx._("Choose the color to be used on accent elements"));
+            accent_group.set_description(Dstx._("Highlight color for buttons, sliders, and switches."));
             accent_group.visible = false;
 
             accent_colors_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
@@ -212,8 +212,8 @@ namespace Dstx.Widgets {
 
             // ===== SECTION 3: DSTX BASE THEMES =====
             standard_themes_group = new Adw.PreferencesGroup();
-            standard_themes_group.set_title(Dstx._("DSTX Base Themes"));
-            standard_themes_group.set_description(Dstx._("Light and dark DSTX themes (independent of the system)"));
+            standard_themes_group.set_title(Dstx._("The Basics"));
+            standard_themes_group.set_description(Dstx._("DSTX's own light and dark themes."));
 
             standard_gallery = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 32);
             standard_gallery.halign = Gtk.Align.CENTER;
@@ -234,7 +234,7 @@ namespace Dstx.Widgets {
             // ===== SECTION 4: LIGHT THEMES =====
             light_themes_group = new Adw.PreferencesGroup();
             light_themes_group.set_title(Dstx._("Light Themes"));
-            light_themes_group.set_description(Dstx._("Themes with light background for well-lit environments"));
+            light_themes_group.set_description(Dstx._("The lighter side of DSTX. Perfect for well‑lit rooms."));
 
             light_gallery = new Gtk.Box(Gtk.Orientation.VERTICAL, 16);
             light_gallery.halign = Gtk.Align.CENTER;
@@ -255,7 +255,7 @@ namespace Dstx.Widgets {
             // ===== SECTION 5: DARK THEMES =====
             dark_themes_group = new Adw.PreferencesGroup();
             dark_themes_group.set_title(Dstx._("Dark Themes"));
-            dark_themes_group.set_description(Dstx._("Themes with dark background for low-light environments"));
+            dark_themes_group.set_description(Dstx._("Go dark. Easy on the eyes, heavy on the style."));
 
             dark_gallery = new Gtk.Box(Gtk.Orientation.VERTICAL, 16);
             dark_gallery.halign = Gtk.Align.CENTER;
@@ -276,7 +276,7 @@ namespace Dstx.Widgets {
             // ===== SECTION 6: USER THEMES =====
             user_themes_group = new Adw.PreferencesGroup();
             user_themes_group.set_title(Dstx._("Community Themes"));
-            user_themes_group.set_description(Dstx._("Custom themes submitted by users"));
+            user_themes_group.set_description(Dstx._("From the community, with love. Try out these user‑made themes."));
             user_themes_group.visible = false;  // Initially hidden, shown only if there are user themes
 
             user_gallery = new Gtk.Box(Gtk.Orientation.VERTICAL, 16);
