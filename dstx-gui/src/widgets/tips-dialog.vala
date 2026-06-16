@@ -145,7 +145,7 @@ namespace Dstx.Widgets {
             };
             string[] general_descs = {
                 _("DSTX is fresh out of the oven — expect a few rough edges. Found a bug? Please report it on GitHub. No warranty, but we'll do our best to fix it."),
-                _("DSTX runs as a system service. Close the window? Your LED colors and emulation keep working. After install, log out and back in once — that's it."),
+                _("DSTX runs as a system service. Close the window? No worries — your LED colors and emulation keep working. After install, log out and back in once — that's it."),
                 _("Connect up to 4 controllers at once. Each appears in the left panel with its own independent settings. Customize LED, rumble, deadzone per controller."),
                 _("DSTX creates a virtual Xbox 360 pad — works with almost any game. Two modes: <b>UINPUT</b> (full features, rumble included) and <b>UHID</b> (experimental, no rumble but can fix double inputs)."),
                 _("The classic, rock‑solid method. Creates virtual devices from user space. Full gamepad capabilities, great compatibility."),
