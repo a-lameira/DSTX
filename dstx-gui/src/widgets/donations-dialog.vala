@@ -60,7 +60,7 @@ namespace Dstx.Widgets {
             // Ko-fi (coffee icon)
             donate_group.add(create_donation_row(
                 "Ko-fi",
-                _("Support with coffee"),
+                _("Buy us a coffee"),
                 "https://ko-fi.com/alameira",
                 _("Donate on Ko-fi"),
                 "kofi-symbolic"
