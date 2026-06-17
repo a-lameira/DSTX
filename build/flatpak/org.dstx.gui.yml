@@ -33,12 +33,3 @@ modules:
     sources:
       - type: dir
         path: ../../dstx-gui
-    post-install:
-      - mkdir -p /app/share/locale
-      - cp -r /run/build/dstx-gui/po/*.mo /app/share/locale/ 2>/dev/null || true
-      - for lang in pt_BR es_ES fr de it ru; do
-          if [ -f /run/build/dstx-gui/po/$lang.mo ]; then
-            mkdir -p /app/share/locale/$lang/LC_MESSAGES;
-            cp /run/build/dstx-gui/po/$lang.mo /app/share/locale/$lang/LC_MESSAGES/dstx-gui.mo;
-          fi;
-        done
