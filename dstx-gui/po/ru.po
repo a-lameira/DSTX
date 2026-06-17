@@ -1,16 +1,16 @@
-# Russian translations for DSTX GUI.
+# Russian translations for dstx-gui package.
 # Copyright (C) 2026 André Lameira
 # This file is distributed under the GPLv3 license.
-# André Lameira <dstx@dstxapp.org>, 2026.
+# André <andre.lameira@dstxapp.org>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: dstx-gui 0.1.0\n"
-"Report-Msgid-Bugs-To: alameira@dstx.org\n"
-"POT-Creation-Date: 2026-06-03 14:58-0300\n"
-"PO-Revision-Date: 2026-06-03 14:58-0300\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-16 14:12-0300\n"
+"PO-Revision-Date: 2026-06-17 09:33-0300\n"
+"Last-Translator: André <andre.lameira@dstxapp.org>\n"
+"Language-Team: Russian <gnu@d07.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/core/locale-manager.vala:153 src/window.vala:448
+#: src/core/locale-manager.vala:153 src/window.vala:511
 msgid "Initializing DSTX..."
 msgstr ""
 
@@ -31,6 +31,7 @@ msgid "Clear all recent colors"
 msgstr ""
 
 #: src/widgets/color-picker-widget.vala:288
+#, c-format
 msgid "Recent Colors"
 msgstr ""
 
@@ -61,7 +62,7 @@ msgstr ""
 
 #: src/widgets/color-picker-dialog.vala:82 src/widgets/keybinds-dialog.vala:500
 #: src/widgets/update-dialog.vala:66 src/widgets/profiles-dialog.vala:287
-#: src/managers/settings-ui-builder.vala:1426 src/window.vala:396
+#: src/managers/settings-ui-builder.vala:1426 src/window.vala:459
 msgid "Cancel"
 msgstr ""
 
@@ -120,7 +121,7 @@ msgstr ""
 
 #: src/widgets/keybinds-dialog.vala:187 src/widgets/update-dialog.vala:139
 #: src/widgets/update-dialog.vala:149 src/widgets/profiles-dialog.vala:77
-#: src/managers/settings-ui-builder.vala:1440 src/window.vala:437
+#: src/managers/settings-ui-builder.vala:1440 src/window.vala:500
 msgid "Close"
 msgstr ""
 
@@ -152,7 +153,7 @@ msgstr ""
 msgid "Face Buttons"
 msgstr ""
 
-#: src/widgets/keybinds-dialog.vala:290 src/widgets/appearance-page.vala:170
+#: src/widgets/keybinds-dialog.vala:290 src/widgets/appearance-page.vala:172
 msgid "System"
 msgstr ""
 
@@ -205,8 +206,8 @@ msgid "Info"
 msgstr ""
 
 #: src/widgets/keybinds-dialog.vala:526 src/widgets/keybinds-dialog.vala:533
-#: src/widgets/profiles-dialog.vala:318 src/widgets/donations-dialog.vala:132
-#: src/window.vala:814
+#: src/widgets/profiles-dialog.vala:318 src/widgets/donations-dialog.vala:136
+#: src/window.vala:887
 msgid "OK"
 msgstr ""
 
@@ -223,108 +224,94 @@ msgid "General"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:136
-msgid "Initial development"
+msgid "Still young"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:137
-msgid "DSTX Service"
+msgid "Runs in the background"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:138
-msgid "Multiple Controllers"
+msgid "Up to 4 players"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:139
-msgid "Emulation Modes"
+msgid "Two emulation engines"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:142
-msgid "Gyroscope and Accelerometer"
+msgid "Gyro? Not yet"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:143
-msgid "Detailed Information"
+msgid "Controller info in one click"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:144
-msgid "Terminal Version"
+msgid "Terminal power"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:147
 msgid ""
-"This software is in its initial stage of development. This means it has been "
-"little tested. Expect bugs and issues, and if you find a bug, please report "
-"it in the 'Issues' section of the repository so that developers can become "
-"aware of the problem. Remember that this software provides absolutely no "
-"warranty, and any issues arising from its use are the sole responsibility of "
-"the user."
+"DSTX is fresh out of the oven — expect a few rough edges. Found a bug? "
+"Please report it on GitHub. No warranty, but we'll do our best to fix it."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:148
 msgid ""
-"DSTX is a system service. This graphical interface is just a front-end to "
-"this service. This means that if you close this window, your LED and "
-"emulation settings will continue to work. Note that after installing the "
-"program, you need to restart your session (logout/login or restart) for the "
-"service settings to become valid."
+"DSTX runs as a system service. Close the window? No worries — your LED "
+"colors and emulation keep working. After install, log out and back in once — "
+"that's it."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:149
 msgid ""
-"You can connect up to 4 controllers simultaneously. Each will appear in the "
-"left sidebar. Each controller has its own independent settings. Change LED "
-"mode, rumble and deadzone individually."
+"Connect up to 4 controllers at once. Each appears in the left panel with its "
+"own independent settings. Customize LED, rumble, deadzone per controller."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:150
 msgid ""
-"DSTX creates a virtual Xbox 360 device that is recognised by the vast "
-"majority of games, enabling unsupported controllers to work in games with "
-"Xbox (Xinput) controller support. In doing so, the program turns a "
-"disadvantage (lack of native support) into a possible advantage (control "
-"over all aspects of the gamepad exposed to the game). DSTX offers two "
-"emulation modes, UINPUT and UHID."
+"DSTX creates a virtual Xbox 360 pad — works with almost any game. Two modes: "
+"<b>UINPUT</b> (full features, rumble included) and <b>UHID</b> "
+"(experimental, no rumble but can fix double inputs)."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:151
 msgid ""
-"UINPUT is a Linux kernel module that allows the creation of virtual devices "
-"from user space. It is the traditional and tested method for emulating "
-"virtual controllers, enabling support for all the capabilities of a gamepad."
+"The classic, rock‑solid method. Creates virtual devices from user space. "
+"Full gamepad capabilities, great compatibility."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:152
 msgid ""
-"UHID is a relatively new Linux kernel module that allows the creation of HID "
-"devices from user space. Currently, the UHID mode implementation is "
-"experimental and is limited to input events (buttons, axes), with no rumble "
-"support. In some scenarios, using UHID can mitigate double input issues."
+"Newer kernel module, still experimental. Only handles buttons and axes (no "
+"rumble). Can help if you're experiencing double inputs with UINPUT."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:153
 msgid ""
-"Gyroscope emulation, while possible, introduces a series of technical "
-"complexities that are not planned for the initial version of the program. At "
-"present, DSTX does not support gyroscope emulation."
+"Gyroscope emulation is technically possible but complex — not planned for "
+"now. Maybe in a future release!"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:154
 msgid ""
-"Click the information button (ⓘ) on the top bar to see technical details of "
-"the selected controller."
+"Click the <b>ⓘ</b> button in the top bar to see technical details of your "
+"controller: driver, serial, input nodes."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:155
 msgid ""
-"DSTX can also be used from the terminal with the command <tt>dstx</tt>. A "
-"terminal graphical interface (TUI) is provided."
+"Prefer the command line? Run <tt>dstx</tt> in your terminal — a full TUI "
+"(text interface) is included."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:157
 msgid "General Tips"
 msgstr ""
 
-#: src/widgets/tips-dialog.vala:161 src/window.vala:155
+#: src/widgets/tips-dialog.vala:161 src/window.vala:158
 msgid "Profiles"
 msgstr ""
 
@@ -345,184 +332,165 @@ msgid "Stick Sensitivity"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:167 src/widgets/tips-dialog.vala:310
-#: src/managers/settings-ui-builder.vala:119
 #: src/managers/settings-ui-builder.vala:1092
 msgid "Triggers"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:168 src/widgets/tips-dialog.vala:311
-#: src/managers/settings-ui-builder.vala:120
 #: src/managers/settings-ui-builder.vala:1111
 msgid "Buttons"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:171
 msgid ""
-"Using the profile dialog, you can create, delete, save, and load "
-"configuration profiles. If the 'auto-save' option is enabled, any changes to "
-"the settings will be automatically saved to the current profile."
+"Create, save, load, or delete profiles. Turn on <b>auto‑save</b> and every "
+"change is automatically stored in the current profile."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:172
 msgid ""
-"Gamepad settings apply to the emulated device, not the real controller. "
-"Emulation must be active for the settings to be available and take effect."
+"Only LED talks directly to your hardware. All other settings apply to the "
+"emulated Xbox controller. Keep emulation ON for them to work."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:173
 msgid ""
-"You can choose the method for creating the virtual Xbox 360 device (UINPUT "
-"or UHID). Note that UHID is experimental and does not support rumble."
+"You choose how the virtual Xbox pad is created. UINPUT is stable and "
+"feature‑complete (rumble included). UHID is experimental (no rumble) but can "
+"help with double‑input weirdness."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:174
 msgid ""
-"In UINPUT emulation mode, you can enable or disable the rumble feature and "
-"set the intensity (gain) of vibration effects (0 to 100%)."
+"In UINPUT mode, you can enable/disable rumble and adjust vibration intensity "
+"(gain) from 0 to 100%."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:175
 msgid ""
-"For the analog sticks, there are settings for deadzone, sensitivity and Y-"
-"axis inversion."
+"Fine‑tune deadzone (how far you must push before it reacts), sensitivity "
+"presets, and invert Y‑axis for left and right sticks independently."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:176
 msgid ""
-"8 sensitivity modes are available for the analog sticks, each with a "
-"different response curve:\n"
-"• <b>Default</b> – linear 1:1 curve, natural controller response;\n"
-"• <b>Precision</b> – logarithmic curve, smooths movements in the center, "
-"allowing greater control over small displacements;\n"
-"• <b>Rapid</b> – exponential curve, accentuates movements, allowing quick "
-"responses with small displacements, favouring shorter reaction time;\n"
-"• <b>Smooth</b> – 'S' curve, starts smooth, accelerates in the middle, "
-"smooths at the end;\n"
-"• <b>Aggressive</b> – inverted 'S' curve, responds aggressively at the "
-"beginning and smooths at the end, favouring quick reflexes;\n"
-"• <b>Sniper</b> – extreme logarithmic curve, millimetric control in the "
-"centre with a very smooth response;\n"
-"• <b>Racing</b> – reduced linear curve, maintains proportionality, but with "
-"a longer travel;\n"
-"• <b>FPS</b> – attenuated inverted 'S' curve, precision in the centre and "
-"fast response at the edges."
+"8 curves available:\n"
+"• <b>Default</b> – linear, natural\n"
+"• <b>Precision</b> – smooth in the center for tiny moves\n"
+"• <b>Rapid</b> – fast response, great for reflexes\n"
+"• <b>Smooth</b> – S‑curve: gentle start, faster middle\n"
+"• <b>Aggressive</b> – inverted S, quick initial snap\n"
+"• <b>Sniper</b> – ultra‑smooth for aiming\n"
+"• <b>Racing</b> – linear but longer travel\n"
+"• <b>FPS</b> – balanced precision + speed"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:177
 msgid ""
-"DSTX offers a feature to switch the trigger mode from analog to digital. The "
-"Xbox 360 controller has only analog triggers, and most games expect analog "
-"triggers and do not recognize digital triggers. However, in some niche "
-"cases, it is useful to output digital triggers instead of analog ones."
+"Flip L2/R2 from analog to digital (on/off). Most games expect analog, but in "
+"some niche cases digital can be useful."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:178
 msgid ""
-"For the buttons there is a Debounce option (noise filtering) to attenuate "
-"double input originating from the hardware."
+"Debounce filters out electrical noise, reducing accidental double presses "
+"from the hardware."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:180
 msgid "Settings"
 msgstr ""
 
-#: src/widgets/tips-dialog.vala:202 src/window.vala:458
+#: src/widgets/tips-dialog.vala:202 src/window.vala:525
 msgid "Controllers"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:215
-msgid "General connection Issues"
+msgid "Connection hiccups"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:216
-msgid "Detection by games"
+msgid "Game not seeing the controller?"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:217
-msgid "Steam Input"
+msgid "Steam Input conflict"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:220
 msgid ""
-"This program supports USB and Bluetooth connections. Generally, the "
-"connection is successful most of the time. However, in some scenarios the "
-"controllers may not be connected correctly by the program. In these cases, "
-"we recommend that the controllers be disconnected and reconnected. Some "
-"attempts may be necessary."
+"USB and Bluetooth usually work great. If a controller isn't detected, try "
+"disconnecting and reconnecting it a couple of times."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:221
 msgid ""
-"In most cases, games automatically detect the virtual controller created by "
-"DSTX. If a game fails to detect the controller, restarting the game usually "
-"resolves the issue."
+"Most games auto‑detect the virtual Xbox pad. If one doesn't, restart the "
+"game — that often fixes it."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:222
 msgid ""
-"The DSTX works perfectly with Steam games. Steam even detects the virtual "
-"controller as a native controller. However, if 'Steam Input' is enabled, "
-"there may be unwanted interference. To avoid issues, we recommend disabling "
-"Steam Input when using the DSTX with Steam games, and vice versa."
+"DSTX works great with Steam games, but if <b>Steam Input</b> is on, it can "
+"interfere. Disable Steam Input when using DSTX, or disable DSTX emulation "
+"when using Steam Input."
 msgstr ""
 
-#: src/widgets/tips-dialog.vala:224 src/window.vala:763
+#: src/widgets/tips-dialog.vala:224 src/window.vala:833
 msgid "Connection"
 msgstr ""
 
-#: src/widgets/tips-dialog.vala:228 src/widgets/tips-dialog.vala:248
-msgid "USB connections"
+#: src/widgets/tips-dialog.vala:228
+msgid "USB quirks"
 msgstr ""
 
-#: src/widgets/tips-dialog.vala:229 src/widgets/tips-dialog.vala:249
+#: src/widgets/tips-dialog.vala:229
 msgid "Bluetooth connections"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:232
 msgid ""
-"The DualShock 4 controller has known bugs caused by the kernel driver when "
-"connected via USB. Depending on the context, this can result in erratic "
-"behavior of the LEDs and rumble function, as well as double-input issues "
-"when connected via USB."
+"The kernel driver has some bugs over USB — LEDs and rumble may act weird, "
+"and double inputs can happen — it's a known issue."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:233
 msgid ""
-"The DualShock 4 controller performs more stably and predictably when "
-"connected to DSTX via Bluetooth. At this time, we recommend using this "
-"connection method to minimize unwanted behavior."
+"DualShock 4 behaves much better over Bluetooth. We recommend using Bluetooth "
+"for the best experience."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:239
-msgid "Specific Issues"
+msgid "Solid performer"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:242
 msgid ""
-"The DualSense controller shows consistent behaviour between USB and "
-"Bluetooth connection modes. Generally speaking, it is the controller that "
-"has worked most consistently and stably with DSTX so far. However, in some "
-"cases, the controller may not connect properly to the program via Bluetooth, "
-"particularly with regard to the LED functionality. If the connection fails, "
-"simply disconnect and reconnect the controller."
+"DualSense is the most stable controller so far — USB and Bluetooth both work "
+"well. On rare occasions, Bluetooth LED control may fail; just disconnect and "
+"reconnect."
+msgstr ""
+
+#: src/widgets/tips-dialog.vala:248
+msgid "USB works best"
+msgstr ""
+
+#: src/widgets/tips-dialog.vala:249
+msgid "Bluetooth quirks"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:252
 msgid ""
-"The Nintendo Switch Pro Controller generally works best when connected via "
-"USB. A known issue is that when you unplug the USB cable from the "
-"controller, it automatically reconnects via Bluetooth. In this case, "
-"disconnect the controller through your system’s Bluetooth device manager."
+"Best experience is over USB. One catch: unplugging USB automatically "
+"reconnects via Bluetooth. If that happens, manually disconnect the "
+"controller in your system's Bluetooth settings."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:253
 msgid ""
-"The Nintendo Switch Pro controller has some bugs related to Bluetooth "
-"connections, notably an offset in the X and Y values of the analog axes. "
-"Further testing is needed to determine the exact cause of the bug, but for "
-"now, the program applies empirically determined corrections to these "
-"offsets. If you are experiencing issues with incorrect analog stick values "
-"over Bluetooth connections, please file a bug report."
+"Over Bluetooth, analog sticks may show a slight offset (Kernel-related). "
+"DSTX applies empirical corrections, but if you still see wrong values, "
+"please file a bug report."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:255
@@ -530,7 +498,7 @@ msgid "Nintendo Switch Pro"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:290
-msgid "LED System"
+msgid "Light it up"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:291
@@ -551,38 +519,32 @@ msgstr ""
 
 #: src/widgets/tips-dialog.vala:297
 msgid ""
-"For DualShock 4 and DualSense controllers, DSTX offers a complete LED "
-"configuration system. Two modes are available: Static and Dynamic."
+"Only for DualShock 4 and DualSense. Two modes: Static (fixed color) and "
+"Dynamic (moving effects)."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:298
 msgid ""
-"In static mode, you can choose a fixed colour for your controller's LED. For "
-"efficiency, the program writes the selected colour to the LED only once on "
-"the controller. This means that if another program (Steam, OpenRGB, the "
-"kernel driver, etc.) also writes an LED colour to your controller, it will "
-"overwrite the configured colour. To avoid this, the 'Reapply LED' feature is "
-"offered, which monitors these third-party write events and reapplies the "
-"colour configured in DSTX on demand."
+"Pick any color. The LED is written only once, so other apps (Steam, OpenRGB) "
+"may overwrite it. Turn on <b>Reapply LED</b> to fight back and keep your "
+"color."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:299
 msgid ""
-"In dynamic mode, you can choose from eight available effects. Depending on "
-"the selected effect, you can configure the base colour and speed. Note that "
-"using effects at a high speed can affect battery life on Bluetooth "
-"connections."
+"Choose from 8 effects. Depending on the effect, you can set a base color and "
+"speed. High speed = more battery drain over Bluetooth."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:300
 msgid ""
-"The brightness adjustment controls the intensity of the brightness for both "
-"operating modes of the LED system. For dynamic mode, keep in mind that the "
-"lower the brightness, the lower the resolution of the effects."
+"Brightness affects both static and dynamic modes. Lower brightness in "
+"dynamic mode reduces effect resolution."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:301
-msgid "The DualSense has player indicator LEDs that can be set from 0 to 4."
+msgid ""
+"DualSense has small player indicator LEDs (0–4). Set which number lights up."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:303
@@ -597,32 +559,30 @@ msgstr ""
 msgid "Rainbow and Wave"
 msgstr ""
 
-#: src/widgets/tips-dialog.vala:309 src/managers/settings-ui-builder.vala:118
+#: src/widgets/tips-dialog.vala:309
 msgid "Battery"
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:314
-msgid "Oscillating effects of the base colour with speed adjustment."
+msgid "Oscillate your base color — speed adjustable."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:315
 msgid ""
-"These effects do not use the base colour. Rainbow goes through the entire "
-"colour spectrum, and Wave alternates between cyan, yellow and magenta tones."
+"Rainbow cycles through the spectrum. Wave alternates between cyan, yellow, "
+"and magenta — no base color used."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:316
-msgid ""
-"The LED shows the battery level: green for charged, yellow for medium, red "
-"for low."
+msgid "LED shows battery level: green = full, yellow = medium, red = low."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:317
-msgid "The LED changes colour according to the intensity of trigger pressure."
+msgid "LED changes color based on how hard you pull L2/R2."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:318
-msgid "The LED changes colour according to the buttons pressed."
+msgid "Color reacts to button presses."
 msgstr ""
 
 #: src/widgets/tips-dialog.vala:320
@@ -673,81 +633,89 @@ msgstr ""
 msgid "Update failed. Please check terminal for details."
 msgstr ""
 
-#: src/widgets/appearance-page.vala:89
+#: src/widgets/appearance-page.vala:91
 msgid "Appearance"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:97 src/widgets/appearance-page.vala:313
-#: src/widgets/appearance-page.vala:335
+#: src/widgets/appearance-page.vala:99 src/widgets/appearance-page.vala:337
+#: src/widgets/appearance-page.vala:359
 msgid "Light"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:165
+#: src/widgets/appearance-page.vala:167
 msgid "Theme Mode"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:166
-msgid "Defines how the application theme is determined"
+#: src/widgets/appearance-page.vala:168
+msgid "System, light, dark, or something completely custom."
 msgstr ""
 
-#: src/widgets/appearance-page.vala:169
+#: src/widgets/appearance-page.vala:171
 msgid "Mode"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:170
+#: src/widgets/appearance-page.vala:172
 msgid "Light (System)"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:170
+#: src/widgets/appearance-page.vala:172
 msgid "Dark (System)"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:170
+#: src/widgets/appearance-page.vala:172
 msgid "Custom (DSTX)"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:191
+#: src/widgets/appearance-page.vala:193
 msgid "Accent Color"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:192
-msgid "Choose the color to be used on accent elements"
+#: src/widgets/appearance-page.vala:194
+msgid "Highlight color for buttons, sliders, and switches."
 msgstr ""
 
-#: src/widgets/appearance-page.vala:213
-msgid "DSTX Base Themes"
+#: src/widgets/appearance-page.vala:215
+msgid "The Basics"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:214
-msgid "Light and dark DSTX themes (independent of the system)"
+#: src/widgets/appearance-page.vala:216
+msgid "DSTX's own light and dark themes."
 msgstr ""
 
-#: src/widgets/appearance-page.vala:234
+#: src/widgets/appearance-page.vala:236
 msgid "Light Themes"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:235
-msgid "Themes with light background for well-lit environments"
+#: src/widgets/appearance-page.vala:237
+msgid "The lighter side of DSTX. Perfect for well‑lit rooms."
 msgstr ""
 
-#: src/widgets/appearance-page.vala:255
+#: src/widgets/appearance-page.vala:257
 msgid "Dark Themes"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:256
-msgid "Themes with dark background for low-light environments"
+#: src/widgets/appearance-page.vala:258
+msgid "Go dark. Easy on the eyes, heavy on the style."
 msgstr ""
 
-#: src/widgets/appearance-page.vala:331
+#: src/widgets/appearance-page.vala:278
+msgid "Community Themes"
+msgstr ""
+
+#: src/widgets/appearance-page.vala:279
+msgid "From the community, with love. Try out these user‑made themes."
+msgstr ""
+
+#: src/widgets/appearance-page.vala:355
 msgid "Dark"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:744
+#: src/widgets/appearance-page.vala:789
 #, c-format
 msgid "Error removing hover: %s"
 msgstr ""
 
-#: src/widgets/appearance-page.vala:889
+#: src/widgets/appearance-page.vala:934
 #, c-format
 msgid "Error applying theme border: %s"
 msgstr ""
@@ -880,8 +848,8 @@ msgstr ""
 
 #: src/widgets/donations-dialog.vala:53
 msgid ""
-"DSTX is an open source and free software project. Your donation helps keep "
-"development active and improves the software."
+"DSTX runs on love and late nights. Any donation — big or small — helps pay "
+"the bills and fuel development."
 msgstr ""
 
 #: src/widgets/donations-dialog.vala:58
@@ -889,170 +857,126 @@ msgid "Donation Platforms"
 msgstr ""
 
 #: src/widgets/donations-dialog.vala:63
-msgid "Support with coffee ☕"
+msgid "Buy us a coffee"
 msgstr ""
 
 #: src/widgets/donations-dialog.vala:65
 msgid "Donate on Ko-fi"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:71
+#: src/widgets/donations-dialog.vala:72
 msgid "One-time or recurring donation"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:73
+#: src/widgets/donations-dialog.vala:74
 msgid "Donate on PayPal"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:79
+#: src/widgets/donations-dialog.vala:81
 msgid "Support via GitHub"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:81
+#: src/widgets/donations-dialog.vala:83
 msgid "GitHub Sponsors"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:90
-msgid "Thank you for considering supporting the project! 💜"
+#: src/widgets/donations-dialog.vala:93
+msgid "Thank you for being part of this journey! 💜"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:117
+#: src/widgets/donations-dialog.vala:121
 msgid "PIX (Brazil)"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:118
+#: src/widgets/donations-dialog.vala:122
 msgid "Key: dstx@dstxapp.org"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:120
+#: src/widgets/donations-dialog.vala:124
 msgid "Copy Key"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:129
+#: src/widgets/donations-dialog.vala:133
 msgid "Key copied!"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:130
+#: src/widgets/donations-dialog.vala:134
 msgid "The PIX key has been copied to the clipboard."
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:155 src/widgets/donations-dialog.vala:163
+#: src/widgets/donations-dialog.vala:161 src/widgets/donations-dialog.vala:169
 #, c-format
 msgid "Error opening link: %s"
 msgstr ""
 
-#: src/widgets/donations-dialog.vala:168
+#: src/widgets/donations-dialog.vala:174
 #, c-format
 msgid "Error creating launcher: %s"
 msgstr ""
 
-#: src/managers/app-state-manager.vala:80
+#: src/managers/app-state-manager.vala:110
 msgid "Checking system components..."
 msgstr ""
 
-#: src/managers/app-state-manager.vala:84
+#: src/managers/app-state-manager.vala:114
 msgid "System service not installed"
 msgstr ""
 
-#: src/managers/app-state-manager.vala:94
+#: src/managers/app-state-manager.vala:122
+msgid "Checking core installation..."
+msgstr ""
+
+#: src/managers/app-state-manager.vala:126
+msgid "Core package not installed"
+msgstr ""
+
+#: src/managers/app-state-manager.vala:136
 msgid "Checking daemon version..."
 msgstr ""
 
-#: src/managers/app-state-manager.vala:118
+#: src/managers/app-state-manager.vala:160
 msgid "Connecting to D-Bus..."
 msgstr ""
 
-#: src/managers/app-state-manager.vala:125
+#: src/managers/app-state-manager.vala:167
 msgid "D-Bus connection failed"
 msgstr ""
 
-#: src/managers/app-state-manager.vala:133
+#: src/managers/app-state-manager.vala:175
 msgid "Checking daemon status..."
 msgstr ""
 
-#: src/managers/app-state-manager.vala:143 src/window.vala:450
+#: src/managers/app-state-manager.vala:185 src/window.vala:513
 msgid "Daemon is not running"
 msgstr ""
 
-#: src/managers/app-state-manager.vala:162
+#: src/managers/app-state-manager.vala:204
 #, c-format
 msgid "Checking controllers... (attempt %d/%d)"
 msgstr ""
 
-#: src/managers/app-state-manager.vala:176
+#: src/managers/app-state-manager.vala:218
 #, c-format
 msgid "Daemon not responding, retrying... (attempt %d/%d)"
 msgstr ""
 
-#: src/managers/app-state-manager.vala:190
+#: src/managers/app-state-manager.vala:232
 #, c-format
 msgid "D-Bus bridge not ready, retrying... (attempt %d/%d)"
 msgstr ""
 
-#: src/managers/app-state-manager.vala:214
+#: src/managers/app-state-manager.vala:256
 #, c-format
 msgid "Error, retrying... (attempt %d/%d)"
 msgstr ""
 
-#: src/managers/app-state-manager.vala:270
+#: src/managers/app-state-manager.vala:312
 msgid "Service detected, checking controllers..."
 msgstr ""
 
 #: src/managers/controller-manager.vala:514
 #, c-format
 msgid "CONTROLLER %d"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:102
-msgid "Default"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:103
-msgid "Precision"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:104
-msgid "Rapid"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:105
-msgid "Smooth"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:106
-msgid "Aggressive"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:107
-msgid "Sniper"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:108
-msgid "Racing"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:109
-msgid "FPS"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:113
-msgid "Breathing"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:114
-msgid "Rainbow"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:115
-msgid "Pulse"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:116
-msgid "Blink"
-msgstr ""
-
-#: src/managers/settings-ui-builder.vala:117
-msgid "Wave"
 msgstr ""
 
 #: src/managers/settings-ui-builder.vala:138
@@ -1213,7 +1137,7 @@ msgstr ""
 msgid "Stop"
 msgstr ""
 
-#: src/managers/settings-ui-builder.vala:1310 src/window.vala:452
+#: src/managers/settings-ui-builder.vala:1310 src/window.vala:515
 msgid "Start Service"
 msgstr ""
 
@@ -1306,214 +1230,226 @@ msgstr ""
 msgid "Error setting auto-save: %s"
 msgstr ""
 
-#: src/window.vala:159
+#: src/window.vala:162
 msgid "Manage profiles"
 msgstr ""
 
-#: src/window.vala:174
+#: src/window.vala:177
 msgid "Keybinds"
 msgstr ""
 
-#: src/window.vala:178
+#: src/window.vala:181
 msgid "Configure button mappings"
 msgstr ""
 
-#: src/window.vala:183
+#: src/window.vala:186
 msgid "No controller selected"
 msgstr ""
 
-#: src/window.vala:338
+#: src/window.vala:341
 msgid "Preferences"
 msgstr ""
 
-#: src/window.vala:339
+#: src/window.vala:342
 msgid "Tips"
 msgstr ""
 
-#: src/window.vala:340
+#: src/window.vala:343
 msgid "Donate ❤️"
 msgstr ""
 
-#: src/window.vala:344
+#: src/window.vala:347
 msgid "About DSTX"
 msgstr ""
 
-#: src/window.vala:345
+#: src/window.vala:348
 msgid "Quit"
 msgstr ""
 
-#: src/window.vala:365
+#: src/window.vala:368
 msgid "Starting service..."
 msgstr ""
 
-#: src/window.vala:369
+#: src/window.vala:372
 msgid "Service started, reconnecting..."
 msgstr ""
 
-#: src/window.vala:373
+#: src/window.vala:376
 #, c-format
 msgid "Failed to start service. Exit code: %d"
 msgstr ""
 
-#: src/window.vala:377
+#: src/window.vala:380
 #, c-format
 msgid "Error starting service: %s"
 msgstr ""
 
-#: src/window.vala:391
-msgid "DSTX System Service Required"
-msgstr ""
-
-#: src/window.vala:392
-msgid ""
-"Click 'Install' to set up the DSTX system service (dstx-daemon).\n"
-"\n"
-"This operation requires administrative privileges.\n"
-"\n"
-"If you cancel, you can install later using the button on this screen."
+#: src/window.vala:395
+msgid "DSTX Core Package Required"
 msgstr ""
 
 #: src/window.vala:397
+msgid ""
+"The DSTX core service is not installed on your system.\n"
+"\n"
+msgstr ""
+
+#: src/window.vala:420
+msgid "Go to Downloads Page"
+msgstr ""
+
+#: src/window.vala:435 src/window.vala:440
+#, c-format
+msgid "Could not open browser. Please visit %s"
+msgstr ""
+
+#: src/window.vala:454
+msgid "DSTX System Service Required"
+msgstr ""
+
+#: src/window.vala:455
+msgid ""
+"Click 'Install' to set up the DSTX system service (dstx-daemon).\n"
+"\n"
+msgstr ""
+
+#: src/window.vala:460
 msgid "Install"
 msgstr ""
 
-#: src/window.vala:411
+#: src/window.vala:474
 msgid "Installing DSTX Service"
 msgstr ""
 
-#: src/window.vala:412
+#: src/window.vala:475
 msgid ""
 "Please wait while the DSTX service is being installed...\n"
 "\n"
 "This may take a few seconds."
 msgstr ""
 
-#: src/window.vala:432
+#: src/window.vala:495
 msgid "Installation Complete"
 msgstr ""
 
-#: src/window.vala:433
+#: src/window.vala:496
 msgid ""
 "The DSTX system service has been installed successfully.\n"
 "\n"
-"If this is your first installation, you will need to restart your user "
-"session in order to connect to the service.\n"
-"\n"
-"You can now try to connect your controller."
 msgstr ""
 
-#: src/window.vala:439
+#: src/window.vala:502
 msgid "✓ Service installed successfully"
 msgstr ""
 
-#: src/window.vala:442
+#: src/window.vala:505
 msgid "Installation failed. Check terminal for details."
 msgstr ""
 
-#: src/window.vala:447 src/window.vala:468
+#: src/window.vala:510 src/window.vala:535
 msgid "DSTX"
 msgstr ""
 
-#: src/window.vala:449
+#: src/window.vala:512
 msgid "Checking service..."
 msgstr ""
 
-#: src/window.vala:451
+#: src/window.vala:514
 msgid "Start the DSTX service to continue"
 msgstr ""
 
-#: src/window.vala:453
+#: src/window.vala:516
 msgid "No Controller Found"
 msgstr ""
 
-#: src/window.vala:454
+#: src/window.vala:517
 msgid "Connect a controller to start"
 msgstr ""
 
-#: src/window.vala:455
+#: src/window.vala:521
 msgid "DSTX Service Not Installed"
 msgstr ""
 
-#: src/window.vala:456
+#: src/window.vala:522
 msgid "Install the DSTX system service to use controllers."
 msgstr ""
 
-#: src/window.vala:457
+#: src/window.vala:523
 msgid "Install Service"
 msgstr ""
 
-#: src/window.vala:459
+#: src/window.vala:526
 msgid "Hide controllers list"
 msgstr ""
 
-#: src/window.vala:460
+#: src/window.vala:527
 msgid "Show controllers list"
 msgstr ""
 
-#: src/window.vala:461
+#: src/window.vala:528
 msgid "Close settings"
 msgstr ""
 
-#: src/window.vala:462
+#: src/window.vala:529
 msgid "Controller information"
 msgstr ""
 
-#: src/window.vala:463 src/window.vala:464 src/window.vala:465
-#: src/window.vala:466 src/window.vala:467
+#: src/window.vala:530 src/window.vala:531 src/window.vala:532
+#: src/window.vala:533 src/window.vala:534
 msgid "Menu"
 msgstr ""
 
-#: src/window.vala:586 src/window.vala:600 src/window.vala:764
+#: src/window.vala:653 src/window.vala:667 src/window.vala:834
 msgid "Bluetooth"
 msgstr ""
 
-#: src/window.vala:586 src/window.vala:600 src/window.vala:764
+#: src/window.vala:653 src/window.vala:667 src/window.vala:834
 msgid "USB"
 msgstr ""
 
-#: src/window.vala:722
+#: src/window.vala:789
 #, c-format
 msgid "Controller Information %d"
 msgstr ""
 
-#: src/window.vala:724
+#: src/window.vala:791
 msgid "Technical Details"
 msgstr ""
 
-#: src/window.vala:737
+#: src/window.vala:804
 msgid "Device Information"
 msgstr ""
 
-#: src/window.vala:740
+#: src/window.vala:807
 msgid "Type"
 msgstr ""
 
-#: src/window.vala:746 src/window.vala:754
+#: src/window.vala:814 src/window.vala:823
 msgid "Not available"
 msgstr ""
 
-#: src/window.vala:748
+#: src/window.vala:816
 msgid "Driver"
 msgstr ""
 
-#: src/window.vala:756
+#: src/window.vala:825
 msgid "Address"
 msgstr ""
 
-#: src/window.vala:770
+#: src/window.vala:841
 msgid "Slot"
 msgstr ""
 
-#: src/window.vala:779
+#: src/window.vala:851
 msgid "Input Nodes"
 msgstr ""
 
-#: src/window.vala:783
+#: src/window.vala:855
 #, c-format
 msgid "Node %d"
 msgstr ""
 
-#: src/window.vala:803
+#: src/window.vala:876
 msgid "Error loading information"
 msgstr ""
 
