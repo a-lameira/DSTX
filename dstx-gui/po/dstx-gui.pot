@@ -1,6 +1,6 @@
 # .pot file for DSTX GUI. Contains all translatable text strings
 # Copyright (C) 2026 André Lameira
-# This file is distributed under the same license as the dstx-gui package.
+# This file is distributed under the GPLv3 license.
 # André <andre.lameira@dstxapp.org>, 2026.
 #
 #, fuzzy
