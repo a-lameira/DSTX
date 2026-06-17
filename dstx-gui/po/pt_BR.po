@@ -21,7 +21,7 @@ msgstr ""
 
 #: src/core/locale-manager.vala:153 src/window.vala:511
 msgid "Initializing DSTX..."
-msgstr ""
+msgstr "Inicializando DSTX..."
 
 #: src/widgets/color-picker-widget.vala:149
 msgid "#RRGGBB"
@@ -29,55 +29,55 @@ msgstr ""
 
 #: src/widgets/color-picker-widget.vala:196
 msgid "Clear all recent colors"
-msgstr ""
+msgstr "Descartar as cores recentes"
 
 #: src/widgets/color-picker-widget.vala:288
 #, c-format
 msgid "Recent Colors"
-msgstr ""
+msgstr "Cores Recentes"
 
 #: src/widgets/color-picker-widget.vala:310
 msgid "Red"
-msgstr ""
+msgstr "Vermelho"
 
 #: src/widgets/color-picker-widget.vala:311
 msgid "Green"
-msgstr ""
+msgstr "Verde"
 
 #: src/widgets/color-picker-widget.vala:312
 msgid "Blue"
-msgstr ""
+msgstr "Azul"
 
 #: src/widgets/color-picker-widget.vala:323
 msgid "Saturation"
-msgstr ""
+msgstr "Saturação"
 
 #: src/widgets/color-picker-widget.vala:379
 msgid "No recent colors"
-msgstr ""
+msgstr "Não há cores recentes"
 
 #: src/widgets/color-picker-dialog.vala:50
 #: src/widgets/color-picker-dialog.vala:77
 msgid "Select Color"
-msgstr ""
+msgstr "Selecionar Cor"
 
 #: src/widgets/color-picker-dialog.vala:82 src/widgets/keybinds-dialog.vala:500
 #: src/widgets/update-dialog.vala:66 src/widgets/profiles-dialog.vala:287
 #: src/managers/settings-ui-builder.vala:1426 src/window.vala:459
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: src/widgets/color-picker-dialog.vala:86
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: src/widgets/keybinds-dialog.vala:74
 msgid "None"
-msgstr ""
+msgstr "Nenhum"
 
 #: src/widgets/keybinds-dialog.vala:77
 msgid "Select"
-msgstr ""
+msgstr "Selecionar"
 
 #: src/widgets/keybinds-dialog.vala:77
 #: src/managers/settings-ui-builder.vala:1324
@@ -114,33 +114,33 @@ msgstr ""
 
 #: src/widgets/keybinds-dialog.vala:84
 msgid "Keybinds Configuration"
-msgstr ""
+msgstr "Configuração de Keybinds"
 
 #: src/widgets/keybinds-dialog.vala:180
 msgid "Reset to Default"
-msgstr ""
+msgstr "Restaurar o Padrão"
 
 #: src/widgets/keybinds-dialog.vala:187 src/widgets/update-dialog.vala:139
 #: src/widgets/update-dialog.vala:149 src/widgets/profiles-dialog.vala:77
 #: src/managers/settings-ui-builder.vala:1440 src/window.vala:500
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: src/widgets/keybinds-dialog.vala:210
 msgid "Xbox Layout"
-msgstr ""
+msgstr "Layout Xbox"
 
 #: src/widgets/keybinds-dialog.vala:211
 msgid "Restore Xbox button layout (A/B/X/Y identity)"
-msgstr ""
+msgstr "Restaurar o layout Xbox dos botões"
 
 #: src/widgets/keybinds-dialog.vala:216
 msgid "Switch Layout"
-msgstr ""
+msgstr "Layout Switch"
 
 #: src/widgets/keybinds-dialog.vala:217
 msgid "Enable Nintendo Switch button layout (swap A/B, X/Y)"
-msgstr ""
+msgstr "Habilitar o layout Nintendo Switch dos botões"
 
 #: src/widgets/keybinds-dialog.vala:274
 msgid "D-Pad"
@@ -152,11 +152,11 @@ msgstr ""
 
 #: src/widgets/keybinds-dialog.vala:287
 msgid "Face Buttons"
-msgstr ""
+msgstr "Botões de Face"
 
 #: src/widgets/keybinds-dialog.vala:290 src/widgets/appearance-page.vala:172
 msgid "System"
-msgstr ""
+msgstr "Sistema"
 
 #: src/widgets/keybinds-dialog.vala:300
 msgid "L / R"
@@ -165,46 +165,46 @@ msgstr ""
 #: src/widgets/keybinds-dialog.vala:440
 #, c-format
 msgid "Failed to apply layout: %s"
-msgstr ""
+msgstr "Falha ao aplicar layout: %s"
 
 #: src/widgets/keybinds-dialog.vala:474
 #, c-format
 msgid "Failed to load keymap: %s"
-msgstr ""
+msgstr "Falha ao aplicar keymap: %s"
 
 #: src/widgets/keybinds-dialog.vala:484
 msgid "Keybind applied"
-msgstr ""
+msgstr "Keybind aplicado"
 
 #: src/widgets/keybinds-dialog.vala:490
 #, c-format
 msgid "Failed to set keybind: %s"
-msgstr ""
+msgstr "Falha ao definir keybind: %s"
 
 #: src/widgets/keybinds-dialog.vala:497
 msgid "Reset Keybinds"
-msgstr ""
+msgstr "Restaurar Keybinds"
 
 #: src/widgets/keybinds-dialog.vala:498
 msgid "Are you sure you want to reset all keybinds to default?"
-msgstr ""
+msgstr "Você tem certeza que quer restaurar todos os keybinds para o padrão?"
 
 #: src/widgets/keybinds-dialog.vala:501
 msgid "Reset"
-msgstr ""
+msgstr "Restaurar"
 
 #: src/widgets/keybinds-dialog.vala:508
 msgid "Keybinds reset to default"
-msgstr ""
+msgstr "Keybinds restauradas para o padrão"
 
 #: src/widgets/keybinds-dialog.vala:516
 #, c-format
 msgid "Failed to reset keybinds: %s"
-msgstr ""
+msgstr "Falha ao restaurar keybinds: %s"
 
 #: src/widgets/keybinds-dialog.vala:525 src/widgets/profiles-dialog.vala:317
 msgid "Info"
-msgstr ""
+msgstr "Informações"
 
 #: src/widgets/keybinds-dialog.vala:526 src/widgets/keybinds-dialog.vala:533
 #: src/widgets/profiles-dialog.vala:318 src/widgets/donations-dialog.vala:136
@@ -214,39 +214,39 @@ msgstr ""
 
 #: src/widgets/keybinds-dialog.vala:532
 msgid "Error"
-msgstr ""
+msgstr "Erro"
 
 #: src/widgets/tips-dialog.vala:35
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Dicas e Truques"
 
 #: src/widgets/tips-dialog.vala:123 src/managers/settings-ui-builder.vala:1183
 msgid "General"
-msgstr ""
+msgstr "Geral"
 
 #: src/widgets/tips-dialog.vala:136
 msgid "Still young"
-msgstr ""
+msgstr "Ainda Jovem"
 
 #: src/widgets/tips-dialog.vala:137
 msgid "Runs in the background"
-msgstr ""
+msgstr "Roda em segundo plano"
 
 #: src/widgets/tips-dialog.vala:138
 msgid "Up to 4 players"
-msgstr ""
+msgstr "Até 4 jogadores"
 
 #: src/widgets/tips-dialog.vala:139
 msgid "Two emulation engines"
-msgstr ""
+msgstr "Dois modos de emulação"
 
 #: src/widgets/tips-dialog.vala:142
 msgid "Gyro? Not yet"
-msgstr ""
+msgstr "Giroscópio? Ainda não"
 
 #: src/widgets/tips-dialog.vala:143
 msgid "Controller info in one click"
-msgstr ""
+msgstr "Informações em um clique"
 
 #: src/widgets/tips-dialog.vala:144
 msgid "Terminal power"
