@@ -25,6 +25,18 @@ modules:
       - type: dir
         path: static
 
+  # Translations (.mo)
+  - name: dstx-locale
+    buildsystem: simple
+    build-commands:
+      - for lang in pt_BR es_ES fr de it ru; do
+          msgfmt -o $lang.mo po/$lang.po;
+          install -Dm644 $lang.mo /app/share/locale/$lang/LC_MESSAGES/dstx-gui.mo;
+        done
+    sources:
+      - type: dir
+        path: ../../dstx-gui
+
   # GUI Module (Vala)
   - name: dstx-gui
     buildsystem: meson
