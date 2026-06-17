@@ -77,7 +77,7 @@ msgstr "Nenhum"
 
 #: src/widgets/keybinds-dialog.vala:77
 msgid "Select"
-msgstr "Selecionar"
+msgstr ""
 
 #: src/widgets/keybinds-dialog.vala:77
 #: src/managers/settings-ui-builder.vala:1324
@@ -1063,15 +1063,15 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1070
 msgid "Invert Y Axis (Left)"
-msgstr ""
+msgstr "Inverter Eixo Y (Esq.)"
 
 #: src/managers/settings-ui-builder.vala:1079
 msgid "Invert Y Axis (Right)"
-msgstr ""
+msgstr "Inverter Eixo Y (Dir.)"
 
 #: src/managers/settings-ui-builder.vala:1095
 msgid "Digital Triggers"
-msgstr ""
+msgstr "Gatilhos Digitais"
 
 #: src/managers/settings-ui-builder.vala:1114
 msgid "Debounce"
@@ -1104,11 +1104,11 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1223
 msgid "Enable Auto-save"
-msgstr ""
+msgstr "Habilitar Salvamento Automático"
 
 #: src/managers/settings-ui-builder.vala:1267
 msgid "Service"
-msgstr ""
+msgstr "Serviço"
 
 #: src/managers/settings-ui-builder.vala:1270
 msgid "Systemd Service"
@@ -1136,7 +1136,7 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1304
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: src/managers/settings-ui-builder.vala:1310 src/window.vala:515
 msgid "Start Service"
@@ -1160,15 +1160,15 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1361
 msgid "System Components (Flatpak)"
-msgstr ""
+msgstr "Componentes de Sistema (Flatpak)"
 
 #: src/managers/settings-ui-builder.vala:1377
 msgid "Active"
-msgstr ""
+msgstr "Ativo"
 
 #: src/managers/settings-ui-builder.vala:1377
 msgid "Inactive"
-msgstr ""
+msgstr "Inativo"
 
 #: src/managers/settings-ui-builder.vala:1378
 msgid "Service is running"
@@ -1180,23 +1180,23 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1379
 msgid "Disabled"
-msgstr ""
+msgstr "Desabilitado"
 
 #: src/managers/settings-ui-builder.vala:1395
 msgid "Installed"
-msgstr ""
+msgstr "Instalado"
 
 #: src/managers/settings-ui-builder.vala:1396
 msgid "Uninstall..."
-msgstr ""
+msgstr "Desinstalar..."
 
 #: src/managers/settings-ui-builder.vala:1399
 msgid "Not installed"
-msgstr ""
+msgstr "Não instalado"
 
 #: src/managers/settings-ui-builder.vala:1400
 msgid "Install..."
-msgstr ""
+msgstr "Instalar..."
 
 #: src/managers/settings-ui-builder.vala:1423
 msgid "Confirm Uninstall"
@@ -1209,11 +1209,11 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1427
 msgid "Uninstall"
-msgstr ""
+msgstr "Desinstalar"
 
 #: src/managers/settings-ui-builder.vala:1437
 msgid "Uninstall Complete"
-msgstr ""
+msgstr "Desinstalação Concluída"
 
 #: src/managers/settings-ui-builder.vala:1438
 msgid ""
@@ -1233,7 +1233,7 @@ msgstr ""
 
 #: src/window.vala:162
 msgid "Manage profiles"
-msgstr ""
+msgstr "Gerenciar perfis"
 
 #: src/window.vala:177
 msgid "Keybinds"
@@ -1249,15 +1249,15 @@ msgstr ""
 
 #: src/window.vala:341
 msgid "Preferences"
-msgstr ""
+msgstr "Preferências"
 
 #: src/window.vala:342
 msgid "Tips"
-msgstr ""
+msgstr "Dicas"
 
 #: src/window.vala:343
 msgid "Donate ❤️"
-msgstr ""
+msgstr "Doe ❤️"
 
 #: src/window.vala:347
 msgid "About DSTX"
@@ -1297,7 +1297,7 @@ msgstr ""
 
 #: src/window.vala:420
 msgid "Go to Downloads Page"
-msgstr ""
+msgstr "Ir para a página de Downloads"
 
 #: src/window.vala:435 src/window.vala:440
 #, c-format
