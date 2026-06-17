@@ -372,6 +372,9 @@ if not fs.exists(desktop_in_path)
     error('Desktop file template not found: ' + desktop_in_path)
 endif
 
+# Install translations via script
+meson.add_install_script('scripts/install-mo.sh')
+
 # ==================== CONFIGURATION REPORT ====================
 message('\n==================== DIRECTORIES ====================')
 message('Prefix:          ' + prefix)
