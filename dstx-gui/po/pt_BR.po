@@ -250,13 +250,15 @@ msgstr "Informações em um clique"
 
 #: src/widgets/tips-dialog.vala:144
 msgid "Terminal power"
-msgstr ""
+msgstr "O Poder do Terminal"
 
 #: src/widgets/tips-dialog.vala:147
 msgid ""
 "DSTX is fresh out of the oven — expect a few rough edges. Found a bug? "
 "Please report it on GitHub. No warranty, but we'll do our best to fix it."
 msgstr ""
+"O DSTX acabou de sair do forno — espere algumas pontas soltas. Encontou um bug? "
+"Por favor reporte no GitHub. Sem garantias, mas daremos o nosso melhor para corrigir."
 
 #: src/widgets/tips-dialog.vala:148
 msgid ""
@@ -264,12 +266,17 @@ msgid ""
 "colors and emulation keep working. After install, log out and back in once — "
 "that's it."
 msgstr ""
+"O DSTX roda como um serviço de sistema. Fechou a janela? Não se preocupe — suas cores "
+"de LED e a emulação continuam funcionando. Após instalar, reinicie a sua sessão — "
+"é isso."
 
 #: src/widgets/tips-dialog.vala:149
 msgid ""
 "Connect up to 4 controllers at once. Each appears in the left panel with its "
 "own independent settings. Customize LED, rumble, deadzone per controller."
 msgstr ""
+"Conecte até 4 controles simultaneamente. Cada um aparece no painel esquerdo com suas "
+"configurações independentes. Customize o LED, rumble, deadzone por controle."
 
 #: src/widgets/tips-dialog.vala:150
 msgid ""
@@ -310,37 +317,37 @@ msgstr ""
 
 #: src/widgets/tips-dialog.vala:157
 msgid "General Tips"
-msgstr ""
+msgstr "Dicas Gerais"
 
 #: src/widgets/tips-dialog.vala:161 src/window.vala:158
 msgid "Profiles"
-msgstr ""
+msgstr "Perfis"
 
 #: src/widgets/tips-dialog.vala:162 src/managers/settings-ui-builder.vala:962
 msgid "Emulation"
-msgstr ""
+msgstr "Emulação"
 
 #: src/widgets/tips-dialog.vala:163 src/managers/settings-ui-builder.vala:978
 msgid "Emulation Mode"
-msgstr ""
+msgstr "Modo de Emulação"
 
 #: src/widgets/tips-dialog.vala:165 src/managers/settings-ui-builder.vala:1026
 msgid "Analog Sticks"
-msgstr ""
+msgstr "Sticks Analógicos"
 
 #: src/widgets/tips-dialog.vala:166
 msgid "Stick Sensitivity"
-msgstr ""
+msgstr "Sensibilidade dos Sticks"
 
 #: src/widgets/tips-dialog.vala:167 src/widgets/tips-dialog.vala:310
 #: src/managers/settings-ui-builder.vala:1092
 msgid "Triggers"
-msgstr ""
+msgstr "Gatilhos"
 
 #: src/widgets/tips-dialog.vala:168 src/widgets/tips-dialog.vala:311
 #: src/managers/settings-ui-builder.vala:1111
 msgid "Buttons"
-msgstr ""
+msgstr "Botões"
 
 #: src/widgets/tips-dialog.vala:171
 msgid ""
@@ -400,11 +407,11 @@ msgstr ""
 
 #: src/widgets/tips-dialog.vala:180
 msgid "Settings"
-msgstr ""
+msgstr "Configurações"
 
 #: src/widgets/tips-dialog.vala:202 src/window.vala:525
 msgid "Controllers"
-msgstr ""
+msgstr "Controles"
 
 #: src/widgets/tips-dialog.vala:215
 msgid "Connection hiccups"
@@ -439,7 +446,7 @@ msgstr ""
 
 #: src/widgets/tips-dialog.vala:224 src/window.vala:833
 msgid "Connection"
-msgstr ""
+msgstr "Conexão"
 
 #: src/widgets/tips-dialog.vala:228
 msgid "USB quirks"
@@ -504,15 +511,15 @@ msgstr ""
 
 #: src/widgets/tips-dialog.vala:291
 msgid "Static Mode"
-msgstr ""
+msgstr "Modo Estático"
 
 #: src/widgets/tips-dialog.vala:292
 msgid "Dynamic Mode"
-msgstr ""
+msgstr "Modo Dinâmico"
 
 #: src/widgets/tips-dialog.vala:293
 msgid "Brightness Adjustment"
-msgstr ""
+msgstr "Ajuste de Brilho"
 
 #: src/widgets/tips-dialog.vala:294
 msgid "Player LEDs (DualSense)"
@@ -596,7 +603,7 @@ msgstr ""
 
 #: src/widgets/update-dialog.vala:71
 msgid "Update Now"
-msgstr ""
+msgstr "Atualizar Agora"
 
 #: src/widgets/update-dialog.vala:84
 msgid ""
@@ -618,7 +625,7 @@ msgstr ""
 
 #: src/widgets/update-dialog.vala:87
 msgid "This operation requires administrative privileges."
-msgstr ""
+msgstr "Esta operação requer privilégios de administrador"
 
 #: src/widgets/update-dialog.vala:127
 msgid "Removing old components..."
@@ -636,28 +643,28 @@ msgstr ""
 
 #: src/widgets/appearance-page.vala:91
 msgid "Appearance"
-msgstr ""
+msgstr "Aparência"
 
 #: src/widgets/appearance-page.vala:99 src/widgets/appearance-page.vala:337
 #: src/widgets/appearance-page.vala:359
 msgid "Light"
-msgstr ""
+msgstr "Claro"
 
 #: src/widgets/appearance-page.vala:167
 msgid "Theme Mode"
-msgstr ""
+msgstr "Modo do Tema"
 
 #: src/widgets/appearance-page.vala:168
 msgid "System, light, dark, or something completely custom."
-msgstr ""
+msgstr "Sistema, claro, escuro, ou algo completamente customizado"
 
 #: src/widgets/appearance-page.vala:171
 msgid "Mode"
-msgstr ""
+msgstr "Modo"
 
 #: src/widgets/appearance-page.vala:172
 msgid "Light (System)"
-msgstr ""
+msgstr "Claro (Sistema)"
 
 #: src/widgets/appearance-page.vala:172
 msgid "Dark (System)"
