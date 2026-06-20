@@ -844,45 +844,46 @@ msgstr ""
 
 #: src/widgets/donations-dialog.vala:38
 msgid "Support the DSTX Project"
-msgstr ""
+msgstr "Apoie o projeto DSTX"
 
 #: src/widgets/donations-dialog.vala:49
 msgid "Donations"
-msgstr ""
+msgstr "Doações"
 
 #: src/widgets/donations-dialog.vala:52
 msgid "Contribute"
-msgstr ""
+msgstr "Contribua!"
 
 #: src/widgets/donations-dialog.vala:53
 msgid ""
 "DSTX runs on love and late nights. Any donation — big or small — helps pay "
 "the bills and fuel development."
-msgstr ""
+msgstr "O DSTX é feito por amor e nas horas vagas. Qualquer doação — grande ou pequena — "
+"ajuda a pagar as contas e impulsiona o desenvolvimento."
 
 #: src/widgets/donations-dialog.vala:58
 msgid "Donation Platforms"
-msgstr ""
+msgstr "Plataformas de Doação"
 
 #: src/widgets/donations-dialog.vala:63
 msgid "Buy us a coffee"
-msgstr ""
+msgstr "Pague um café"
 
 #: src/widgets/donations-dialog.vala:65
 msgid "Donate on Ko-fi"
-msgstr ""
+msgstr "Doe no Ko-fi"
 
 #: src/widgets/donations-dialog.vala:72
 msgid "One-time or recurring donation"
-msgstr ""
+msgstr "Uma vez ou periodicamente"
 
 #: src/widgets/donations-dialog.vala:74
 msgid "Donate on PayPal"
-msgstr ""
+msgstr "Doe via PayPal"
 
 #: src/widgets/donations-dialog.vala:81
 msgid "Support via GitHub"
-msgstr ""
+msgstr "Apoie via GitHub"
 
 #: src/widgets/donations-dialog.vala:83
 msgid "GitHub Sponsors"
@@ -890,32 +891,32 @@ msgstr ""
 
 #: src/widgets/donations-dialog.vala:93
 msgid "Thank you for being part of this journey! 💜"
-msgstr ""
+msgstr "Obrigado por fazer parte dessa jornada! 💜"
 
 #: src/widgets/donations-dialog.vala:121
 msgid "PIX (Brazil)"
-msgstr ""
+msgstr "PIX"
 
 #: src/widgets/donations-dialog.vala:122
 msgid "Key: dstx@dstxapp.org"
-msgstr ""
+msgstr "Chave: dstx@dstxapp.org"
 
 #: src/widgets/donations-dialog.vala:124
 msgid "Copy Key"
-msgstr ""
+msgstr "Copiar Chave"
 
 #: src/widgets/donations-dialog.vala:133
 msgid "Key copied!"
-msgstr ""
+msgstr "Chave copiada!"
 
 #: src/widgets/donations-dialog.vala:134
 msgid "The PIX key has been copied to the clipboard."
-msgstr ""
+msgstr "A chave PIX foi copiada para a área de transferência"
 
 #: src/widgets/donations-dialog.vala:161 src/widgets/donations-dialog.vala:169
 #, c-format
 msgid "Error opening link: %s"
-msgstr ""
+msgstr "Erro ao abrir link: %s"
 
 #: src/widgets/donations-dialog.vala:174
 #, c-format
@@ -985,15 +986,15 @@ msgstr ""
 #: src/managers/controller-manager.vala:514
 #, c-format
 msgid "CONTROLLER %d"
-msgstr ""
+msgstr "CONTROLE %d"
 
 #: src/managers/settings-ui-builder.vala:138
 msgid "Current Profile"
-msgstr ""
+msgstr "Perfil Atual"
 
 #: src/managers/settings-ui-builder.vala:141
 msgid "Loading..."
-msgstr ""
+msgstr "Carregando..."
 
 #: src/managers/settings-ui-builder.vala:154
 #, c-format
@@ -1002,59 +1003,59 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:711
 msgid "LED"
-msgstr ""
+msgstr "LED"
 
 #: src/managers/settings-ui-builder.vala:714
 msgid "Static"
-msgstr ""
+msgstr "Estático"
 
 #: src/managers/settings-ui-builder.vala:714
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinâmico"
 
 #: src/managers/settings-ui-builder.vala:717
 msgid "LED Mode"
-msgstr ""
+msgstr "Modo do LED"
 
 #: src/managers/settings-ui-builder.vala:792
 msgid "Effect"
-msgstr ""
+msgstr "Efeito"
 
 #: src/managers/settings-ui-builder.vala:821
 msgid "LED Color"
-msgstr ""
+msgstr "Cor do LED"
 
 #: src/managers/settings-ui-builder.vala:868
 msgid "Speed"
-msgstr ""
+msgstr "Velocidade"
 
 #: src/managers/settings-ui-builder.vala:885
 msgid "Brightness"
-msgstr ""
+msgstr "Brilho"
 
 #: src/managers/settings-ui-builder.vala:900
-msgid "Player LEDs"
+msgid "LEDs de Jogador"
 msgstr ""
 
 #: src/managers/settings-ui-builder.vala:914
 msgid "Reapply LED"
-msgstr ""
+msgstr "Reaplicar LED"
 
 #: src/managers/settings-ui-builder.vala:964
 msgid "Enable Emulation"
-msgstr ""
+msgstr "Habilitar Emulação"
 
 #: src/managers/settings-ui-builder.vala:994
 msgid "Rumble"
-msgstr ""
+msgstr "Rumble"
 
 #: src/managers/settings-ui-builder.vala:996
 msgid "Enable Rumble"
-msgstr ""
+msgstr "Habilitar Rumble"
 
 #: src/managers/settings-ui-builder.vala:1008
 msgid "Gain"
-msgstr ""
+msgstr "Ganho"
 
 #: src/managers/settings-ui-builder.vala:1029
 msgid "Deadzone"
@@ -1062,11 +1063,11 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1046
 msgid "Left Stick Sensitivity"
-msgstr ""
+msgstr "Sensibilidade (Esquerdo)"
 
 #: src/managers/settings-ui-builder.vala:1060
 msgid "Right Stick Sensitivity"
-msgstr ""
+msgstr "Sensibilidade (Direito)"
 
 #: src/managers/settings-ui-builder.vala:1070
 msgid "Invert Y Axis (Left)"
@@ -1086,16 +1087,16 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1178
 msgid "DSTX Preferences"
-msgstr ""
+msgstr "Preferências do DSTX"
 
 #: src/managers/settings-ui-builder.vala:1187
 #: src/managers/settings-ui-builder.vala:1202
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: src/managers/settings-ui-builder.vala:1188
 msgid "User interface language"
-msgstr ""
+msgstr "Idioma da interface"
 
 #: src/managers/settings-ui-builder.vala:1211
 msgid "Language changed. Please restart the application for full effect."
@@ -1103,7 +1104,7 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1219
 msgid "Automatic Profile Saving"
-msgstr ""
+msgstr "Salvamento automático de perfil"
 
 #: src/managers/settings-ui-builder.vala:1220
 msgid "Automatically save the active profile after changes."
@@ -1135,7 +1136,7 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1290
 msgid "Stop Service"
-msgstr ""
+msgstr "Parar serviço"
 
 #: src/managers/settings-ui-builder.vala:1298
 msgid "Service stopped"
@@ -1159,11 +1160,11 @@ msgstr ""
 
 #: src/managers/settings-ui-builder.vala:1338
 msgid "Service restarted"
-msgstr ""
+msgstr "Serviço reiniciado"
 
 #: src/managers/settings-ui-builder.vala:1344
 msgid "Restart"
-msgstr ""
+msgstr "Reiniciar"
 
 #: src/managers/settings-ui-builder.vala:1361
 msgid "System Components (Flatpak)"
@@ -1252,7 +1253,7 @@ msgstr ""
 
 #: src/window.vala:186
 msgid "No controller selected"
-msgstr ""
+msgstr "Nenhum controle selecionado"
 
 #: src/window.vala:341
 msgid "Preferences"
@@ -1268,19 +1269,19 @@ msgstr "Doe ❤️"
 
 #: src/window.vala:347
 msgid "About DSTX"
-msgstr ""
+msgstr "Sobre o DSTX"
 
 #: src/window.vala:348
 msgid "Quit"
-msgstr ""
+msgstr "Sair"
 
 #: src/window.vala:368
 msgid "Starting service..."
-msgstr ""
+msgstr "Iniciando serviço..."
 
 #: src/window.vala:372
 msgid "Service started, reconnecting..."
-msgstr ""
+msgstr "Serviço iniciado, reconectando..."
 
 #: src/window.vala:376
 #, c-format
