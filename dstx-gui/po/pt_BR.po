@@ -284,36 +284,49 @@ msgid ""
 "<b>UINPUT</b> (full features, rumble included) and <b>UHID</b> "
 "(experimental, no rumble but can fix double inputs)."
 msgstr ""
+"O DSTX cria um controle Xbox 360 virtual que funciona com qualquer jogo. Dois modos: "
+"<b>UINPUT</b> (todas as funcionalidades, inclusive rumble) e <b>UHID</b> "
+"(experimental, sem rumble mas pode ajudar com input duplo)."
 
 #: src/widgets/tips-dialog.vala:151
 msgid ""
 "The classic, rock‑solid method. Creates virtual devices from user space. "
 "Full gamepad capabilities, great compatibility."
 msgstr ""
+"O método clássico e sólido. Cria dispositivos virtuais a partir do espaço de usuário. "
+"Todas as funcionalidades do controle, ótima compatibilidade."
 
 #: src/widgets/tips-dialog.vala:152
 msgid ""
 "Newer kernel module, still experimental. Only handles buttons and axes (no "
 "rumble). Can help if you're experiencing double inputs with UINPUT."
 msgstr ""
+"Módulo mais recente do Kernel, ainda experimental. Apenas processa botões e eixos (sem "
+"rumble). Pode ajudar se você enfrenta inputs duplos com UINPUT."
 
 #: src/widgets/tips-dialog.vala:153
 msgid ""
 "Gyroscope emulation is technically possible but complex — not planned for "
 "now. Maybe in a future release!"
 msgstr ""
+"Emulação de giroscópio é tecnicamente possível, mas complexa — não está nos planos "
+"por enquanto. Talvez em uma futura versão!"
 
 #: src/widgets/tips-dialog.vala:154
 msgid ""
 "Click the <b>ⓘ</b> button in the top bar to see technical details of your "
 "controller: driver, serial, input nodes."
 msgstr ""
+"Clique no botão <b>ⓘ</b> na barra superior para ver detalhes técnicos do seu "
+"controle: driver, número de série, nós de entrada."
 
 #: src/widgets/tips-dialog.vala:155
 msgid ""
 "Prefer the command line? Run <tt>dstx</tt> in your terminal — a full TUI "
 "(text interface) is included."
 msgstr ""
+"Prefere a linha de comando? Digite <tt>dstx</tt> no seu terminal — uma TUI "
+"(interface de texto) completa está incluída."
 
 #: src/widgets/tips-dialog.vala:157
 msgid "General Tips"
@@ -354,12 +367,16 @@ msgid ""
 "Create, save, load, or delete profiles. Turn on <b>auto‑save</b> and every "
 "change is automatically stored in the current profile."
 msgstr ""
+"Crie, salve, carregue, ou delete perfis. Ligue o <b>salvamento automático</b> e cada "
+"alteração é automaticamente armazenada no perfil atual."
 
 #: src/widgets/tips-dialog.vala:172
 msgid ""
 "Only LED talks directly to your hardware. All other settings apply to the "
 "emulated Xbox controller. Keep emulation ON for them to work."
 msgstr ""
+"Apenas o LED se comunica diretamente com seu hardware. Todas as outras configurações se aplicam ao "
+"controle Xbox emulado. Mantenha a emulação ativa para que funcionem."
 
 #: src/widgets/tips-dialog.vala:173
 msgid ""
