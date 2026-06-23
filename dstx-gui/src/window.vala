@@ -172,14 +172,14 @@ namespace Dstx {
             // Keybinds button
             var keybinds_btn = new Gtk.Button();
             var keybinds_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
-            var keybinds_icon = new Gtk.Image.from_icon_name("year-symbolic");
+            var keybinds_icon = new Gtk.Image.from_icon_name("applications-symbolic");
             keybinds_icon.set_pixel_size(16);
             var keybinds_label = new Gtk.Label(_("Keybinds"));
             keybinds_box.append(keybinds_icon);
             keybinds_box.append(keybinds_label);
             keybinds_btn.set_child(keybinds_box);
             keybinds_btn.set_tooltip_text(_("Configure button mappings"));
-            
+
             // Single clicked connection
             keybinds_btn.clicked.connect(() => {
                 if (controller_manager.selected_controller == null) {
@@ -381,75 +381,75 @@ namespace Dstx {
             }
         }
 
-		private void setup_no_service_buttons() {
-    			if (Core.is_flatpak()) {
-    			    // Flatpak: uses the install button from UI
-    			    if (install_service_button != null) {
-    			        install_service_button.clicked.connect(() => {
-    			            confirm_installation.begin();
-    			        });
-    			    }
-    			} else {
-    			    // Non-Flatpak: core missing – show download link
-    			    if (no_service_page != null) {
-    			        no_service_page.set_title(_("DSTX Core Package Required"));
-    			        no_service_page.set_description(
-    			            _("The DSTX core service is not installed on your system.\n\n" +
-    			              "Please download and install the core package from the official website.")
-    			        );
-    		        
-    			        // Remove existing child
-    			        var old_child = no_service_page.get_child();
-    			        if (old_child != null) {
-    			            no_service_page.set_child(null);
-    			            old_child.destroy();
-    			        }
-    	        
-    			        // Centered container for the button
-    			        var center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-    			        center_box.set_halign(Gtk.Align.CENTER);
-    			        center_box.set_valign(Gtk.Align.CENTER);
-    			        center_box.set_margin_top(12);
-    			        center_box.set_margin_bottom(12);
-            
-    			        // Button with icon
-    			        var download_button = new Gtk.Button();
-    			        var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
-    			        var icon = new Gtk.Image.from_icon_name("symbolic-link-symbolic");
-    			        icon.set_pixel_size(14);
-    			        var label = new Gtk.Label(_("Go to Downloads Page"));
-    			        button_box.append(label);
-    			        button_box.append(icon);
-    			        download_button.set_child(button_box);
-    			        download_button.add_css_class("suggested-action");
-    			        download_button.add_css_class("pill");
-    		        
-    			        download_button.clicked.connect(() => {
-    			            try {
-    			                var launcher = new Gtk.UriLauncher(CORE_DOWNLOAD_URL);
-    			                launcher.launch.begin(this, null, (obj, res) => {
-    			                    try {
-    			                        launcher.launch.end(res);
-    			                    } catch (Error e) {
-    			                        warning("Failed to open URL: %s", e.message);
-    			                        show_toast(_("Could not open browser. Please visit %s").printf(CORE_DOWNLOAD_URL));
-    			                    }
-    			                });
-    			            } catch (Error e) {
-    			                warning("Error creating launcher: %s", e.message);
-    			                show_toast(_("Could not open browser. Please visit %s").printf(CORE_DOWNLOAD_URL));
-    			            }
-    			        });
-    		        
-    			        center_box.append(download_button);
-    			        no_service_page.set_child(center_box);
-    			    }
-    			}
-		}
+        private void setup_no_service_buttons() {
+            if (Core.is_flatpak()) {
+                // Flatpak: uses the install button from UI
+                if (install_service_button != null) {
+                    install_service_button.clicked.connect(() => {
+                        confirm_installation.begin();
+                    });
+                }
+            } else {
+                // Non-Flatpak: core missing – show download link
+                if (no_service_page != null) {
+                    no_service_page.set_title(_("DSTX Core Package Required"));
+                    no_service_page.set_description(
+                        _("The DSTX core service is not installed on your system.\n\n" +
+                          "Please download and install the core package from the official website.")
+                    );
+
+                    // Remove existing child
+                    var old_child = no_service_page.get_child();
+                    if (old_child != null) {
+                        no_service_page.set_child(null);
+                        old_child.destroy();
+                    }
+
+                    // Centered container for the button
+                    var center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+                    center_box.set_halign(Gtk.Align.CENTER);
+                    center_box.set_valign(Gtk.Align.CENTER);
+                    center_box.set_margin_top(12);
+                    center_box.set_margin_bottom(12);
+
+                    // Button with icon
+                    var download_button = new Gtk.Button();
+                    var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+                    var icon = new Gtk.Image.from_icon_name("symbolic-link-symbolic");
+                    icon.set_pixel_size(14);
+                    var label = new Gtk.Label(_("Go to Downloads Page"));
+                    button_box.append(label);
+                    button_box.append(icon);
+                    download_button.set_child(button_box);
+                    download_button.add_css_class("suggested-action");
+                    download_button.add_css_class("pill");
+
+                    download_button.clicked.connect(() => {
+                        try {
+                            var launcher = new Gtk.UriLauncher(CORE_DOWNLOAD_URL);
+                            launcher.launch.begin(this, null, (obj, res) => {
+                                try {
+                                    launcher.launch.end(res);
+                                } catch (Error e) {
+                                    warning("Failed to open URL: %s", e.message);
+                                    show_toast(_("Could not open browser. Please visit %s").printf(CORE_DOWNLOAD_URL));
+                                }
+                            });
+                        } catch (Error e) {
+                            warning("Error creating launcher: %s", e.message);
+                            show_toast(_("Could not open browser. Please visit %s").printf(CORE_DOWNLOAD_URL));
+                        }
+                    });
+
+                    center_box.append(download_button);
+                    no_service_page.set_child(center_box);
+                }
+            }
+        }
 
         public async void confirm_installation() {
             if (!Core.is_flatpak()) return;
-            
+
             var dialog = new Adw.AlertDialog(
                 _("DSTX System Service Required"),
                 _("Click 'Install' to set up the DSTX system service (dstx-daemon).\n\n" +
@@ -515,13 +515,13 @@ namespace Dstx {
             start_service_button.set_label(_("Start Service"));
             no_controllers_page.set_title(_("No Controller Found"));
             no_controllers_page.set_description(_("Connect a controller to start"));
-            
+
             // For non-Flatpak, the title/description will be overwritten in setup_no_service_buttons()
             // but we set defaults here for Flatpak case
             no_service_page.set_title(_("DSTX Service Not Installed"));
             no_service_page.set_description(_("Install the DSTX system service to use controllers."));
             install_service_button.set_label(_("Install Service"));
-            
+
             if (left_sidebar_title != null) left_sidebar_title.set_title(_("Controllers"));
             hide_sidebar_button.set_tooltip_text(_("Hide controllers list"));
             show_sidebar_button.set_tooltip_text(_("Show controllers list"));
@@ -575,7 +575,7 @@ namespace Dstx {
                 controller_manager.selected_controller.slot != controller.slot) return;
             if (controller.version <= current_widget_version) return;
             message("Window: Updating settings for version %llu", controller.version);
-            
+
             // Update settings (LED, rumble, etc.) with debounce
             if (update_timeout != 0) Source.remove(update_timeout);
             update_timeout = Timeout.add(50, () => {
@@ -584,7 +584,7 @@ namespace Dstx {
                 update_timeout = 0;
                 return Source.REMOVE;
             });
-            
+
             // Update keymap immediately (may have changed due to layout)
             if (current_view_model != null) {
                 current_view_model.refresh_keymap();
@@ -946,10 +946,85 @@ namespace Dstx {
             }
 
             try {
+                string current = yield settings_controller.get_current_core_version();
+
+                // Check for invalid version (0.0.0) which indicates D-Bus is not accessible
+                if (current == "0.0.0") {
+                    // Create button with icon for installation instructions
+                    var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+                    button_box.set_halign(Gtk.Align.CENTER);
+                    button_box.set_valign(Gtk.Align.CENTER);
+
+                    var label = new Gtk.Label(_("Installation Instructions"));
+                    var icon = new Gtk.Image.from_icon_name("symbolic-link-symbolic");
+                    icon.set_pixel_size(16);
+
+                    button_box.append(label);
+                    button_box.append(icon);
+
+                    var link_button = new Gtk.Button();
+                    link_button.set_child(button_box);
+                    link_button.set_halign(Gtk.Align.CENTER);
+                    link_button.add_css_class("suggested-action");
+                    link_button.add_css_class("pill");
+                    link_button.clicked.connect(() => {
+                        try {
+                            var launcher = new Gtk.UriLauncher("https://dstxapp.org/#installInstructions");
+                            launcher.launch.begin(this, null, (obj, res) => {
+                                try {
+                                    launcher.launch.end(res);
+                                } catch (Error e) {
+                                    warning("Failed to open URL: %s", e.message);
+                                }
+                            });
+                        } catch (Error e) {
+                            warning("Error creating launcher: %s", e.message);
+                        }
+                    });
+
+                    // Show D-Bus connection error dialog
+                    var error_dialog = new Adw.AlertDialog(
+                        _("D-Bus Connection Error"),
+                        _("Error connecting to D-Bus. Please ensure:\n\n" +
+                          "• The 'dstx' group exists\n" +
+                          "• Your user is added to the 'dstx' group\n" +
+                          "• The 'dstx-daemon' and 'dstx-dbus' processes are running\n\n" +
+                          "You need to log out and log back in for group permissions to take effect.\n\n" +
+                          "For installation instructions, visit the DSTX website.")
+                    );
+
+                    // Add both responses with consistent styling
+                    error_dialog.add_response("ok", _("OK"));
+                    error_dialog.add_response("help", _("Installation Instructions"));
+                    error_dialog.set_default_response("ok");
+                    error_dialog.set_close_response("ok");
+
+                    // Handle the help response to open the URL
+                    error_dialog.response.connect((response) => {
+                        if (response == "help") {
+                            try {
+                                var launcher = new Gtk.UriLauncher("https://dstxapp.org/#installInstructions");
+                                launcher.launch.begin(this, null, (obj, res) => {
+                                    try {
+                                        launcher.launch.end(res);
+                                    } catch (Error e) {
+                                        warning("Failed to open URL: %s", e.message);
+                                    }
+                                });
+                            } catch (Error e) {
+                                warning("Error creating launcher: %s", e.message);
+                            }
+                        }
+                    });
+
+                    error_dialog.present(this);
+                    return;
+                }
+
+                // Version is valid, check for updates
                 bool has_update = yield settings_controller.check_for_updates();
                 if (has_update) {
                     update_dialog_shown = true;
-                    string current = yield settings_controller.get_current_core_version();
                     string expected = settings_controller.get_expected_core_version();
                     var dialog = new UpdateDialog(this, current, expected);
                     dialog.update_completed.connect((success) => {
