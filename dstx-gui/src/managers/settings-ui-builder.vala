@@ -1181,7 +1181,7 @@ led_mode_row.notify["selected"].connect(() => {
 
             var general_page = new Adw.PreferencesPage();
             general_page.set_title(_("General"));
-            general_page.set_icon_name("applications-system-symbolic");
+            general_page.set_icon_name("gnome-tweak-tool-symbolic");
 
             var lang_group = new Adw.PreferencesGroup();
             lang_group.set_title(_("Language"));
