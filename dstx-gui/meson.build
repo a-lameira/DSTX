@@ -242,6 +242,34 @@ install_data('data/icons/pix-symbolic.svg',
     install_dir: icondir_symbolic,
 )
 
+install_data('data/icons/applications-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
+install_data('data/icons/accessories-dictionary-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
+install_data('data/icons/gnome-tweak-tool-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
+install_data('data/icons/computer-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
+install_data('data/icons/image-adjust-color-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
+install_data('data/icons/input-gaming-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
+install_data('data/icons/dialog-information-symbolic.svg',
+    install_dir: icondir_symbolic,
+)
+
 icondir_scalable = datadir / 'icons/hicolor/scalable/apps'
 
 install_data('data/icons/ds4-symbolic.svg',
