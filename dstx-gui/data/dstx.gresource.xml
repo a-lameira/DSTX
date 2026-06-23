@@ -29,6 +29,13 @@
     <file>icons/paypal-symbolic.svg</file>
     <file>icons/github-symbolic.svg</file>
     <file>icons/pix-symbolic.svg</file>
+    <file>icons/gnome-tweak-tool-symbolic.svg</file>
+    <file>icons/applications-symbolic.svg</file>
+    <file>icons/accessories-dictionary-symbolic.svg</file>
+    <file>icons/computer-symbolic.svg</file>
+    <file>icons/image-adjust-color-symbolic.svg</file>
+    <file>icons/input-gaming-symbolic.svg</file>
+    <file>icons/dialog-information-symbolic.svg</file>
     
   </gresource>
 </gresources>
