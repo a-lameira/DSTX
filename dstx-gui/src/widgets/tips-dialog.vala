@@ -275,7 +275,7 @@ namespace Dstx.Widgets {
         private Adw.PreferencesPage create_led_page() {
             var page = new Adw.PreferencesPage();
             page.set_title("LED");
-            page.set_icon_name("preferences-color-symbolic");
+            page.set_icon_name("image-adjust-color-symbolic");
 
             var container = new Gtk.Box(Orientation.VERTICAL, 24);
             container.set_halign(Align.FILL);
