@@ -1341,11 +1341,11 @@ msgstr ""
 
 #: src/window.vala:460
 msgid "Install"
-msgstr ""
+msgstr "Instalar"
 
 #: src/window.vala:474
 msgid "Installing DSTX Service"
-msgstr ""
+msgstr "Instalando o serviço DSTX"
 
 #: src/window.vala:475
 msgid ""
@@ -1353,24 +1353,29 @@ msgid ""
 "\n"
 "This may take a few seconds."
 msgstr ""
+"Por favor aguarde enquanto o serviço DSTX é instalado...\n"
+"\n"
+"Isso pode demorar alguns segundos."
 
 #: src/window.vala:495
 msgid "Installation Complete"
-msgstr ""
+msgstr "Instalação completa"
 
 #: src/window.vala:496
 msgid ""
 "The DSTX system service has been installed successfully.\n"
 "\n"
 msgstr ""
+"O serviço de sistema DSTX foi instalado com sucesso.\n"
+"\n"
 
 #: src/window.vala:502
 msgid "✓ Service installed successfully"
-msgstr ""
+msgstr "✓ Serviço instalado com sucesso"
 
 #: src/window.vala:505
 msgid "Installation failed. Check terminal for details."
-msgstr ""
+msgstr "A instalação falhou. Verifique o terminal para maiores detalhes."
 
 #: src/window.vala:510 src/window.vala:535
 msgid "DSTX"
@@ -1378,47 +1383,47 @@ msgstr ""
 
 #: src/window.vala:512
 msgid "Checking service..."
-msgstr ""
+msgstr "Verificando o serviço..."
 
 #: src/window.vala:514
 msgid "Start the DSTX service to continue"
-msgstr ""
+msgstr "Inicie o serviço DSTX para continuar"
 
 #: src/window.vala:516
 msgid "No Controller Found"
-msgstr ""
+msgstr "Nenhum Controle Encontrado"
 
 #: src/window.vala:517
 msgid "Connect a controller to start"
-msgstr ""
+msgstr "Conecte um controle para iniciar"
 
 #: src/window.vala:521
 msgid "DSTX Service Not Installed"
-msgstr ""
+msgstr "O serviço DSTX não está instalado"
 
 #: src/window.vala:522
 msgid "Install the DSTX system service to use controllers."
-msgstr ""
+msgstr "Instale o serviço de sistema DSTX para utilizar controles"
 
 #: src/window.vala:523
 msgid "Install Service"
-msgstr ""
+msgstr "Instalar Serviço"
 
 #: src/window.vala:526
 msgid "Hide controllers list"
-msgstr ""
+msgstr "Esconder lista de controles"
 
 #: src/window.vala:527
 msgid "Show controllers list"
-msgstr ""
+msgstr "Mostrar lista de controles"
 
 #: src/window.vala:528
 msgid "Close settings"
-msgstr ""
+msgstr "Fechar configurações"
 
 #: src/window.vala:529
 msgid "Controller information"
-msgstr ""
+msgstr "Informações do controle"
 
 #: src/window.vala:530 src/window.vala:531 src/window.vala:532
 #: src/window.vala:533 src/window.vala:534
@@ -1436,23 +1441,23 @@ msgstr ""
 #: src/window.vala:789
 #, c-format
 msgid "Controller Information %d"
-msgstr ""
+msgstr "Informação do controle %d"
 
 #: src/window.vala:791
 msgid "Technical Details"
-msgstr ""
+msgstr "Detalhes Técnicos"
 
 #: src/window.vala:804
 msgid "Device Information"
-msgstr ""
+msgstr "Informações do Dispositivo"
 
 #: src/window.vala:807
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: src/window.vala:814 src/window.vala:823
 msgid "Not available"
-msgstr ""
+msgstr "Indisponível"
 
 #: src/window.vala:816
 msgid "Driver"
@@ -1460,7 +1465,7 @@ msgstr ""
 
 #: src/window.vala:825
 msgid "Address"
-msgstr ""
+msgstr "Endereço"
 
 #: src/window.vala:841
 msgid "Slot"
@@ -1468,18 +1473,18 @@ msgstr ""
 
 #: src/window.vala:851
 msgid "Input Nodes"
-msgstr ""
+msgstr "Nós de Entrada"
 
 #: src/window.vala:855
 #, c-format
 msgid "Node %d"
-msgstr ""
+msgstr "Nó %d"
 
 #: src/window.vala:876
 msgid "Error loading information"
-msgstr ""
+msgstr "Erro ao carregar informações"
 
 #: src/application.vala:308
 #, c-format
 msgid "Application: Configuration loaded from: %s"
-msgstr ""
+msgstr "Aplicação: Configuração carregada de: %s"
